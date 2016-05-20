@@ -1,4 +1,4 @@
-./run @mode=simple -Grammar.inPaths data/taxes.grammar
+./run @mode=simple -Grammar.inPaths data/taxes.grammar -Learner.maxTrainIters 2 -SimpleLexicon.inPaths data/taxes.lexicon -typeInference
 
 
 inputs:
