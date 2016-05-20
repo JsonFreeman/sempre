@@ -1,10 +1,27 @@
-(rule $ROOT (if $SENTENCE , then $PHRASE .) (lambda x (lambda y (call + (var x) (string "& ~") (var y)))))
+(rule $ROOT (if $SENTENCE , then $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
 
-(rule $SENTENCE ($SENTENCE and $SENTENCE) (ConcatFn " & "))
-(rule $SENTENCE ($PHRASE is greater than $FIELD) (lambda x (lambda y (call + (string "greater_than(") (var x) (string ", ") (var y) (string ")")))))
-(rule $SENTENCE ($FIELD has a non-zero value) (lambda x (call + (string "non_zero(") (var x) (string ")"))))
-(rule $SENTENCE ($FIELD must have a non-zero value) (lambda x (call + (string "non_zero(") (var x) (string ")"))))
+(rule $SENTENCE ($SENTENCE and $SENTENCE) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
 
+# comparisons
+(rule $SENTENCE ($FIELD is greater than $FIELD) (lambda x (lambda y (call + (string "greater_than(") (var x) (string ", ") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD is greater than or equal to $FIELD) (lambda x (lambda y (call + (string "greater_than_equal_to(") (var x) (string ", ") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD is less than $FIELD) (lambda x (lambda y (call + (string "less_than(") (var x) (string ", ") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD is less than or equal to $FIELD) (lambda x (lambda y (call + (string "less_than_equal_to(") (var x) (string ", ") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD is not equal to $FIELD) (lambda x (lambda y (call + (string "distinct(") (var x) (string ", ") (var y) (string ")")))))
 
-(rule $FIELD (form $PHRASE , line $PHRASE ` $PHRASE ') (lambda x (lambda y (lambda z (var z)))))
-(rule $FIELD (line $PHRASE ` $PHRASE ') (lambda y (lambda z (var z))))
+# field value
+(rule $SENTENCE ($FIELD has a non zero value) (lambda x (call + (string "non_zero(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD must have a non zero value) (lambda x (call + (string "non_zero(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD has the value ` $PHRASE ') (lambda x (lambda y (call + (string "value(") (var x) (string ", ") (var y) (string ")")))))
+
+# implied field value
+(rule $SENTENCE ($FIELD is (not optional) checked \(element ` $PHRASE ' has the value $PHRASE\)) (lambda x (lambda y (lambda z (call + (string "has_value(") (var x) (string ", ") (var y) (string ")"))))))
+(rule $SENTENCE ($FIELD is (not optional) checked \(element ` $PHRASE ' does not have the value $PHRASE\)) (lambda x (lambda y (lambda z (call + (string "~has_value(") (var x) (string ", ") (var y) (string ")"))))))
+
+# field value existence
+(rule $SENTENCE ($FIELD has a value) (lambda x (call + (string "has_value(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD is checked) (lambda x (call + (string "has_value(") (var x) (string ")"))))
+
+# extract field name
+(rule $FIELD (form $TOKEN , line $TOKEN ` $PHRASE ') (lambda x (lambda y (lambda z (var z)))))
+(rule $FIELD (line $TOKEN ` $TOKEN ') (lambda y (lambda z (var z))))
