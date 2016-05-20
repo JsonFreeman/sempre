@@ -1,0 +1,16 @@
+./run @mode=simple -Grammar.inPaths data/taxes.grammar
+
+
+inputs:
+grammar
+divide examples
+lexicon?
+feature extractor
+executor
+valueEvaluator
+
+options:
+beam search
+maxIters
+learning rate
+language analyzer?
