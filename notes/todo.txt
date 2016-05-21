@@ -1,0 +1,16 @@
+./run @mode=simple -Grammar.inPaths data/taxes.grammar -Learner.maxTrainIters 2 -SimpleLexicon.inPaths data/taxes.lexicon -typeInference
+
+
+inputs:
+grammar
+divide examples
+lexicon?
+feature extractor
+executor
+valueEvaluator
+
+options:
+beam search
+maxIters
+learning rate
+language analyzer?
