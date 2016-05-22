@@ -26,19 +26,19 @@
 
 (example
   (utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked (element 'IndividualReturnFilingStatusCd' has the value 2), then both the Primary SSN and the Spouse SSN must be present in the Return Header.")
-  (targetValue (string "value (individualReturnFilingStatusCd,2) &  ~(has_value(primarySSN) & has_value(spouseSSN,X))" ) ) ) 
+  (targetValue (string "value(individualReturnFilingStatusCd,2) &  ~(has_value(primarySSN) & has_value(spouseSSN,X))" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 3 checkbox "Married filing separately" (element 'IndividualReturnFilingStatusCd' has the value 3), and Line 6b checkbox 'ExemptSpouseInd' are checked, then both the Primary SSN and the Spouse SSN must be present in the Return Header.")
-  (targetValue (string "value (individualReturnFilingStatusCd,3) & has_value(exemptSpouseInd) &  ~(has_value(primarySSN) & has_value(spouseSSN))" ) ) ) 
+  (targetValue (string "value(individualReturnFilingStatusCd,3) & has_value(exemptSpouseInd) &  ~(has_value(primarySSN) & has_value(spouseSSN))" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 4 checkbox "Head of household" (element 'IndividualReturnFilingStatusCd' has the value 4), and Line 6b checkbox 'ExemptSpouseInd' are checked, then both the Primary SSN and the Spouse SSN must be present in the Return Header.")
-  (targetValue (string "value (individualReturnFilingStatusCd,4) & has_value(exemptSpouseInd) & ~(has_value(primarySSN) & has_value(spouseSSN))" ) ) ) 
+  (targetValue (string "value(individualReturnFilingStatusCd,4) & has_value(exemptSpouseInd) & ~(has_value(primarySSN) & has_value(spouseSSN))" ) ) ) 
 
 (example
   (utterance "Each 'DependentSSN' that has a value on Form 1040, Line 6c(2) must be within the valid range of SSN/ITIN/ATIN.")
-  (targetValue (string "has_value (depSSN(I)) & ~validSSN(depSSN(I))" ) ) ) 
+  (targetValue (string "has_value(depSSN(I)) & ~validSSN(depSSN(I))" ) ) ) 
 
 (example
   (utterance "Form 1040, Line 6c(2), each 'DependentSSN' provided must be unique among all the dependent SSNs in Line 6c(2).")
@@ -50,7 +50,7 @@
 
 (example
   (utterance "If Form 1040, Line 66a 'EICEligibilityLiteralCd' has the value 'NO', then Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present.")
-  (targetValue (string "value (eICEligibilityLiteralCd,NO) & (non_zero(earnedIncomeCreditAmt) | has_value(earnedIncomeCreditAmt))" ) ) ) 
+  (targetValue (string "value(eICEligibilityLiteralCd,NO) & non_zero(earnedIncomeCreditAmt) & has_value(earnedIncomeCreditAmt)" ) ) ) 
 
 (example
   (utterance "If Schedule EIC (Form 1040) is present in the return, Form 1040, Line 66a 'EarnedIncomeCreditAmt' must have a non-zero value.")
