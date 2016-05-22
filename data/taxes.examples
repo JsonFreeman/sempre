@@ -93,7 +93,7 @@
 
 (example
   (utterance "If Form 1040, Line 31a 'TotalAlimonyPaidAmt' has a non-zero value, then there must be at least one 'RecipientSSN' provided on Line 31b.")
-  (targetValue (string "has_value(totalAlimonyPaidAmt) &  missingValue(recipientSSN(I))" ) ) ) 
+  (targetValue (string "has_value(totalAlimonyPaidAmt) &  ~has_value(recipientSSN(I))" ) ) ) 
 
 (example
   (utterance "Each 'RecipientSSN' that has a value on Form 1040, Line 31b must be within the valid range of SSN/ITIN and must not be an ATIN.")
@@ -119,7 +119,7 @@
 
 (example
   (utterance "If Form 1040, Line 75 'OverpaidAmt' has a non-zero value, then Line 74 'TotalPaymentsAmt' must be greater than Line 63 'TotalTaxAmt'.")
-  (targetValue (string "non_zero(overpaidAmt) & ~greaterThan(totalPaymentAmt,totalTaxAmt)" ) ) ) 
+  (targetValue (string "non_zero(overpaidAmt) & ~greater_than(totalPaymentAmt,totalTaxAmt)" ) ) ) 
 
 (example
   (utterance "If 'PrimarySSN' in the Return Header is an ITIN, then Form 1040, Line 66a 'EarnedIncomeCreditAmt' must be equal to zero if an amount is entered.")
@@ -167,7 +167,7 @@
 
 (example
   (utterance "If Form 1040, Line 6c 'ChldNotLivingWithYouCnt' has a non-zero value, there must be at least one dependent listed in Line 6c that has its Line 6c(3) 'DependentRelationshipCd' from among the following values: ("STEPCHILD" or "HALF BROTHER" or "HALF SISTER" or "STEPBROTHER" or "STEPSISTER" or "FOSTER CHILD" or "GRANDCHILD" or "BROTHER" or "SISTER" or "NEPHEW" or "NIECE" or "SON" or "DAUGHTER").")
-  (targetValue (string "non_zero(chldNotLivingWithYouCnt) & ~(same (dependentRelationshipCd(I),stepChild) | same(dependentRelationshipCd(I),halfBrother) | same(dependentRelationshipCd(I),halfSister) | same(dependentRelationshipCd(I),stepBrother) | same(dependentRelationshipCd(I),stepSister) | same(dependentRelationshipCd(I),fosterChild) | same(dependentRelationshipCd(I),grandChild) | same(dependentRelationshipCd(I),brother) |same(dependentRelationshipCd(I),sister) | same(dependentRelationshipCd(I),nephew) | same(dependentRelationshipCd(I),niece) | same(dependentRelationshipCd(I),son) | same(dependentRelationshipCd(I),daughter)" ) ) ) 
+  (targetValue (string "non_zero(chldNotLivingWithYouCnt) & ~(same(dependentRelationshipCd(I),stepChild) | same(dependentRelationshipCd(I),halfBrother) | same(dependentRelationshipCd(I),halfSister) | same(dependentRelationshipCd(I),stepBrother) | same(dependentRelationshipCd(I),stepSister) | same(dependentRelationshipCd(I),fosterChild) | same(dependentRelationshipCd(I),grandChild) | same(dependentRelationshipCd(I),brother) |same(dependentRelationshipCd(I),sister) | same(dependentRelationshipCd(I),nephew) | same(dependentRelationshipCd(I),niece) | same(dependentRelationshipCd(I),son) | same(dependentRelationshipCd(I),daughter)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 13 checkbox 'CapitalDistributionInd' is checked, then Line 13 'CapitalGainLossAmt' must have a non-zero value.")
@@ -175,7 +175,7 @@
 
 (example
   (utterance "If Form 2210 is present, then Form 1040, Line 79 'EsPenaltyAmt' must be equal to Form 2210, Line 17 'PenaltyAmt' or Form 2210, Line 27 'TotalPenaltyAmt'.")
-  (targetValue (string "has_value(form2210IsPresent) & ~(same(esPaneltyAmt,form2210PentaltyAmt,Y) | same (esPaneltyAmt,form2210TotalPenaltyAmt))" ) ) ) 
+  (targetValue (string "has_value(form2210IsPresent) & ~(same(esPaneltyAmt,form2210PentaltyAmt,Y) | same(esPaneltyAmt,form2210TotalPenaltyAmt))" ) ) ) 
 
 (example
   (utterance "Form 1040, Line 6d 'TotalExemptionsCnt' must be equal to the total of the following fields: 'TotalExemptPrimaryAndSpouseCnt', 'ChldWhoLivedWithYouCnt', 'ChldNotLivingWithYouCnt', and 'OtherDependentsListedCnt'.")
@@ -248,7 +248,7 @@
 
 (example
   (utterance "For each dependent that has a value on Form 1040, Line 6c(1), if Line 6c(4) checkbox 'EligibleForChildTaxCreditInd' is checked, then the corresponding line 6c(3) 'DependentRelationshipCd' must have one of the following values: "STEPCHILD" or "HALF BROTHER" or "HALF SISTER" or "STEPBROTHER" or "STEPSISTER" or "FOSTER CHILD" or "GRANDCHILD" or "BROTHER" or "SISTER" or "NEPHEW" or "NIECE" or "SON" or "DAUGHTER".")
-  (targetValue (string "has_value(eligibleForChildTaxCreditInd(I)) & ~(same (dependentRelationshipCd(I),stepChild) | same(dependentRelationshipCd(I),halfBrother) | same(dependentRelationshipCd(I),halfSister) | same(dependentRelationshipCd(I),stepBrother) | same(dependentRelationshipCd(I),stepSister) | same(dependentRelationshipCd(I),fosterChild) | same(dependentRelationshipCd(I),grandChild) | same(dependentRelationshipCd(I),brother) |same(dependentRelationshipCd(I),sister) | same(dependentRelationshipCd(I),nephew) | same(dependentRelationshipCd(I),niece) | same(dependentRelationshipCd(I),son) | same(dependentRelationshipCd(I),daughter)" ) ) ) 
+  (targetValue (string "has_value(eligibleForChildTaxCreditInd(I)) & ~(same(dependentRelationshipCd(I),stepChild) | same(dependentRelationshipCd(I),halfBrother) | same(dependentRelationshipCd(I),halfSister) | same(dependentRelationshipCd(I),stepBrother) | same(dependentRelationshipCd(I),stepSister) | same(dependentRelationshipCd(I),fosterChild) | same(dependentRelationshipCd(I),grandChild) | same(dependentRelationshipCd(I),brother) |same(dependentRelationshipCd(I),sister) | same(dependentRelationshipCd(I),nephew) | same(dependentRelationshipCd(I),niece) | same(dependentRelationshipCd(I),son) | same(dependentRelationshipCd(I),daughter)" ) ) ) 
 
 (example
   (utterance "Form 1040, Line 6c, for each dependent provided, if Line 6c (4) checkbox 'EligibleForChildTaxCreditInd' is checked, then that dependent's age must be under 17.")
