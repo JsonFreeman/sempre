@@ -47,7 +47,7 @@
 (rule $SENTENCE ($FIELD in the return header is an itin) (lambda x (call + (string "iTin(") (var x) (string ")"))))
 # not working for unknown reasons
 (rule $SENTENCE (Schedule $TOKEN $PHRASE must be attached) (lambda x (lambda y (call + (string "has_value(presentSchedule") (var x) (string ")")))))
-(rule $SENTENCE (Schedule $TOKEN must NOT be attached) (lambda x (call + (string "~has_value(presentSchedule") (var x) (string ")"))))
+(rule $SENTENCE (Schedule $TOKEN must not be attached) (lambda x (call + (string "~has_value(presentSchedule") (var x) (string ")"))))
 
 
 # extract field name
