@@ -14,7 +14,7 @@
 
 (example
   (utterance "If Form 1040, Line 4 checkbox "Head of household" is checked (element 'IndividualReturnFilingStatusCd' has the value 4) and 'QualifyingHOHNm' has a value, then 'QualifyingHOHSSN' must have a value.")
-  (targetValue (string "value(individualReturnFilingStatusCd,4) & has_value (qualifyingHOHNm)  & missing_value(qulifyingHOHSSN)" ) ) ) 
+  (targetValue (string "value(individualReturnFilingStatusCd,4) & has_value (qualifyingHOHNm)  & ~has_value(qulifyingHOHSSN)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 4 'QualifyingHOHSSN' has a value, then it cannot be equal to the Primary SSN or the Spouse SSN in the Return Header.")
@@ -69,11 +69,11 @@
 
 (example
   (utterance "If Form 1040, Line 8a 'TaxableInterestAmt' is greater than 1500, then it must be equal to Schedule B (Form 1040), Line 4 'CalculatedTotalTaxableIntAmt' unless Form 8958 is present in the return.")
-  (targetValue (string "greater_than(taxableInterestAmt,1500) &  missing_value(form8958Present) & distinct(taxableInterestAmt,calculatedTotalTaxableIntAmt)" ) ) ) 
+  (targetValue (string "greater_than(taxableInterestAmt,1500) &  ~has_value(form8958Present) & distinct(taxableInterestAmt,calculatedTotalTaxableIntAmt)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 9a 'OrdinaryDividendsAmt' is greater than 1500, then it must be equal to Schedule B (Form 1040), Line 6 'TotalOrdinaryDividendsAmt' unless Form 8958 is present in the return.")
-  (targetValue (string "greater_than(ordinaryDividendsAmt,1500) &  missing_value(form8958Present) & ~same(ordinaryDividendsAmt,totalOrdinaryDividendsAmt)" ) ) ) 
+  (targetValue (string "greater_than(ordinaryDividendsAmt,1500) &  ~has_value(form8958Present) & ~same(ordinaryDividendsAmt,totalOrdinaryDividendsAmt)" ) ) ) 
 
 (example
   (utterance "If Schedule A (Form 1040) is present in the return, then Form 1040, Line 40 'TotalItemizedOrStandardDedAmt' must be equal to Schedule A (Form 1040), Line 29 'TotalItemizedDeductionsAmt'.")
@@ -109,7 +109,7 @@
 
 (example
   (utterance "If Form 1040, Line 13 checkbox 'CapitalDistributionInd' is not checked and Line 13 'CapitalGainLossAmt' has a non-zero value, then Schedule D (Form 1040) must be attached.")
-  (targetValue (string "missing_value(capitalDistributionInd) & non_zero(capitalGainLossAmt) & missing_value(presentScheduleD)" ) ) ) 
+  (targetValue (string "~has_value(capitalDistributionInd) & non_zero(capitalGainLossAmt) & ~has_value(presentScheduleD)" ) ) ) 
 
 (example
   (utterance "If any of the following Form 1040 fields have a value, then all of these fields must have a value: Line 76b 'RoutingTransitNum', Line 76c 'BankAccountTypeCd', Line 76d 'DepositorAccountNum'.")
@@ -155,7 +155,7 @@
 
 (example
   (utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is greater than Line 63 'TotalTaxAmt' and [ Line 77 'AppliedToEsTaxAmt' plus(+) Line 79 'EsPenaltyAmt' is equal to Line 75 'OverpaidAmt' ], then Line 76a 'RefundAmt' must be equal to zero if an amount is entered.")
-  (targetValue (string "greater_than(totalPaymentAmt,totalTaxAmt) & plus(appliedToEsTaxAmt,esPaneltyAmt,overpaidAmt) &  ~missing_value(refundAmt) & non_zero(refundAmt)" ) ) ) 
+  (targetValue (string "greater_than(totalPaymentAmt,totalTaxAmt) & plus(appliedToEsTaxAmt,esPaneltyAmt,overpaidAmt) &  has_value(refundAmt) & non_zero(refundAmt)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is greater than Line 63 'TotalTaxAmt' and [Line 77 'AppliedToEsTaxAmt' plus (+) Line 79 'EsPenaltyAmt' is less than Line 75 'OverpaidAmt'], then Line 76a 'RefundAmt' must have a non-zero value.")
@@ -187,12 +187,12 @@
 
 (example
   (utterance "If Form 1040, Line 54c checkbox 'SpecificOtherCreditsInd' is checked and 'creditFormsStatementSchRCd' has the value "SCH R" and (Line 39a checkboxes 'Primary65OrOlderInd' and 'Spouse65OrOlderInd' are not checked), then at least one of the following checkboxes on Schedule R (Form 1040A or 1040) must be checked: Line 2 'Line 2 'Und65RtdPermnntTotDsbltyInd' or Line 4 'BothUnder65OneRtdDsbltyInd' or Line 5 'BothUnder65BothRtdDsbltyInd' or Line 9 'Under65DidNotLiveTogetherInd'.")
-  (targetValue (string "has_value(specificOtherCreditsInd) &  value(creditFormsStatementSchRCd,sch_R) & missing_value(primary65OrOlderInd) & missing_value(spouse65OrOlderInd) &
-                             missing_value(und65RtdPermnntTotDsbltyInd) & missing_value(bothUnder65OneRtdDsbltyInd) & missing_value(bothUnder65BothRtdDsbltyInd) & missing_value(under65DidNotLiveTogetherInd)" ) ) ) 
+  (targetValue (string "has_value(specificOtherCreditsInd) &  value(creditFormsStatementSchRCd,sch_R) & ~has_value(primary65OrOlderInd) & ~has_value(spouse65OrOlderInd) &
+                             ~has_value(und65RtdPermnntTotDsbltyInd) & ~has_value(bothUnder65OneRtdDsbltyInd) & ~has_value(bothUnder65BothRtdDsbltyInd) & ~has_value(under65DidNotLiveTogetherInd)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 51 'RtrSavingsContributionsCrAmt' has a non-zero value, then Form 8880 must be attached.")
-  (targetValue (string "non_zero(rtrSavingsContributionsCrAmt) & missing_value(form8880IsAttached)" ) ) ) 
+  (targetValue (string "non_zero(rtrSavingsContributionsCrAmt) & ~has_value(form8880IsAttached)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 36 'OtherAdjustmentsTotalAmt' has a non-zero value or "Other Adjustments Statement" [OtherAdjustmentsStatement] is attached, then Form 1040, Line 36 'TotalAdjustmentsAmt' must have a non-zero value.")
@@ -200,11 +200,11 @@
 
 (example
   (utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked (element 'IndividualReturnFilingStatusCd' has the value 2), then 'SpousePINEnteredByCd' must have a value.")
-  (targetValue (string "value(individualReturnFilingStatusCd,2) & missing_value(spousePINEnteredByCd)" ) ) ) 
+  (targetValue (string "value(individualReturnFilingStatusCd,2) & ~has_value(spousePINEnteredByCd)" ) ) ) 
 
 (example
   (utterance "If Form 1040 Line 3 checkbox "Married filing separately" is checked (element 'IndividualReturnFilingStatusCd' has the value 3), then Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present.")
-  (targetValue (string "value(individualReturnFilingStatusCd,3) & ~missing_value(earnedIncomeCreditAmt) & ~distinct(earnedIncomeCreditAmt,0)" ) ) ) 
+  (targetValue (string "value(individualReturnFilingStatusCd,3) & has_value(earnedIncomeCreditAmt) & ~distinct(earnedIncomeCreditAmt,0)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 36 'TotalAdjustmentsAmt' has a non-zero value, then at least one of the following must have a non-zero value: Line 23 'EducatorExpensesAmt' or Line 24 'BusExpnsReservistsAndOthersAmt' or Line 25 'HealthSavingsAccountDedAmt' or Line 26 'MovingExpenseAmt' or Line 27 'DeductibleSelfEmploymentTaxAmt' or Line 28 'SelfEmpldSepSimpleQlfyPlansAmt' or Line 29 'SelfEmpldHealthInsDedAmt' or Line 30 'PnltyOnErlyWthdrwOfSavingsAmt' or Line 31a 'TotalAlimonyPaidAmt' or Line 32 'IRADeductionAmt' or Line 33 'StudentLoanInterestDedAmt' or Line 34 'TuitionAndFeesDedAmt' or Line 35 'DomesticProductionActDedAmt' or 'OtherAdjustmentsAmt' in 'OtherAdjustmentsStatement' attached to Line 36.")
@@ -227,15 +227,15 @@
 
 (example
   (utterance "If Form 1040, Line 66a 'EarnedIncomeCreditAmt' is greater than 503, then Schedule EIC (Form 1040A or 1040) must be present in the return.")
-  (targetValue (string "greater_than(earnedIncomeCreditAmt,503) & missing_value(scheduleEICIsAttached)" ) ) ) 
+  (targetValue (string "greater_than(earnedIncomeCreditAmt,503) & ~has_value(scheduleEICIsAttached)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 66a 'EarnedIncomeCreditAmt' has a non-zero value and Schedule EIC (Form 1040) is not present in the return, then the Primary Taxpayer and/or the Spouse Taxpayer in the Return Header must be at least 25 years old but not be older than 64.")
-  (targetValue (string "non_zero(earnedIncomeCreditAmt) & missing_value(scheduleEICIsAttached) & ~((age(primarySSN,X) & greater_than(X,25) & greater_than(65,X)) | (age(spouseSSN,Y) & greater_than(Y,25) & greater_than(65,Y)))" ) ) ) 
+  (targetValue (string "non_zero(earnedIncomeCreditAmt) & ~has_value(scheduleEICIsAttached) & ~((age(primarySSN,X) & greater_than(X,25) & greater_than(65,X)) | (age(spouseSSN,Y) & greater_than(Y,25) & greater_than(65,Y)))" ) ) ) 
 
 (example
   (utterance "If Schedule A (Form 1040) is not present in the return and Form 1040, Line 39b checkbox 'MustItemizeInd' is checked, then Form 1040, Line 40 'TotalItemizedOrStandardDedAmt' must have a zero value if an amount is entered.")
-  (targetValue (string "missing_value(scheduleAIsPresent) & has_value(mustItemizeInd) & non_zero(totalItemizedOrStandardDedAmt,X)" ) ) ) 
+  (targetValue (string "~has_value(scheduleAIsPresent) & has_value(mustItemizeInd) & non_zero(totalItemizedOrStandardDedAmt,X)" ) ) ) 
 
 (example
   (utterance "Form 1040, Line 64 'WithholdingTaxAmt' must be less than the sum of the following: [Line 7 'WagesSalariesAndTipsAmt' and Line 8a 'TaxableInterestAmt' and Line 9a 'OrdinaryDividendsAmt' and (Line 15a 'IRADistributionsAmt' or Line 15b 'TaxableIRAAmt') and (Line 16a 'PensionsAnnuitiesAmt' or Line 16b 'TotalTaxablePensionsAmt' ) and Line 19 'UnemploymentCompAmt' and Line 20a 'SocSecBnftAmt' and ( all 'OtherIncomeAmt' in [OtherIncomeTypeStatement] attached to Line 21 ) and ( all Schedule C (Form 1040), Line 1 'TotalGrossReceiptsAmt' ) and ( all Schedule C-EZ(Form 1040), Line 1 'TotalGrossReceiptsAmt' ) ] unless one of the following is true: (1) Line 13 'CapitalGainLossAmt' has a non-zero value; (2) Line 14 'OtherGainLossAmt' has a non-zero value; (3) Line 17 'RentalRealEstateIncomeLossAmt' has a non-zero value; (4) Line 18 'NetFarmProfitLossAmt' has a non-zero value; (5) Combat Pay has been excluded from wages.")
@@ -244,7 +244,7 @@
 
 (example
   (utterance "If Form 1040, Line 78 'OwedAmt' has a non-zero value and Line 79 'EsPenaltyAmt' has a zero value or has no entry, then Line 63 'TotalTaxAmt' must be greater than Line 74 'TotalPaymentsAmt'.")
-  (targetValue (string "non_zero(owedAmt) & (same(esPenaltyAmt,0) | missing_value(esPenaltyAmt)) & ~greater_than(totalTaxAmt,totalPaymentsAmt)" ) ) ) 
+  (targetValue (string "non_zero(owedAmt) & (same(esPenaltyAmt,0) | ~has_value(esPenaltyAmt)) & ~greater_than(totalTaxAmt,totalPaymentsAmt)" ) ) ) 
 
 (example
   (utterance "For each dependent that has a value on Form 1040, Line 6c(1), if Line 6c(4) checkbox 'EligibleForChildTaxCreditInd' is checked, then the corresponding line 6c(3) 'DependentRelationshipCd' must have one of the following values: "STEPCHILD" or "HALF BROTHER" or "HALF SISTER" or "STEPBROTHER" or "STEPSISTER" or "FOSTER CHILD" or "GRANDCHILD" or "BROTHER" or "SISTER" or "NEPHEW" or "NIECE" or "SON" or "DAUGHTER".")
@@ -289,15 +289,15 @@
 
 (example
   (utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked (element 'IndividualReturnFilingStatusCd' has the value 2) and either 'PrimaryDeathDt' or 'SpouseDeathDt' has a value, then Form 1040 'SurvivingSpouseInd' must be checked.")
-  (targetValue (string "value(individualReturnFilingStatusCd,2) & ( has_value(primaryDeathDt) | has_value(spouseDeathDt)) & missing_value(survivingSpouseInd)" ) ) ) 
+  (targetValue (string "value(individualReturnFilingStatusCd,2) & ( has_value(primaryDeathDt) | has_value(spouseDeathDt)) & ~has_value(survivingSpouseInd)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is not checked (element 'IndividualReturnFilingStatusCd' does not have the value 2) and 'PrimaryDeathDt' has a value, then Personal Representative Indicator checkbox 'PersonalRepresentativeInd' must be checked.")
-  (targetValue (string "~value(individualReturnFilingStatusCd,2) & has_value(primaryDeathDt) & missing_value(personalRepresentativevInd)" ) ) ) 
+  (targetValue (string "~value(individualReturnFilingStatusCd,2) & has_value(primaryDeathDt) & ~has_value(personalRepresentativevInd)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked (element 'IndividualReturnFilingStatusCd' has the value 2) and both 'PrimaryDeathDt' and 'SpouseDeathDt' has a value, then Personal Representative Indicator checkbox 'PersonalRepresentativeInd' must be checked.")
-  (targetValue (string "value(individualReturnFilingStatusCd,2) & has_value(primaryDeathDt) & has_value(spouseDeathDt) & missing_value(personalRepresentativeInd)" ) ) ) 
+  (targetValue (string "value(individualReturnFilingStatusCd,2) & has_value(primaryDeathDt) & has_value(spouseDeathDt) & ~has_value(personalRepresentativeInd)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is not checked (element 'IndividualReturnFilingStatusCd' does not have the value 2) and 'PrimaryDeathDt' has a value, then Filer Name in the Return Header 'NameLine1Txt' must contain either " DECD" or "<DECD".")
