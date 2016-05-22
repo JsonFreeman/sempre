@@ -11,7 +11,7 @@
 # field value
 (rule $SENTENCE ($FIELD has a non zero value) (lambda x (call + (string "non_zero(") (var x) (string ")"))))
 (rule $SENTENCE ($FIELD must have a non zero value) (lambda x (call + (string "non_zero(") (var x) (string ")"))))
-(rule $SENTENCE ($FIELD has the value ` $PHRASE ') (lambda x (lambda y (call + (string "value(") (var x) (string ",") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD has the value (` optional) $TOKEN (' optional)) (lambda x (lambda y (call + (string "value(") (var x) (string ",") (var y) (string ")")))))
 
 # implied field value
 (rule $SENTENCE ($FIELD is (not optional) checked [ element ` $PHRASE ' has the value $PHRASE ]) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
@@ -20,17 +20,19 @@
 # field value existence
 (rule $SENTENCE ($FIELD has a value) (lambda x (call + (string "has_value(") (var x) (string ")"))))
 (rule $SENTENCE ($FIELD is checked) (lambda x (call + (string "has_value(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD is not checked) (lambda x (call + (string "~has_value(") (var x) (string ")"))))
 (rule $SENTENCE ($FIELD must have a value) (lambda x (call + (string "has_value(") (var x) (string ")"))))
 # Negation problem
-(rule $SENTENCE ($FIELD must be equal to zero if an amount is entered) (lambda x (call + (string "has_value(") (var x) (string ") & ") (string "non_zero(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD must be equal to zero if an amount is entered) (lambda x (call + (string "has_value(") (var x) (string ") & ") (string "zero(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD must be equal to zero or not be present) (lambda x (call + (string "(zero(") (var x) (string ") | ~has_value(") (var x) (string "))"))))
 
 # Tax-specific field value
-(rule $SENTENCE ($FIELD in the Return Header is an ITIN) (lambda x (call + (string "iTin(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD in the return header is an itin) (lambda x (call + (string "iTin(") (var x) (string ")"))))
 # not working for unknown reasons
-(rule $SENTENCE (Schedule $TOKEN $Padding must be attached) (lambda x (call + (string "has_value(presentSchedule") (var x) (string ")"))))
-(rule $SENTENCE (Schedule $TOKEN $Padding must NOT be attached) (lambda x (call + (string "~has_value(presentSchedule") (var x) (string ")"))))
+(rule $SENTENCE (Schedule $TOKEN $PHRASE must be attached) (lambda x (lambda y (call + (string "has_value(presentSchedule") (var x) (string ")")))))
+(rule $SENTENCE (Schedule $TOKEN must NOT be attached) (lambda x (call + (string "~has_value(presentSchedule") (var x) (string ")"))))
 
 # extract field name
-(rule $FIELD (form $TOKEN , line $PHRASE ` $PHRASE ') (lambda x (lambda y (lambda z (var z)))))
-(rule $FIELD (line $PHRASE ` $PHRASE ') (lambda y (lambda z (var z))))
+(rule $FIELD (form $TOKEN , line $TOKEN (checkbox optional) ` $PHRASE ') (lambda x (lambda y (lambda z (var z)))))
+(rule $FIELD (line $TOKEN (checkbox optional) ` $PHRASE ') (lambda y (lambda z (var z))))
 (rule $FIELD (` $PHRASE ') (lambda x (var x)))
