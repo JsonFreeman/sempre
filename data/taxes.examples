@@ -119,7 +119,7 @@
 
 (example
   (utterance "If Form 1040, Line 75 'OverpaidAmt' has a non-zero value, then Line 74 'TotalPaymentsAmt' must be greater than Line 63 'TotalTaxAmt'.")
-  (targetValue (string "non_zero(overpaidAmt) & ~greater_than(totalPaymentAmt,totalTaxAmt)" ) ) ) 
+  (targetValue (string "non_zero(overpaidAmt) & ~greater_than(totalPaymentsAmt,totalTaxAmt)" ) ) ) 
 
 (example
   (utterance "If 'PrimarySSN' in the Return Header is an ITIN, then Form 1040, Line 66a 'EarnedIncomeCreditAmt' must be equal to zero if an amount is entered.")
@@ -155,15 +155,15 @@
 
 (example
   (utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is greater than Line 63 'TotalTaxAmt' and [ Line 77 'AppliedToEsTaxAmt' plus(+) Line 79 'EsPenaltyAmt' is equal to Line 75 'OverpaidAmt' ], then Line 76a 'RefundAmt' must be equal to zero if an amount is entered.")
-  (targetValue (string "greater_than(totalPaymentAmt,totalTaxAmt) & plus(appliedToEsTaxAmt,esPaneltyAmt,overpaidAmt) &  has_value(refundAmt) & non_zero(refundAmt)" ) ) ) 
+  (targetValue (string "greater_than(totalPaymentsAmt,totalTaxAmt) & plus(appliedToEsTaxAmt,esPaneltyAmt,overpaidAmt) &  has_value(refundAmt) & non_zero(refundAmt)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is greater than Line 63 'TotalTaxAmt' and [Line 77 'AppliedToEsTaxAmt' plus (+) Line 79 'EsPenaltyAmt' is less than Line 75 'OverpaidAmt'], then Line 76a 'RefundAmt' must have a non-zero value.")
-  (targetValue (string "greater_than(totalPaymentAmt,totalTaxAmt) & greater_than(overpaidAmt,plus(appliedToEsTaxAmt,esPaneltyAmt)) & ~non_zero(refundAmt)" ) ) ) 
+  (targetValue (string "greater_than(totalPaymentsAmt,totalTaxAmt) & greater_than(overpaidAmt,plus(appliedToEsTaxAmt,esPaneltyAmt)) & ~non_zero(refundAmt)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is equal to Line 63 'TotalTaxAmt', then the following lines must not have a value greater than zero: Line 75 'OverpaidAmt' and Line 76a 'RefundAmt' and Line 77 'AppliedToEsTaxAmt'.")
-  (targetValue (string "same(totalPaymentAmt,totalTaxAmt) & greater_than(appliedToEsTaxAmt,0) & greater_than(refundAmt,0) & greater_than(overpaidAmt,0)" ) ) ) 
+  (targetValue (string "same(totalPaymentsAmt,totalTaxAmt) & greater_than(appliedToEsTaxAmt,0) & greater_than(refundAmt,0) & greater_than(overpaidAmt,0)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 6c 'ChldNotLivingWithYouCnt' has a non-zero value, there must be at least one dependent listed in Line 6c that has its Line 6c(3) 'DependentRelationshipCd' from among the following values: ("STEPCHILD" or "HALF BROTHER" or "HALF SISTER" or "STEPBROTHER" or "STEPSISTER" or "FOSTER CHILD" or "GRANDCHILD" or "BROTHER" or "SISTER" or "NEPHEW" or "NIECE" or "SON" or "DAUGHTER").")
