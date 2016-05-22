@@ -54,7 +54,7 @@
 
 (example
   (utterance "If Schedule EIC (Form 1040) is present in the return, Form 1040, Line 66a 'EarnedIncomeCreditAmt' must have a non-zero value.")
-  (targetValue (string "has_value (scheduleEICIsPresent) & ~non_zero (earnedIncomeCreditAmt)" ) ) ) 
+  (targetValue (string "has_value (scheduleEIC) & ~non_zero (earnedIncomeCreditAmt)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 66a 'EarnedIncomeCreditAmt' has a non-zero value, then at least one of the following must be true: (1) In [WagesNotShownSchedule] attached to Form 1040, Line 7, at least one 'WagesLiteralCd' must have the value "HSH" and the corresponding 'WagesNotShownAmt' must be greater than zero; (2) [OtherIncomeTypeStatement] must be attached to Form 1040, Line 21; (3) Form W-2 must be present; (4) Form 1099-R must be present; (5) Schedule C (Form 1040) must be present; (6) Schedule E (Form 1040), Line 28(b) 'PartnershipSCorpCd' must have the value "P" for at least one entry in Line 28; (7) Schedule F (Form 1040) must be present; (8) Schedule C-EZ (Form 1040) must be present; (9) Form 8919 must be present; (10) In [WagesNotShownSchedule] attached to Form 1040, Line 7, at least one 'WagesLiteralCd' must have the value "FEC" with the corresponding 'WagesNotShownAmt' having a value greater than zero and [FECRecord] must be present.")
@@ -175,7 +175,7 @@
 
 (example
   (utterance "If Form 2210 is present, then Form 1040, Line 79 'EsPenaltyAmt' must be equal to Form 2210, Line 17 'PenaltyAmt' or Form 2210, Line 27 'TotalPenaltyAmt'.")
-  (targetValue (string "has_value(form2210IsPresent) & ~(same(esPaneltyAmt,form2210PentaltyAmt,Y) | same(esPaneltyAmt,form2210TotalPenaltyAmt))" ) ) ) 
+  (targetValue (string "has_value(form2210) & ~(same(esPaneltyAmt,form2210PentaltyAmt,Y) | same(esPaneltyAmt,form2210TotalPenaltyAmt))" ) ) ) 
 
 (example
   (utterance "Form 1040, Line 6d 'TotalExemptionsCnt' must be equal to the total of the following fields: 'TotalExemptPrimaryAndSpouseCnt', 'ChldWhoLivedWithYouCnt', 'ChldNotLivingWithYouCnt', and 'OtherDependentsListedCnt'.")
@@ -183,7 +183,7 @@
 
 (example
   (utterance "If Form 1040, Line 24 'BusExpnsReservistsAndOthersAmt' has a non-zero value, then Form 2106 or Form 2106-EZ must be attached to Line 24.")
-  (targetValue (string "non_zero(busExpnsReservistsAndOthersAmt) & ~has_value(form2106IsPresent) & ~has_value(form2106EZIsPresent)" ) ) ) 
+  (targetValue (string "non_zero(busExpnsReservistsAndOthersAmt) & ~has_value(form2106) & ~has_value(form2106EZ)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 54c checkbox 'SpecificOtherCreditsInd' is checked and 'creditFormsStatementSchRCd' has the value "SCH R" and (Line 39a checkboxes 'Primary65OrOlderInd' and 'Spouse65OrOlderInd' are not checked), then at least one of the following checkboxes on Schedule R (Form 1040A or 1040) must be checked: Line 2 'Line 2 'Und65RtdPermnntTotDsbltyInd' or Line 4 'BothUnder65OneRtdDsbltyInd' or Line 5 'BothUnder65BothRtdDsbltyInd' or Line 9 'Under65DidNotLiveTogetherInd'.")
@@ -192,11 +192,11 @@
 
 (example
   (utterance "If Form 1040, Line 51 'RtrSavingsContributionsCrAmt' has a non-zero value, then Form 8880 must be attached.")
-  (targetValue (string "non_zero(rtrSavingsContributionsCrAmt) & ~has_value(form8880IsAttached)" ) ) ) 
+  (targetValue (string "non_zero(rtrSavingsContributionsCrAmt) & ~has_value(form8880)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 36 'OtherAdjustmentsTotalAmt' has a non-zero value or "Other Adjustments Statement" [OtherAdjustmentsStatement] is attached, then Form 1040, Line 36 'TotalAdjustmentsAmt' must have a non-zero value.")
-  (targetValue (string "(non_zero(otherAdjustmentTotalAmt) | has_value(otherAdjustmentsStatementIsAttached))  & same(totalAdjustmentAmt,0)" ) ) ) 
+  (targetValue (string "(non_zero(otherAdjustmentTotalAmt) | has_value(otherAdjustmentsStatement))  & same(totalAdjustmentAmt,0)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked (element 'IndividualReturnFilingStatusCd' has the value 2), then 'SpousePINEnteredByCd' must have a value.")
@@ -227,15 +227,15 @@
 
 (example
   (utterance "If Form 1040, Line 66a 'EarnedIncomeCreditAmt' is greater than 503, then Schedule EIC (Form 1040A or 1040) must be present in the return.")
-  (targetValue (string "greater_than(earnedIncomeCreditAmt,503) & ~has_value(scheduleEICIsAttached)" ) ) ) 
+  (targetValue (string "greater_than(earnedIncomeCreditAmt,503) & ~has_value(scheduleEIC)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 66a 'EarnedIncomeCreditAmt' has a non-zero value and Schedule EIC (Form 1040) is not present in the return, then the Primary Taxpayer and/or the Spouse Taxpayer in the Return Header must be at least 25 years old but not be older than 64.")
-  (targetValue (string "non_zero(earnedIncomeCreditAmt) & ~has_value(scheduleEICIsAttached) & ~((age(primarySSN,X) & greater_than(X,25) & greater_than(65,X)) | (age(spouseSSN,Y) & greater_than(Y,25) & greater_than(65,Y)))" ) ) ) 
+  (targetValue (string "non_zero(earnedIncomeCreditAmt) & ~has_value(scheduleEIC) & ~((age(primarySSN,X) & greater_than(X,25) & greater_than(65,X)) | (age(spouseSSN,Y) & greater_than(Y,25) & greater_than(65,Y)))" ) ) ) 
 
 (example
   (utterance "If Schedule A (Form 1040) is not present in the return and Form 1040, Line 39b checkbox 'MustItemizeInd' is checked, then Form 1040, Line 40 'TotalItemizedOrStandardDedAmt' must have a zero value if an amount is entered.")
-  (targetValue (string "~has_value(scheduleAIsPresent) & has_value(mustItemizeInd) & non_zero(totalItemizedOrStandardDedAmt,X)" ) ) ) 
+  (targetValue (string "~has_value(scheduleA) & has_value(mustItemizeInd) & non_zero(totalItemizedOrStandardDedAmt,X)" ) ) ) 
 
 (example
   (utterance "Form 1040, Line 64 'WithholdingTaxAmt' must be less than the sum of the following: [Line 7 'WagesSalariesAndTipsAmt' and Line 8a 'TaxableInterestAmt' and Line 9a 'OrdinaryDividendsAmt' and (Line 15a 'IRADistributionsAmt' or Line 15b 'TaxableIRAAmt') and (Line 16a 'PensionsAnnuitiesAmt' or Line 16b 'TotalTaxablePensionsAmt' ) and Line 19 'UnemploymentCompAmt' and Line 20a 'SocSecBnftAmt' and ( all 'OtherIncomeAmt' in [OtherIncomeTypeStatement] attached to Line 21 ) and ( all Schedule C (Form 1040), Line 1 'TotalGrossReceiptsAmt' ) and ( all Schedule C-EZ(Form 1040), Line 1 'TotalGrossReceiptsAmt' ) ] unless one of the following is true: (1) Line 13 'CapitalGainLossAmt' has a non-zero value; (2) Line 14 'OtherGainLossAmt' has a non-zero value; (3) Line 17 'RentalRealEstateIncomeLossAmt' has a non-zero value; (4) Line 18 'NetFarmProfitLossAmt' has a non-zero value; (5) Combat Pay has been excluded from wages.")
