@@ -42,11 +42,11 @@
 
 (example
   (utterance "Form 1040, Line 6c(2), each 'DependentSSN' provided must be unique among all the dependent SSNs in Line 6c(2).")
-  (targetValue (string "has_value (depSSN(I)) & has_(depSSN(J)) & ~distinct(depSSN(I),depSSN(J))" ) ) ) 
+  (targetValue (string "has_value(depSSN(I)) & has_value(depSSN(J)) & same(depSSN(I),depSSN(J))" ) ) ) 
 
 (example
   (utterance "Form 1040, Line 6c(2), each 'DependentSSN' provided must not be the same as the 'PrimarySSN' or the 'SpouseSSN' in the Return Header.")
-  (targetValue (string "has_value(depSSN(I)) & ( same(depSSN(I),primarySSN) | same(depSSN(I),spouseSSN))" ) ) ) 
+  (targetValue (string "has_value(depSSN(I)) & (same(depSSN(I),primarySSN) | same(depSSN(I),spouseSSN))" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 66a 'EICEligibilityLiteralCd' has the value 'NO', then Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present.")
@@ -69,7 +69,7 @@
 
 (example
   (utterance "If Form 1040, Line 8a 'TaxableInterestAmt' is greater than 1500, then it must be equal to Schedule B (Form 1040), Line 4 'CalculatedTotalTaxableIntAmt' unless Form 8958 is present in the return.")
-  (targetValue (string "greater_than(taxableInterestAmt,1500) &  ~has_value(form8958Present) & distinct(taxableInterestAmt,calculatedTotalTaxableIntAmt)" ) ) ) 
+  (targetValue (string "greater_than(taxableInterestAmt,1500) &  ~has_value(form8958Present) & ~same(taxableInterestAmt,calculatedTotalTaxableIntAmt)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 9a 'OrdinaryDividendsAmt' is greater than 1500, then it must be equal to Schedule B (Form 1040), Line 6 'TotalOrdinaryDividendsAmt' unless Form 8958 is present in the return.")
@@ -77,11 +77,11 @@
 
 (example
   (utterance "If Schedule A (Form 1040) is present in the return, then Form 1040, Line 40 'TotalItemizedOrStandardDedAmt' must be equal to Schedule A (Form 1040), Line 29 'TotalItemizedDeductionsAmt'.")
-  (targetValue (string "has_value(scheduleAPresent) & distinct(totalItemizedOrStandardDedAmt,totalItemizedDeductionsAmt)" ) ) ) 
+  (targetValue (string "has_value(scheduleAPresent) & ~same(totalItemizedOrStandardDedAmt,totalItemizedDeductionsAmt)" ) ) ) 
 
 (example
   (utterance "Form 1040, Line 49 'CreditForChildAndDepdCareAmt' must be equal to Form 2441, Line 11 'CreditForChildAndDepdCareAmt'.")
-  (targetValue (string "distinct(creditForChildAndDepdCareAmt,form2441Line11CreditForChildAndDepdCareAmt)" ) ) ) 
+  (targetValue (string "~same(creditForChildAndDepdCareAmt,form2441Line11CreditForChildAndDepdCareAmt)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 73 'OverpaidAmt' is greater than Line 77 'EsPenaltyAmt', then the sum of Line 74a 'RefundAmt', Line 75 'AppliedToEsTaxAmt', and Line 77 'EsPenaltyAmt' must be equal to Line 73 'OverpaidAmt'.")
@@ -89,7 +89,7 @@
 
 (example
   (utterance "If Form 1040, Line 75 'OverpaidAmt' is greater than zero and less than Line 79 'EsPenaltyAmt', then (Line 76a 'RefundAmt' and Line 77 'AppliedToEsTaxAmt' must be equal to zero if an amount is entered ) and [ Line 78 'OwedAmt' must be equal to ( Line 79 'EsPenaltyAmt' minus(-) Line 75 'OverpaidAmt') ].")
-  (targetValue (string "greater_than(overpaidAmt,0) & greater_than(esPaneltyAmt,overpaidAmt) & ~(sameAs(refundAmt,0)& sameAs(appliedToEsTaxAmt,0) & minus(esPenaltyAmt,overpaidAmt,owedAmt))" ) ) ) 
+  (targetValue (string "greater_than(overpaidAmt,0) & greater_than(esPaneltyAmt,overpaidAmt) & ~(same(refundAmt,0) & same(appliedToEsTaxAmt,0) & minus(esPenaltyAmt,overpaidAmt,owedAmt))" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 31a 'TotalAlimonyPaidAmt' has a non-zero value, then there must be at least one 'RecipientSSN' provided on Line 31b.")
@@ -147,7 +147,7 @@
 
 (example
   (utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is not equal to Line 63 'TotalTaxAmt', then one of the following must have a non-zero value: Line 75 'OverpaidAmt' or Line 76a 'RefundAmt' or Line 77 'AppliedToEsTaxAmt' or Line 78 'OwedAmt'.")
-  (targetValue (string "distinct(totalPaymentsAmt,totalTaxAmt) & non_zero(overPaidAmt) | non_zero(refundAmt) | non_zero(appliedToEsTaxAmt) | non_zero(owedAmt)" ) ) ) 
+  (targetValue (string "~same(totalPaymentsAmt,totalTaxAmt) & non_zero(overPaidAmt) | non_zero(refundAmt) | non_zero(appliedToEsTaxAmt) | non_zero(owedAmt)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 16a 'PensionsAnnuitiesAmt' or Line 16b 'TotalTaxablePensionsAmt' has a non-zero value, then both amounts cannot be equal.")
@@ -204,7 +204,7 @@
 
 (example
   (utterance "If Form 1040 Line 3 checkbox "Married filing separately" is checked (element 'IndividualReturnFilingStatusCd' has the value 3), then Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present.")
-  (targetValue (string "value(individualReturnFilingStatusCd,3) & has_value(earnedIncomeCreditAmt) & ~distinct(earnedIncomeCreditAmt,0)" ) ) ) 
+  (targetValue (string "value(individualReturnFilingStatusCd,3) & has_value(earnedIncomeCreditAmt) & ~same(earnedIncomeCreditAmt,0)" ) ) ) 
 
 (example
   (utterance "If Form 1040, Line 36 'TotalAdjustmentsAmt' has a non-zero value, then at least one of the following must have a non-zero value: Line 23 'EducatorExpensesAmt' or Line 24 'BusExpnsReservistsAndOthersAmt' or Line 25 'HealthSavingsAccountDedAmt' or Line 26 'MovingExpenseAmt' or Line 27 'DeductibleSelfEmploymentTaxAmt' or Line 28 'SelfEmpldSepSimpleQlfyPlansAmt' or Line 29 'SelfEmpldHealthInsDedAmt' or Line 30 'PnltyOnErlyWthdrwOfSavingsAmt' or Line 31a 'TotalAlimonyPaidAmt' or Line 32 'IRADeductionAmt' or Line 33 'StudentLoanInterestDedAmt' or Line 34 'TuitionAndFeesDedAmt' or Line 35 'DomesticProductionActDedAmt' or 'OtherAdjustmentsAmt' in 'OtherAdjustmentsStatement' attached to Line 36.")
