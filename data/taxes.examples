@@ -171,7 +171,7 @@
 
 (example
   (utterance "If Form 1040, Line 13 checkbox 'CapitalDistributionInd' is checked, then Line 13 'CapitalGainLossAmt' must have a non-zero value.")
-  (targetValue (string "has_value(capitalDistributionInd) & ~non_zero(captialGainLossAmt)" ) ) ) 
+  (targetValue (string "has_value(capitalDistributionInd) & ~non_zero(capitalGainLossAmt)" ) ) ) 
 
 (example
   (utterance "If Form 2210 is present, then Form 1040, Line 79 'EsPenaltyAmt' must be equal to Form 2210, Line 17 'PenaltyAmt' or Form 2210, Line 27 'TotalPenaltyAmt'.")
@@ -239,7 +239,7 @@
 
 (example
   (utterance "Form 1040, Line 64 'WithholdingTaxAmt' must be less than the sum of the following: [Line 7 'WagesSalariesAndTipsAmt' and Line 8a 'TaxableInterestAmt' and Line 9a 'OrdinaryDividendsAmt' and (Line 15a 'IRADistributionsAmt' or Line 15b 'TaxableIRAAmt') and (Line 16a 'PensionsAnnuitiesAmt' or Line 16b 'TotalTaxablePensionsAmt' ) and Line 19 'UnemploymentCompAmt' and Line 20a 'SocSecBnftAmt' and ( all 'OtherIncomeAmt' in [OtherIncomeTypeStatement] attached to Line 21 ) and ( all Schedule C (Form 1040), Line 1 'TotalGrossReceiptsAmt' ) and ( all Schedule C-EZ(Form 1040), Line 1 'TotalGrossReceiptsAmt' ) ] unless one of the following is true: (1) Line 13 'CapitalGainLossAmt' has a non-zero value; (2) Line 14 'OtherGainLossAmt' has a non-zero value; (3) Line 17 'RentalRealEstateIncomeLossAmt' has a non-zero value; (4) Line 18 'NetFarmProfitLossAmt' has a non-zero value; (5) Combat Pay has been excluded from wages.")
-  (targetValue (string "~non_zero(captialGainLossAmt) & ~non_zero(otherGainLossAmt) & ~nonzero(rentalRealEstateIncomeLossAmt) & ~nonzero(netFarmProfitLossAmt) &
+  (targetValue (string "~non_zero(capitalGainLossAmt) & ~non_zero(otherGainLossAmt) & ~nonzero(rentalRealEstateIncomeLossAmt) & ~nonzero(netFarmProfitLossAmt) &
                                ~greater_than(plus(wagesSalariesAndTipsAmt,taxableInterestAmt,ordinaryDividentsAmt,iRADistributionsAmt,pensionsAnnuitiesAmt,unemploymentCompAmt,socSecBenftAmt,otherIncomeAmt,totalGrossReceiptAmt),withholdingTaxAmt)" ) ) ) 
 
 (example
