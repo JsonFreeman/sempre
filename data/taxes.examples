@@ -14,7 +14,7 @@
 
 ( example
   ( utterance "If Form 1040, Line 4 checkbox \"Head of household\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 4 ) and 'QualifyingHOHNm' has a value, then 'QualifyingHOHSSN' must have a value." )
-  ( targetValue ( string "value( individualReturnFilingStatusCd,4 ) & has_value ( qualifyingHOHNm )  & ~has_value( qulifyingHOHSSN )"  )  )  ) 
+  ( targetValue ( string "value( individualReturnFilingStatusCd,4 ) & has_value ( qualifyingHOHNm )  & ~has_value( qualifyingHOHSSN )"  )  )  ) 
 
 ( example
   ( utterance "If Form 1040, Line 4 'QualifyingHOHSSN' has a value, then it cannot be equal to the Primary SSN or the Spouse SSN in the Return Header." )
@@ -273,7 +273,7 @@
 
 ( example
   ( utterance "If Form 1040, Line 33 'StudentLoanInterestDedAmt' has a non-zero value, then Form 1040, Line 3 checkbox \"Married filing separately\" must not be checked ( element 'IndividualReturnFilingStatusCd' must not have the value 3 )." )
-  ( targetValue ( string "non_zero( studentLoanInterestDedAmt ) & value( indvidualReturnFilingStatusCd,3 )"  )  )  ) 
+  ( targetValue ( string "non_zero( studentLoanInterestDedAmt ) & value( individualReturnFilingStatusCd,3 )"  )  )  ) 
 
 ( example
   ( utterance "Form 1040, Line 60b 'FirstTimeHmByrRepaymentAmt' must not be less than zero, if an amount is entered." )
