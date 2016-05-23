@@ -24,6 +24,7 @@ public class StringValue extends Value {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     StringValue that = (StringValue) o;
-    return this.value.toLowerCase().replaceAll("\\s+", "").equals(that.value.toLowerCase().replaceAll("\\s+", ""));
+    return this.value.toLowerCase().replaceAll("\\s+|~~", "")
+      .equals(that.value.toLowerCase().replaceAll("\\s+|~~", ""));
   }
 }
