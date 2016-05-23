@@ -1,4 +1,5 @@
-(rule $ROOT (if $SENTENCE , then $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
+(rule $ROOT (if $SENTENCE , (then optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
+(rule $ROOT ($SENTENCE .) (lambda x (call + (string "~") (var x))))
 (rule $SENTENCE ($SENTENCE and $SENTENCE) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
 
 
@@ -30,8 +31,8 @@
 
 
 # implied field value
-(rule $SENTENCE ($FIELD is (not optional) checked [ element ` $PHRASE ' has the value $PHRASE ]) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD is (not optional) checked [ element ` $PHRASE ' does not have the value $PHRASE ]) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE ($FIELD is (not optional) checked \( element ` $TOKEN ' has the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE ($FIELD is (not optional) checked \( element ` $TOKEN ' does not have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
 
 
 # field value existence
@@ -39,18 +40,25 @@
 (rule $SENTENCE ($FIELD is checked) (lambda x (call + (string "has_value(") (var x) (string ")"))))
 (rule $SENTENCE ($FIELD is not checked) (lambda x (call + (string "~has_value(") (var x) (string ")"))))
 (rule $SENTENCE ($FIELD must have a value) (lambda x (call + (string "has_value(") (var x) (string ")"))))
-(rule $SENTENCE ($FIELD must be equal to zero if an amount is entered) (lambda x (call + (string "(has_value(") (var x) (string ") & ") (string "~non_zero(") (var x) (string "))"))))
-(rule $SENTENCE ($FIELD must be equal to zero or not be present) (lambda x (call + (string "(~non_zero(") (var x) (string ") | ~has_value(") (var x) (string "))"))))
+(rule $SENTENCE ($FIELD must be equal to zero if an amount is entered) (lambda x (call + (string "~non_zero(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD must be equal to zero or not be present) (lambda x (call + (string "~non_zero(") (var x) (string ")"))))
 
 
 # Tax-specific field value
 (rule $SENTENCE ($FIELD in the return header is an itin) (lambda x (call + (string "iTin(") (var x) (string ")"))))
 # not working for unknown reasons
-(rule $SENTENCE (Schedule $TOKEN $PHRASE must be attached) (lambda x (lambda y (call + (string "has_value(presentSchedule") (var x) (string ")")))))
-(rule $SENTENCE (Schedule $TOKEN must not be attached) (lambda x (call + (string "~has_value(presentSchedule") (var x) (string ")"))))
-
+(rule $SENTENCE (schedule $TOKEN \( $TOKEN $TOKEN \) must be attached) (lambda x (lambda y (call + (string "has_value(schedule") (var x) (string ")")))))
+(rule $SENTENCE (schedule $TOKEN must not be attached) (lambda x (call + (string "~has_value(schedule") (var x) (string ")"))))
+(rule $SENTENCE (schedule $TOKEN \( $TOKEN $TOKEN \) is present in the return) (lambda x (lambda y (lambda z (call + (string "has_value(schedule") (var x) (string ")"))))))
 
 # extract field name
-(rule $FIELD (form $TOKEN , line $TOKEN (checkbox optional) ` $PHRASE ') (lambda x (lambda y (lambda z (var z)))))
-(rule $FIELD (line $TOKEN (checkbox optional) ` $PHRASE ') (lambda y (lambda z (var z))))
-(rule $FIELD (` $PHRASE ') (lambda x (var x)))
+(rule $FIELD (form $TOKEN , line $TOKEN (checkbox optional) ` $TOKEN ') (lambda x (lambda y (lambda z (var z)))))
+(rule $FIELD (schedule $TOKEN $TOKEN $TOKEN , line $TOKEN ` $TOKEN ') (lambda v (lambda w (lambda x (lambda y (lambda z (var z)))))))
+(rule $FIELD (line $TOKEN (checkbox optional) ` $TOKEN ') (lambda y (lambda z (var z))))
+(rule $FIELD (` $TOKEN ') (lambda x (var x)))
+
+# TODO
+# non-if-then
+# schedule X variables
+# form X variables
+# normalize to Xpresent 
