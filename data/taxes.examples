@@ -7,13 +7,13 @@
   ( targetValue ( string "non_zero( overpaidAmt ) & less_than_equal_to( esPenaltyAmt,overpaidAmt ) & non_zero( owedAmt )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 4 checkbox "Head of household" is checked ( element 'IndividualReturnFilingStatusCd' has the value 4 ), then one of the following fields must have a value: [ Line 4 'QualifyingHOHNm' and Line 4 'QualifyingHOHSSN' ] , Line 6c 'ChldWhoLivedWithYouCnt', or Line 6c 'OtherDependentsListedCnt'." )
+  ( utterance "If Form 1040, Line 4 checkbox \"Head of household\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 4 ), then one of the following fields must have a value: [ Line 4 'QualifyingHOHNm' and Line 4 'QualifyingHOHSSN' ] , Line 6c 'ChldWhoLivedWithYouCnt', or Line 6c 'OtherDependentsListedCnt'." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,4 ) & ~( ( has_value( qualifyingHOHNm )  & has_value( qualifyingHOHSSN ) )
                                                                         | has_value( chldWhoLivedWithYouCnt )
                                                                         | has_value( otherDependentsListedCnt ) )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 4 checkbox "Head of household" is checked ( element 'IndividualReturnFilingStatusCd' has the value 4 ) and 'QualifyingHOHNm' has a value, then 'QualifyingHOHSSN' must have a value." )
+  ( utterance "If Form 1040, Line 4 checkbox \"Head of household\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 4 ) and 'QualifyingHOHNm' has a value, then 'QualifyingHOHSSN' must have a value." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,4 ) & has_value ( qualifyingHOHNm )  & ~has_value( qulifyingHOHSSN )"  )  )  ) 
 
 ( example
@@ -25,15 +25,15 @@
   ( targetValue ( string "has_value( qualifyingHOHSSN ) & ~validSSN( qualifyingHOHSSN )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ), then both the Primary SSN and the Spouse SSN must be present in the Return Header." )
+  ( utterance "If Form 1040, Line 2 checkbox \"Married filing jointly\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ), then both the Primary SSN and the Spouse SSN must be present in the Return Header." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,2 ) &  ~( has_value( primarySSN ) & has_value( spouseSSN,X ) )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 3 checkbox "Married filing separately" ( element 'IndividualReturnFilingStatusCd' has the value 3 ), and Line 6b checkbox 'ExemptSpouseInd' are checked, then both the Primary SSN and the Spouse SSN must be present in the Return Header." )
+  ( utterance "If Form 1040, Line 3 checkbox \"Married filing separately\" ( element 'IndividualReturnFilingStatusCd' has the value 3 ), and Line 6b checkbox 'ExemptSpouseInd' are checked, then both the Primary SSN and the Spouse SSN must be present in the Return Header." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,3 ) & has_value( exemptSpouseInd ) &  ~( has_value( primarySSN ) & has_value( spouseSSN ) )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 4 checkbox "Head of household" ( element 'IndividualReturnFilingStatusCd' has the value 4 ), and Line 6b checkbox 'ExemptSpouseInd' are checked, then both the Primary SSN and the Spouse SSN must be present in the Return Header." )
+  ( utterance "If Form 1040, Line 4 checkbox \"Head of household\" ( element 'IndividualReturnFilingStatusCd' has the value 4 ), and Line 6b checkbox 'ExemptSpouseInd' are checked, then both the Primary SSN and the Spouse SSN must be present in the Return Header." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,4 ) & has_value( exemptSpouseInd ) & ~( has_value( primarySSN ) & has_value( spouseSSN ) )"  )  )  ) 
 
 ( example
@@ -57,7 +57,7 @@
   ( targetValue ( string "has_value ( scheduleEIC ) & ~non_zero ( earnedIncomeCreditAmt )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 66a 'EarnedIncomeCreditAmt' has a non-zero value, then at least one of the following must be true: ( 1 ) In [WagesNotShownSchedule] attached to Form 1040, Line 7, at least one 'WagesLiteralCd' must have the value "HSH" and the corresponding 'WagesNotShownAmt' must be greater than zero; ( 2 ) [OtherIncomeTypeStatement] must be attached to Form 1040, Line 21; ( 3 ) Form W-2 must be present; ( 4 ) Form 1099-R must be present; ( 5 ) Schedule C ( Form 1040 ) must be present; ( 6 ) Schedule E ( Form 1040 ), Line 28( b ) 'PartnershipSCorpCd' must have the value "P" for at least one entry in Line 28; ( 7 ) Schedule F ( Form 1040 ) must be present; ( 8 ) Schedule C-EZ ( Form 1040 ) must be present; ( 9 ) Form 8919 must be present; ( 10 ) In [WagesNotShownSchedule] attached to Form 1040, Line 7, at least one 'WagesLiteralCd' must have the value "FEC" with the corresponding 'WagesNotShownAmt' having a value greater than zero and [FECRecord] must be present." )
+  ( utterance "If Form 1040, Line 66a 'EarnedIncomeCreditAmt' has a non-zero value, then at least one of the following must be true: ( 1 ) In [WagesNotShownSchedule] attached to Form 1040, Line 7, at least one 'WagesLiteralCd' must have the value \"HSH\" and the corresponding 'WagesNotShownAmt' must be greater than zero; ( 2 ) [OtherIncomeTypeStatement] must be attached to Form 1040, Line 21; ( 3 ) Form W-2 must be present; ( 4 ) Form 1099-R must be present; ( 5 ) Schedule C ( Form 1040 ) must be present; ( 6 ) Schedule E ( Form 1040 ), Line 28( b ) 'PartnershipSCorpCd' must have the value \"P\" for at least one entry in Line 28; ( 7 ) Schedule F ( Form 1040 ) must be present; ( 8 ) Schedule C-EZ ( Form 1040 ) must be present; ( 9 ) Form 8919 must be present; ( 10 ) In [WagesNotShownSchedule] attached to Form 1040, Line 7, at least one 'WagesLiteralCd' must have the value \"FEC\" with the corresponding 'WagesNotShownAmt' having a value greater than zero and [FECRecord] must be present." )
   ( targetValue ( string "non_zero( earnedIncomeCreditAmt )              & ~ (  (  value ( wagesLiteralCd( I ), hsh ) & greater_than ( wagesNotShownAmt( I ),0 ) )|
                                                                                    has_value( otherIncomeTypeStatement ) |
                                                                                    has_value( w2 ) |
@@ -130,15 +130,15 @@
   ( targetValue ( string "iTIN( primarySSN ) & has_value( formScheduleEIC )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and 'SpouseSSN' in the Return Header is an ITIN, then Form 1040, Line 66a 'EarnedIncomeCreditAmt' must be equal to zero if an amount is entered." )
+  ( utterance "If Form 1040, Line 2 checkbox \"Married filing jointly\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and 'SpouseSSN' in the Return Header is an ITIN, then Form 1040, Line 66a 'EarnedIncomeCreditAmt' must be equal to zero if an amount is entered." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,2 )  & iTIN( spouseSSN ) & non_zero( earnedIncomeCreditAmt )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and 'SpouseSSN' in the Return Header is an ITIN, then Schedule EIC ( Form 1040A or 1040 ) must not be present in the return." )
+  ( utterance "If Form 1040, Line 2 checkbox \"Married filing jointly\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and 'SpouseSSN' in the Return Header is an ITIN, then Schedule EIC ( Form 1040A or 1040 ) must not be present in the return." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,2 )  & iTIN( spouseSSN ) & has_value( formScheduleEIC )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 39b checkbox 'MustItemizeInd' is checked, then Line 3 checkbox "Married filing separately" must be checked ( element 'IndividualReturnFilingStatusCd' must be equal to 3 )." )
+  ( utterance "If Form 1040, Line 39b checkbox 'MustItemizeInd' is checked, then Line 3 checkbox \"Married filing separately\" must be checked ( element 'IndividualReturnFilingStatusCd' must be equal to 3 )." )
   ( targetValue ( string "has_value( mustItemizeInd ) &  ~value( individualReturnFilingStatusCd,3 )"  )  )  ) 
 
 ( example
@@ -166,7 +166,7 @@
   ( targetValue ( string "same( totalPaymentsAmt,totalTaxAmt ) & greater_than( appliedToEsTaxAmt,0 ) & greater_than( refundAmt,0 ) & greater_than( overpaidAmt,0 )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 6c 'ChldNotLivingWithYouCnt' has a non-zero value, there must be at least one dependent listed in Line 6c that has its Line 6c( 3 ) 'DependentRelationshipCd' from among the following values: ( "STEPCHILD" or "HALF BROTHER" or "HALF SISTER" or "STEPBROTHER" or "STEPSISTER" or "FOSTER CHILD" or "GRANDCHILD" or "BROTHER" or "SISTER" or "NEPHEW" or "NIECE" or "SON" or "DAUGHTER" )." )
+  ( utterance "If Form 1040, Line 6c 'ChldNotLivingWithYouCnt' has a non-zero value, there must be at least one dependent listed in Line 6c that has its Line 6c( 3 ) 'DependentRelationshipCd' from among the following values: ( \"STEPCHILD\" or \"HALF BROTHER\" or \"HALF SISTER\" or \"STEPBROTHER\" or \"STEPSISTER\" or \"FOSTER CHILD\" or \"GRANDCHILD\" or \"BROTHER\" or \"SISTER\" or \"NEPHEW\" or \"NIECE\" or \"SON\" or \"DAUGHTER\" )." )
   ( targetValue ( string "non_zero( chldNotLivingWithYouCnt ) & ~( same( dependentRelationshipCd( I ),stepChild ) | same( dependentRelationshipCd( I ),halfBrother ) | same( dependentRelationshipCd( I ),halfSister ) | same( dependentRelationshipCd( I ),stepBrother ) | same( dependentRelationshipCd( I ),stepSister ) | same( dependentRelationshipCd( I ),fosterChild ) | same( dependentRelationshipCd( I ),grandChild ) | same( dependentRelationshipCd( I ),brother ) |same( dependentRelationshipCd( I ),sister ) | same( dependentRelationshipCd( I ),nephew ) | same( dependentRelationshipCd( I ),niece ) | same( dependentRelationshipCd( I ),son ) | same( dependentRelationshipCd( I ),daughter )"  )  )  ) 
 
 ( example
@@ -186,7 +186,7 @@
   ( targetValue ( string "non_zero( busExpnsReservistsAndOthersAmt ) & ~has_value( form2106 ) & ~has_value( form2106EZ )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 54c checkbox 'SpecificOtherCreditsInd' is checked and 'creditFormsStatementSchRCd' has the value "SCH R" and ( Line 39a checkboxes 'Primary65OrOlderInd' and 'Spouse65OrOlderInd' are not checked ), then at least one of the following checkboxes on Schedule R ( Form 1040A or 1040 ) must be checked: Line 2 'Line 2 'Und65RtdPermnntTotDsbltyInd' or Line 4 'BothUnder65OneRtdDsbltyInd' or Line 5 'BothUnder65BothRtdDsbltyInd' or Line 9 'Under65DidNotLiveTogetherInd'." )
+  ( utterance "If Form 1040, Line 54c checkbox 'SpecificOtherCreditsInd' is checked and 'creditFormsStatementSchRCd' has the value \"SCH R\" and ( Line 39a checkboxes 'Primary65OrOlderInd' and 'Spouse65OrOlderInd' are not checked ), then at least one of the following checkboxes on Schedule R ( Form 1040A or 1040 ) must be checked: Line 2 'Line 2 'Und65RtdPermnntTotDsbltyInd' or Line 4 'BothUnder65OneRtdDsbltyInd' or Line 5 'BothUnder65BothRtdDsbltyInd' or Line 9 'Under65DidNotLiveTogetherInd'." )
   ( targetValue ( string "has_value( specificOtherCreditsInd ) &  value( creditFormsStatementSchRCd,sch_R ) & ~has_value( primary65OrOlderInd ) & ~has_value( spouse65OrOlderInd ) &
                              ~has_value( und65RtdPermnntTotDsbltyInd ) & ~has_value( bothUnder65OneRtdDsbltyInd ) & ~has_value( bothUnder65BothRtdDsbltyInd ) & ~has_value( under65DidNotLiveTogetherInd )"  )  )  ) 
 
@@ -195,15 +195,15 @@
   ( targetValue ( string "non_zero( rtrSavingsContributionsCrAmt ) & ~has_value( form8880 )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 36 'OtherAdjustmentsTotalAmt' has a non-zero value or "Other Adjustments Statement" [OtherAdjustmentsStatement] is attached, then Form 1040, Line 36 'TotalAdjustmentsAmt' must have a non-zero value." )
+  ( utterance "If Form 1040, Line 36 'OtherAdjustmentsTotalAmt' has a non-zero value or \"Other Adjustments Statement\" [OtherAdjustmentsStatement] is attached, then Form 1040, Line 36 'TotalAdjustmentsAmt' must have a non-zero value." )
   ( targetValue ( string "( non_zero( otherAdjustmentTotalAmt ) | has_value( otherAdjustmentsStatement ) )  & same( totalAdjustmentAmt,0 )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ), then 'SpousePINEnteredByCd' must have a value." )
+  ( utterance "If Form 1040, Line 2 checkbox \"Married filing jointly\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ), then 'SpousePINEnteredByCd' must have a value." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,2 ) & ~has_value( spousePINEnteredByCd )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040 Line 3 checkbox "Married filing separately" is checked ( element 'IndividualReturnFilingStatusCd' has the value 3 ), then Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present." )
+  ( utterance "If Form 1040 Line 3 checkbox \"Married filing separately\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 3 ), then Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,3 ) & non_zero( earnedIncomeCreditAmt )"  )  )  ) 
 
 ( example
@@ -247,7 +247,7 @@
   ( targetValue ( string "non_zero( owedAmt ) & ( same( esPenaltyAmt,0 ) | ~has_value( esPenaltyAmt ) ) & ~greater_than( totalTaxAmt,totalPaymentsAmt )"  )  )  ) 
 
 ( example
-  ( utterance "For each dependent that has a value on Form 1040, Line 6c( 1 ), if Line 6c( 4 ) checkbox 'EligibleForChildTaxCreditInd' is checked, then the corresponding line 6c( 3 ) 'DependentRelationshipCd' must have one of the following values: "STEPCHILD" or "HALF BROTHER" or "HALF SISTER" or "STEPBROTHER" or "STEPSISTER" or "FOSTER CHILD" or "GRANDCHILD" or "BROTHER" or "SISTER" or "NEPHEW" or "NIECE" or "SON" or "DAUGHTER"." )
+  ( utterance "For each dependent that has a value on Form 1040, Line 6c( 1 ), if Line 6c( 4 ) checkbox 'EligibleForChildTaxCreditInd' is checked, then the corresponding line 6c( 3 ) 'DependentRelationshipCd' must have one of the following values: \"STEPCHILD\" or \"HALF BROTHER\" or \"HALF SISTER\" or \"STEPBROTHER\" or \"STEPSISTER\" or \"FOSTER CHILD\" or \"GRANDCHILD\" or \"BROTHER\" or \"SISTER\" or \"NEPHEW\" or \"NIECE\" or \"SON\" or \"DAUGHTER\"." )
   ( targetValue ( string "has_value( eligibleForChildTaxCreditInd( I ) ) & ~( same( dependentRelationshipCd( I ),stepChild ) | same( dependentRelationshipCd( I ),halfBrother ) | same( dependentRelationshipCd( I ),halfSister ) | same( dependentRelationshipCd( I ),stepBrother ) | same( dependentRelationshipCd( I ),stepSister ) | same( dependentRelationshipCd( I ),fosterChild ) | same( dependentRelationshipCd( I ),grandChild ) | same( dependentRelationshipCd( I ),brother ) |same( dependentRelationshipCd( I ),sister ) | same( dependentRelationshipCd( I ),nephew ) | same( dependentRelationshipCd( I ),niece ) | same( dependentRelationshipCd( I ),son ) | same( dependentRelationshipCd( I ),daughter )"  )  )  ) 
 
 ( example
@@ -260,7 +260,7 @@
                                greater_than( plus( childTaxCreditAmt,additionalChildTaxCreditAmt ),times( plus( chldWhoLivedWithYouCnt,chldNotLivingWithYouCnt ),1000 ) )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 59 'retirementTaxPlanLiteralCd' has the value "NO", then 'TaxOnIRAsAmt' must have a value greater than zero." )
+  ( utterance "If Form 1040, Line 59 'retirementTaxPlanLiteralCd' has the value \"NO\", then 'TaxOnIRAsAmt' must have a value greater than zero." )
   ( targetValue ( string "value( retirementTaxPlanLiteralCd,no ) & ~greater_than( taxOnIRAAmt,0 )"  )  )  ) 
 
 ( example
@@ -272,7 +272,7 @@
   ( targetValue ( string "~same( educationCreditAmt,nonRefundableEducationCrAmt )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 33 'StudentLoanInterestDedAmt' has a non-zero value, then Form 1040, Line 3 checkbox "Married filing separately" must not be checked ( element 'IndividualReturnFilingStatusCd' must not have the value 3 )." )
+  ( utterance "If Form 1040, Line 33 'StudentLoanInterestDedAmt' has a non-zero value, then Form 1040, Line 3 checkbox \"Married filing separately\" must not be checked ( element 'IndividualReturnFilingStatusCd' must not have the value 3 )." )
   ( targetValue ( string "non_zero( studentLoanInterestDedAmt ) & value( indvidualReturnFilingStatusCd,3 )"  )  )  ) 
 
 ( example
@@ -284,21 +284,21 @@
   ( targetValue ( string "non_zero( earnedIncomeCreditAmt )"  )  )  ) 
 
 ( example
-  ( utterance "If ['StateAbbreviationCd' of the Filer's address in the Return Header is equal to "AS", "GU", "MP", "PR" or "VI"] or [the Filer's address in the Return Header is a foreign address], then Form 1040, Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present." )
+  ( utterance "If ['StateAbbreviationCd' of the Filer's address in the Return Header is equal to \"AS\", \"GU\", \"MP\", \"PR\" or \"VI\"] or [the Filer's address in the Return Header is a foreign address], then Form 1040, Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present." )
   ( targetValue ( string "value( stateAbbrevationCd,X ) & ( same( X,as ) | same( X,gu ) | same( X,mp ) |  same( X,pr ) |  same( X,vi ) | same( X,foreign ) )  & non_zero( earnedIncomeCreditAmt )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and either 'PrimaryDeathDt' or 'SpouseDeathDt' has a value, then Form 1040 'SurvivingSpouseInd' must be checked." )
+  ( utterance "If Form 1040, Line 2 checkbox \"Married filing jointly\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and either 'PrimaryDeathDt' or 'SpouseDeathDt' has a value, then Form 1040 'SurvivingSpouseInd' must be checked." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,2 ) & (  has_value( primaryDeathDt ) | has_value( spouseDeathDt ) ) & ~has_value( survivingSpouseInd )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is not checked ( element 'IndividualReturnFilingStatusCd' does not have the value 2 ) and 'PrimaryDeathDt' has a value, then Personal Representative Indicator checkbox 'PersonalRepresentativeInd' must be checked." )
+  ( utterance "If Form 1040, Line 2 checkbox \"Married filing jointly\" is not checked ( element 'IndividualReturnFilingStatusCd' does not have the value 2 ) and 'PrimaryDeathDt' has a value, then Personal Representative Indicator checkbox 'PersonalRepresentativeInd' must be checked." )
   ( targetValue ( string "~value( individualReturnFilingStatusCd,2 ) & has_value( primaryDeathDt ) & ~has_value( personalRepresentativevInd )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and both 'PrimaryDeathDt' and 'SpouseDeathDt' has a value, then Personal Representative Indicator checkbox 'PersonalRepresentativeInd' must be checked." )
+  ( utterance "If Form 1040, Line 2 checkbox \"Married filing jointly\" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and both 'PrimaryDeathDt' and 'SpouseDeathDt' has a value, then Personal Representative Indicator checkbox 'PersonalRepresentativeInd' must be checked." )
   ( targetValue ( string "value( individualReturnFilingStatusCd,2 ) & has_value( primaryDeathDt ) & has_value( spouseDeathDt ) & ~has_value( personalRepresentativeInd )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 2 checkbox "Married filing jointly" is not checked ( element 'IndividualReturnFilingStatusCd' does not have the value 2 ) and 'PrimaryDeathDt' has a value, then Filer Name in the Return Header 'NameLine1Txt' must contain either " DECD" or "<DECD"." )
+  ( utterance "If Form 1040, Line 2 checkbox \"Married filing jointly\" is not checked ( element 'IndividualReturnFilingStatusCd' does not have the value 2 ) and 'PrimaryDeathDt' has a value, then Filer Name in the Return Header 'NameLine1Txt' must contain either \" DECD\" or \"<DECD\"." )
   ( targetValue ( string "~value( individualReturnFilingStatusCd,2 ) & has_value( primaryDeathDt ) & ~value( nameLine1Txt,decd ) & ~value( nameLine1Text,leftAngleDecd )"  )  )  )
