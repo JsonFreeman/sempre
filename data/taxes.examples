@@ -4,7 +4,7 @@
 
 ( example
   ( utterance "If Form 1040, Line 75 'OverpaidAmt' has a non-zero value and Line 79 'EsPenaltyAmt' is less than or equal to Line 75 'OverpaidAmt', then Line 78 'OwedAmt' must be equal to zero if an amount is entered." )
-  ( targetValue ( string "non_zero( overpaidAmt ) & less_than_equal_to( esPenaltyAmt,overpaidAmt ) & has_value( owedAmt ) & non_zero( owedAmt )"  )  )  ) 
+  ( targetValue ( string "non_zero( overpaidAmt ) & less_than_equal_to( esPenaltyAmt,overpaidAmt ) & non_zero( owedAmt )"  )  )  ) 
 
 ( example
   ( utterance "If Form 1040, Line 4 checkbox "Head of household" is checked ( element 'IndividualReturnFilingStatusCd' has the value 4 ), then one of the following fields must have a value: [ Line 4 'QualifyingHOHNm' and Line 4 'QualifyingHOHSSN' ] , Line 6c 'ChldWhoLivedWithYouCnt', or Line 6c 'OtherDependentsListedCnt'." )
@@ -50,7 +50,7 @@
 
 ( example
   ( utterance "If Form 1040, Line 66a 'EICEligibilityLiteralCd' has the value 'NO', then Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present." )
-  ( targetValue ( string "value( eICEligibilityLiteralCd,NO ) & non_zero( earnedIncomeCreditAmt ) & has_value( earnedIncomeCreditAmt )"  )  )  ) 
+  ( targetValue ( string "value( eICEligibilityLiteralCd,NO ) & non_zero( earnedIncomeCreditAmt )"  )  )  ) 
 
 ( example
   ( utterance "If Schedule EIC ( Form 1040 ) is present in the return, Form 1040, Line 66a 'EarnedIncomeCreditAmt' must have a non-zero value." )
@@ -155,7 +155,7 @@
 
 ( example
   ( utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is greater than Line 63 'TotalTaxAmt' and [ Line 77 'AppliedToEsTaxAmt' plus( + ) Line 79 'EsPenaltyAmt' is equal to Line 75 'OverpaidAmt' ], then Line 76a 'RefundAmt' must be equal to zero if an amount is entered." )
-  ( targetValue ( string "greater_than( totalPaymentsAmt,totalTaxAmt ) & plus( appliedToEsTaxAmt,esPaneltyAmt,overpaidAmt ) &  has_value( refundAmt ) & non_zero( refundAmt )"  )  )  ) 
+  ( targetValue ( string "greater_than( totalPaymentsAmt,totalTaxAmt ) & plus( appliedToEsTaxAmt,esPaneltyAmt,overpaidAmt ) & non_zero( refundAmt )"  )  )  ) 
 
 ( example
   ( utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is greater than Line 63 'TotalTaxAmt' and [Line 77 'AppliedToEsTaxAmt' plus ( + ) Line 79 'EsPenaltyAmt' is less than Line 75 'OverpaidAmt'], then Line 76a 'RefundAmt' must have a non-zero value." )
@@ -204,7 +204,7 @@
 
 ( example
   ( utterance "If Form 1040 Line 3 checkbox "Married filing separately" is checked ( element 'IndividualReturnFilingStatusCd' has the value 3 ), then Line 66a 'EarnedIncomeCreditAmt' must be equal to zero or not be present." )
-  ( targetValue ( string "value( individualReturnFilingStatusCd,3 ) & has_value( earnedIncomeCreditAmt ) & ~same( earnedIncomeCreditAmt,0 )"  )  )  ) 
+  ( targetValue ( string "value( individualReturnFilingStatusCd,3 ) & non_zero( earnedIncomeCreditAmt )"  )  )  ) 
 
 ( example
   ( utterance "If Form 1040, Line 36 'TotalAdjustmentsAmt' has a non-zero value, then at least one of the following must have a non-zero value: Line 23 'EducatorExpensesAmt' or Line 24 'BusExpnsReservistsAndOthersAmt' or Line 25 'HealthSavingsAccountDedAmt' or Line 26 'MovingExpenseAmt' or Line 27 'DeductibleSelfEmploymentTaxAmt' or Line 28 'SelfEmpldSepSimpleQlfyPlansAmt' or Line 29 'SelfEmpldHealthInsDedAmt' or Line 30 'PnltyOnErlyWthdrwOfSavingsAmt' or Line 31a 'TotalAlimonyPaidAmt' or Line 32 'IRADeductionAmt' or Line 33 'StudentLoanInterestDedAmt' or Line 34 'TuitionAndFeesDedAmt' or Line 35 'DomesticProductionActDedAmt' or 'OtherAdjustmentsAmt' in 'OtherAdjustmentsStatement' attached to Line 36." )
@@ -235,7 +235,7 @@
 
 ( example
   ( utterance "If Schedule A ( Form 1040 ) is not present in the return and Form 1040, Line 39b checkbox 'MustItemizeInd' is checked, then Form 1040, Line 40 'TotalItemizedOrStandardDedAmt' must have a zero value if an amount is entered." )
-  ( targetValue ( string "~has_value( scheduleA ) & has_value( mustItemizeInd ) & non_zero( totalItemizedOrStandardDedAmt,X )"  )  )  ) 
+  ( targetValue ( string "~has_value( scheduleA ) & has_value( mustItemizeInd ) & non_zero( totalItemizedOrStandardDedAmt )"  )  )  ) 
 
 ( example
   ( utterance "Form 1040, Line 64 'WithholdingTaxAmt' must be less than the sum of the following: [Line 7 'WagesSalariesAndTipsAmt' and Line 8a 'TaxableInterestAmt' and Line 9a 'OrdinaryDividendsAmt' and ( Line 15a 'IRADistributionsAmt' or Line 15b 'TaxableIRAAmt' ) and ( Line 16a 'PensionsAnnuitiesAmt' or Line 16b 'TotalTaxablePensionsAmt'  ) and Line 19 'UnemploymentCompAmt' and Line 20a 'SocSecBnftAmt' and (  all 'OtherIncomeAmt' in [OtherIncomeTypeStatement] attached to Line 21  ) and (  all Schedule C ( Form 1040 ), Line 1 'TotalGrossReceiptsAmt'  ) and (  all Schedule C-EZ( Form 1040 ), Line 1 'TotalGrossReceiptsAmt'  ) ] unless one of the following is true: ( 1 ) Line 13 'CapitalGainLossAmt' has a non-zero value; ( 2 ) Line 14 'OtherGainLossAmt' has a non-zero value; ( 3 ) Line 17 'RentalRealEstateIncomeLossAmt' has a non-zero value; ( 4 ) Line 18 'NetFarmProfitLossAmt' has a non-zero value; ( 5 ) Combat Pay has been excluded from wages." )
@@ -277,7 +277,7 @@
 
 ( example
   ( utterance "Form 1040, Line 60b 'FirstTimeHmByrRepaymentAmt' must not be less than zero, if an amount is entered." )
-  ( targetValue ( string "~greater_than( firstTimeHmByrRepaymentAmt,0 )"  )  )  ) 
+  ( targetValue ( string "less_than( firstTimeHmByrRepaymentAmt,0 )"  )  )  ) 
 
 ( example
   ( utterance "Form 1040, Line 66a 'EarnedIncomeCreditAmt' must have a zero value if an amount is entered. e-File database indicates the taxpayer is not allowed to claim Earned Income Credit for the tax year." )
