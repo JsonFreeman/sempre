@@ -1,5 +1,3 @@
-#(rule $PADDING ($PHRASE) (IdentityFn))
-
 (rule $ROOT (if $SENTENCE , (then optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
 (rule $ROOT ($SENTENCE .) (lambda x (call + (string "~") (var x))))
 (rule $SENTENCE ($SENTENCE and $SENTENCE) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
@@ -10,6 +8,11 @@
 (rule $PADDING (the) (ConstantFn (string "")))
 (rule $PADDING (a) (ConstantFn (string "")))  
 (rule $PADDING ($PADDING $PADDING) (lambda x (lambda y (var x))))
+
+
+# variable labels
+(rule $FORM (form) (ConstantFn (string "")))
+(rule $FORM (line) (ConstantFn (string "")))
 
 
 # modals
@@ -42,15 +45,10 @@
 
 
 # implied field value
-(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' $MODAL value $TOKEN \) ) (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")")))))))
-(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' $MODAL $NEGATION value $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")"))))))))
-(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' $MODAL equal to $TOKEN \) ) (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")")))))))
-(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' $MODAL $NEGATION equal to $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")"))))))))
-
-(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' $MODAL value $TOKEN \) ) (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")")))))))
-(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' $MODAL $NEGATION value $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")"))))))))
-(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' $MODAL equal to $TOKEN \) ) (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")")))))))
-(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' $MODAL $NEGATION equal to $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")"))))))))
+(rule $SENTENCE ($FORM $PHRASE \( element ` $TOKEN ' $MODAL value $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")"))))))))
+(rule $SENTENCE ($FORM $PHRASE \( element ` $TOKEN ' $MODAL $NEGATION value $TOKEN \) ) (lambda u (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")")))))))))
+(rule $SENTENCE ($FORM $PHRASE \( element ` $TOKEN ' $MODAL equal to $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")"))))))))
+(rule $SENTENCE ($FORM $PHRASE \( element ` $TOKEN ' $MODAL $NEGATION equal to $TOKEN \) ) (lambda u (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")")))))))))
 
 
 # field value existence
@@ -70,9 +68,9 @@
 
 
 # extract field name
-(rule $FIELD (form $TOKEN , line $TOKEN (checkbox optional) ` $TOKEN ') (lambda x (lambda y (lambda z (var z)))))
+(rule $FIELD ($FORM $TOKEN , $FORM $TOKEN (checkbox optional) ` $TOKEN ') (lambda v (lambda w (lambda x (lambda y (lambda z (var z)))))))
 (rule $FIELD (schedule $TOKEN $TOKEN $TOKEN , line $TOKEN ` $TOKEN ') (lambda v (lambda w (lambda x (lambda y (lambda z (var z)))))))
-(rule $FIELD (line $TOKEN (checkbox optional) ` $TOKEN ') (lambda y (lambda z (var z))))
+(rule $FIELD ($FORM $TOKEN (checkbox optional) ` $TOKEN ') (lambda x (lambda y (lambda z (var z)))))
 (rule $FIELD (` $TOKEN ') (lambda x (var x)))
 
 # TODO
