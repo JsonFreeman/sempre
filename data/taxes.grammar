@@ -1,6 +1,7 @@
-(rule $ROOT (if $SENTENCE , (then optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
+(rule $ROOT (if $SENTENCE (, optional) (then optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
 (rule $ROOT ($SENTENCE .) (lambda x (call + (string "~") (var x))))
 (rule $SENTENCE ($SENTENCE and $SENTENCE) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
+(rule $SENTENCE ($PHRASE $SENTENCE $PHRASE) (lambda x (lambda y (lambda z (var y)))))
 
 
 # remove
@@ -16,28 +17,24 @@
 
 
 # modals
-(rule $MODAL ($MODAL $PADDING) (lambda x (lambda y (var x))))
-(rule $MODAL (is) (ConstantFn (string "")))
-(rule $MODAL (must (have optional)) (ConstantFn (string "")))
-(rule $MODAL (does) (ConstantFn (string "")))
-(rule $MODAL (has) (ConstantFn (string "")))
+(rule $MODAL ($PHRASE) (IdentityFn))
 
 
 # modal negations
-(rule $NEGATION ($NEGATION $PADDING) (lambda x (lambda y (var x))))
+(rule $NEGATION (not) (ConstantFn (string "~")))
 (rule $NEGATION (cannot) (ConstantFn (string "")))
-(rule $NEGATION (not (have optional)) (ConstantFn (string "")))
 
+(rule $NEGMODAL ($MODAL) (ConstantFn (string "")))
+(rule $NEGMODAL ($MODAL $NEGATION) (ConstantFn (string "~")))
 
 # comparisons
-(rule $SENTENCE ($FIELD $MODAL greater than $FIELD) (lambda x (lambda y (lambda z (call + (string "greater_than(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL greater than or equal to $FIELD) (lambda x (lambda y (lambda z (call + (string "greater_than_equal_to(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL less than $FIELD) (lambda x (lambda y (lambda z (call + (string "less_than(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL less than or equal to $FIELD) (lambda x (lambda y (lambda z (call + (string "less_than_equal_to(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL equal to $FIELD) (lambda x (lambda y (lambda z (call + (string "same(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL $NEGATION equal to $FIELD) (lambda w (lambda x (lambda y (lambda z (call + (string "~same(") (var w) (string ",") (var z) (string ")")))))))
-(rule $SENTENCE ($FIELD $NEGATION equal to $FIELD) (lambda x (lambda y (lambda z (call + (string "~same(") (var x) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE ($FIELD $NEGMODAL $REL $FIELD) (lambda x (lambda y (lambda r (lambda z (call + (var y) (var r) (string "(") (var x) (string ",") (var z) (string ")")))))))
 
+(rule $REL ($PHRASE greater $PHRASE) (lambda x (lambda z (string "greater_than"))))
+(rule $REL ($PHRASE greater than or equal $PHRASE) (lambda x (lambda z (string "greater_than_equal_to"))))
+(rule $REL ($PHRASE less $PHRASE) (lambda x (lambda z (string "less_than"))))
+(rule $REL ($PHRASE less than or equal $PHRASE) (lambda x (lambda z (string "less_than_equal_to"))))
+(rule $REL ($PHRASE equal $PHRASE) (lambda x (lambda z (string "same"))))
 
 # field value
 (rule $SENTENCE ($FIELD $MODAL non zero value) (lambda x (lambda y (call + (string "non_zero(") (var x) (string ")")))))
