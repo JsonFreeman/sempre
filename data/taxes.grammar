@@ -35,7 +35,7 @@
 (rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' does not have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
 (rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' must have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
 (rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' must not have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' must be euqal to $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' must be equal to $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
 (rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' must not be equal to $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
 
 (rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' has the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
