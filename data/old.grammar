@@ -1,0 +1,75 @@
+(rule $ROOT (if $SENTENCE , (then optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
+(rule $ROOT ($SENTENCE .) (lambda x (call + (string "~") (var x))))
+(rule $SENTENCE ($SENTENCE and $SENTENCE) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
+
+
+# comparisons
+(rule $SENTENCE ($FIELD is greater than $FIELD) (lambda x (lambda y (call + (string "greater_than(") (var x) (string ",") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD must be greater than $FIELD) (lambda x (lambda y (call + (string "greater_than(") (var x) (string ",") (var y) (string ")")))))
+
+(rule $SENTENCE ($FIELD is greater than or equal to $FIELD) (lambda x (lambda y (call + (string "greater_than_equal_to(") (var x) (string ",") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD must be greater than or equal to $FIELD) (lambda x (lambda y (call + (string "greater_than_equal_to(") (var x) (string ",") (var y) (string ")")))))
+
+(rule $SENTENCE ($FIELD is less than $FIELD) (lambda x (lambda y (call + (string "less_than(") (var x) (string ",") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD must be less than $FIELD) (lambda x (lambda y (call + (string "less_than(") (var x) (string ",") (var y) (string ")")))))
+
+(rule $SENTENCE ($FIELD is less than or equal to $FIELD) (lambda x (lambda y (call + (string "less_than_equal_to(") (var x) (string ",") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD must be less than or equal to $FIELD) (lambda x (lambda y (call + (string "less_than_equal_to(") (var x) (string ",") (var y) (string ")")))))
+
+(rule $SENTENCE ($FIELD is equal to $FIELD) (lambda x (lambda y (call + (string "same(") (var x) (string ",") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD must be equal to $FIELD) (lambda x (lambda y (call + (string "same(") (var x) (string ",") (var y) (string ")")))))
+
+(rule $SENTENCE ($FIELD is not equal to $FIELD) (lambda x (lambda y (call + (string "~same(") (var x) (string ",") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD must not be equal to $FIELD) (lambda x (lambda y (call + (string "~same(") (var x) (string ",") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD cannot be equal to $FIELD) (lambda x (lambda y (call + (string "~same(") (var x) (string ",") (var y) (string ")")))))
+
+
+# field value
+(rule $SENTENCE ($FIELD has a non zero value) (lambda x (call + (string "non_zero(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD must have a non zero value) (lambda x (call + (string "non_zero(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD has the value (` optional) $TOKEN (' optional)) (lambda x (lambda y (call + (string "value(") (var x) (string ",") (var y) (string ")")))))
+
+
+# implied field value
+(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' has the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' does not have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' must have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' must not have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' must be equal to $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (form $PHRASE \( element ` $TOKEN ' must not be equal to $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
+
+(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' has the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' does not have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' must have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' must not have the value $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' must be equal to $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "value(") (var y) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (line $PHRASE \( element ` $TOKEN ' must not be equal to $TOKEN \) ) (lambda x (lambda y (lambda z (call + (string "~value(") (var y) (string ",") (var z) (string ")"))))))
+
+
+# field value existence
+(rule $SENTENCE ($FIELD has a value) (lambda x (call + (string "has_value(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD is checked) (lambda x (call + (string "has_value(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD is not checked) (lambda x (call + (string "~has_value(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD must have a value) (lambda x (call + (string "has_value(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD must be equal to zero if an amount is entered) (lambda x (call + (string "~non_zero(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD must be equal to zero or not be present) (lambda x (call + (string "~non_zero(") (var x) (string ")"))))
+
+
+# Tax-specific field value
+(rule $SENTENCE ($FIELD in the return header is an itin) (lambda x (call + (string "iTin(") (var x) (string ")"))))
+# not working for unknown reasons
+(rule $SENTENCE (schedule $TOKEN \( $TOKEN $TOKEN \) must be attached) (lambda x (lambda y (call + (string "has_value(schedule") (var x) (string ")")))))
+(rule $SENTENCE (schedule $TOKEN must not be attached) (lambda x (call + (string "~has_value(schedule") (var x) (string ")"))))
+(rule $SENTENCE (schedule $TOKEN \( $TOKEN $TOKEN \) is present in the return) (lambda x (lambda y (lambda z (call + (string "has_value(schedule") (var x) (string ")"))))))
+
+# extract field name
+(rule $FIELD (form $TOKEN , line $TOKEN (checkbox optional) ` $TOKEN ') (lambda x (lambda y (lambda z (var z)))))
+(rule $FIELD (schedule $TOKEN $TOKEN $TOKEN , line $TOKEN ` $TOKEN ') (lambda v (lambda w (lambda x (lambda y (lambda z (var z)))))))
+(rule $FIELD (line $TOKEN (checkbox optional) ` $TOKEN ') (lambda y (lambda z (var z))))
+(rule $FIELD (` $TOKEN ') (lambda x (var x)))
+
+# TODO
+# non-if-then
+# schedule X variables
+# form X variables
+# normalize to Xpresent 
