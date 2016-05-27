@@ -1,15 +1,8 @@
 (rule $ROOT (if $SENTENCE (, optional) (then optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
 (rule $ROOT ($SENTENCE .) (lambda x (call + (string "~") (var x))))
 (rule $SENTENCE ($SENTENCE and $SENTENCE) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
-(rule $SENTENCE ($PAD $SENTENCE $PAD) (lambda x (lambda y (lambda z (var y)))))
+(rule $SENTENCE (($PHRASE optional) $SENTENCE ($PHRASE optional)) (lambda x (lambda y (lambda z (var y)))))
 
-(rule $PAD ($PHRASE) (ConstantFn (string "")))
-
-# remove
-(rule $PADDING (be) (ConstantFn (string "")))
-(rule $PADDING (the) (ConstantFn (string "")))
-(rule $PADDING (a) (ConstantFn (string "")))  
-(rule $PADDING ($PADDING $PADDING) (lambda x (lambda y (var x))))
 
 
 # variable labels
@@ -18,7 +11,7 @@
 
 
 # modals
-(rule $MODAL ($PAD) (IdentityFn))
+(rule $MODAL (($PHRASE optional)) (IdentityFn))
 
 
 # modal negations
@@ -31,25 +24,25 @@
 # comparisons
 (rule $SENTENCE ($FIELD $NEGMODAL $REL $FIELD) (lambda x (lambda y (lambda r (lambda z (call + (var y) (var r) (string "(") (var x) (string ",") (var z) (string ")")))))))
 
-(rule $REL ($PAD greater $PAD) (lambda x (lambda z (string "greater_than"))))
-(rule $REL ($PAD greater than or equal $PAD) (lambda x (lambda z (string "greater_than_equal_to"))))
-(rule $REL ($PAD less $PAD) (lambda x (lambda z (string "less_than"))))
-(rule $REL ($PAD less than or equal $PAD) (lambda x (lambda z (string "less_than_equal_to"))))
-(rule $REL ($PAD equal $PAD) (lambda x (lambda z (string "same"))))
+(rule $REL (($PHRASE optional) greater ($PHRASE optional)) (lambda x (lambda z (string "greater_than"))))
+(rule $REL (($PHRASE optional) greater than or equal ($PHRASE optional)) (lambda x (lambda z (string "greater_than_equal_to"))))
+(rule $REL (($PHRASE optional) less ($PHRASE optional)) (lambda x (lambda z (string "less_than"))))
+(rule $REL (($PHRASE optional) less than or equal ($PHRASE optional)) (lambda x (lambda z (string "less_than_equal_to"))))
+(rule $REL (($PHRASE optional) equal ($PHRASE optional)) (lambda x (lambda z (string "same"))))
 
 # field value
 (rule $SENTENCE ($FIELD $NEGMODAL value (` optional) $TOKEN (' optional)) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
 
 
 # implied field value
-(rule $SENTENCE ($FORM $PAD \( element ` $TOKEN ' $MODAL value $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")"))))))))
-(rule $SENTENCE ($FORM $PAD \( element ` $TOKEN ' $MODAL $NEGATION value $TOKEN \) ) (lambda u (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")")))))))))
-(rule $SENTENCE ($FORM $PAD \( element ` $TOKEN ' $MODAL equal to $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")"))))))))
-(rule $SENTENCE ($FORM $PAD \( element ` $TOKEN ' $MODAL $NEGATION equal to $TOKEN \) ) (lambda u (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")")))))))))
+(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL value $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")"))))))))
+(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL $NEGATION value $TOKEN \) ) (lambda u (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")")))))))))
+(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL equal to $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")"))))))))
+(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL $NEGATION equal to $TOKEN \) ) (lambda u (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")")))))))))
 
 
 # field value existence
-(rule $SENTENCE ($FIELD $NEGMODAL $PAD $UNARY_PRED $PAD) (lambda x (lambda y (lambda _ (lambda z (lambda __ (call + (var y) (var z) (string "(") (var x) (string ")"))))))))
+(rule $SENTENCE ($FIELD $NEGMODAL ($PHRASE optional) $UNARY_PRED ($PHRASE optional)) (lambda x (lambda y (lambda _ (lambda z (lambda __ (call + (var y) (var z) (string "(") (var x) (string ")"))))))))
 
 (rule $UNARY_PRED (value) (ConstantFn (string "has_value")))
 (rule $UNARY_PRED (checked) (ConstantFn (string "has_value")))
