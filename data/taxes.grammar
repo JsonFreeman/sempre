@@ -22,7 +22,7 @@
 
 
 # modal negations
-(rule $NEGATION (not) (ConstantFn (string "~")))
+(rule $NEGATION (not) (ConstantFn (string "")))
 (rule $NEGATION (cannot) (ConstantFn (string "")))
 
 (rule $NEGMODAL ($MODAL) (ConstantFn (string "")))
@@ -38,8 +38,7 @@
 (rule $REL ($PAD equal $PAD) (lambda x (lambda z (string "same"))))
 
 # field value
-(rule $SENTENCE ($FIELD $MODAL non zero value) (lambda x (lambda y (call + (string "non_zero(") (var x) (string ")")))))
-(rule $SENTENCE ($FIELD has the value (` optional) $TOKEN (' optional)) (lambda x (lambda y (call + (string "value(") (var x) (string ",") (var y) (string ")")))))
+(rule $SENTENCE ($FIELD $NEGMODAL value (` optional) $TOKEN (' optional)) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
 
 
 # implied field value
@@ -50,16 +49,17 @@
 
 
 # field value existence
-(rule $SENTENCE ($FIELD has a value) (lambda x (call + (string "has_value(") (var x) (string ")"))))
-(rule $SENTENCE ($FIELD $MODAL checked) (lambda x (lambda y (call + (string "has_value(") (var x) (string ")")))))
-(rule $SENTENCE ($FIELD $MODAL $NEGATION checked) (lambda x (lambda y (lambda z (call + (string "~has_value(") (var x) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL value) (lambda x (lambda y (call + (string "has_value(") (var x) (string ")")))))
-(rule $SENTENCE ($FIELD must be equal to zero if an amount is entered) (lambda x (call + (string "~non_zero(") (var x) (string ")"))))
-(rule $SENTENCE ($FIELD must be equal to zero or not be present) (lambda x (call + (string "~non_zero(") (var x) (string ")"))))
+(rule $SENTENCE ($FIELD $NEGMODAL $PAD $UNARY_PRED $PAD) (lambda x (lambda y (lambda _ (lambda z (lambda __(call + (var y) (var z) (string "(") (var x) (string ")"))))))))
 
+(rule $UNARY_PRED (value) (ConstantFn (string "has_value")))
+(rule $UNARY_PRED (checked) (ConstantFn (string "has_value")))
+(rule $UNARY_PRED (present) (ConstantFn (string "has_value")))
+(rule $UNARY_PRED (attached) (ConstantFn (string "has_value")))
+(rule $UNARY_PRED (non zero) (ConstantFn (string "non_zero")))
+(rule $UNARY_PRED (zero) (ConstantFn (string "~non_zero")))
+(rule $UNARY_PRED (itin) (ConstantFn (string "iTin")))
 
 # Tax-specific field value
-(rule $SENTENCE ($FIELD in the return header is an itin) (lambda x (call + (string "iTin(") (var x) (string ")"))))
 (rule $SENTENCE (schedule $TOKEN \( $TOKEN $TOKEN \) must be attached) (lambda x (lambda y (lambda z (call + (string "has_value(schedule") (var x) (string ")"))))))
 (rule $SENTENCE (schedule $TOKEN must not be attached) (lambda x (call + (string "~has_value(schedule") (var x) (string ")"))))
 (rule $SENTENCE (schedule $TOKEN \( $TOKEN $TOKEN \) is present in the return) (lambda x (lambda y (lambda z (call + (string "has_value(schedule") (var x) (string ")"))))))
