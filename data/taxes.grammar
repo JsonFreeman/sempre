@@ -1,7 +1,6 @@
 (rule $ROOT (if $SENTENCE (, optional) (then optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
 (rule $ROOT ($SENTENCE .) (lambda x (call + (string "~") (var x))))
 (rule $SENTENCE ($SENTENCE and $SENTENCE) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
-(rule $SENTENCE (($PHRASE optional) $SENTENCE ($PHRASE optional)) (lambda x (lambda y (lambda z (var y)))))
 
 
 
@@ -9,10 +8,11 @@
 (rule $FORM (form) (ConstantFn (string "")))
 (rule $FORM (line) (ConstantFn (string "")))
 
-
-# modals
-(rule $MODAL (($PHRASE optional)) (IdentityFn))
-
+(rule $MODAL ($MODAL $PADDING) (lambda x (lambda y (var x))))
+(rule $MODAL (is) (ConstantFn (string "")))
+(rule $MODAL (must (have optional)) (ConstantFn (string "")))
+(rule $MODAL (does) (ConstantFn (string "")))
+(rule $MODAL (has) (ConstantFn (string "")))
 
 # modal negations
 (rule $NEGATION (not) (ConstantFn (string "")))
