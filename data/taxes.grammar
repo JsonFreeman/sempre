@@ -8,7 +8,6 @@
 (rule $FORM (form) (ConstantFn (string "")))
 (rule $FORM (line) (ConstantFn (string "")))
 
-(rule $MODAL ($MODAL $PHRASE) (lambda x (lambda y (var x))))
 (rule $MODAL (is) (ConstantFn (string "")))
 (rule $MODAL (must (have optional)) (ConstantFn (string "")))
 (rule $MODAL (does) (ConstantFn (string "")))
