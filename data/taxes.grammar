@@ -58,6 +58,8 @@
 
 
 # extract field name
+(rule $FIELD ($FIELD in the return header) (IdentityFn))
+(rule $FIELD ($FIELD in the return) (IdentityFn))
 (rule $FIELD ($FORM $TOKEN , $FORM $TOKEN (checkbox optional) ` $TOKEN ') (lambda v (lambda w (lambda x (lambda y (lambda z (var z)))))))
 (rule $FIELD (schedule $TOKEN $TOKEN $TOKEN , line $TOKEN ` $TOKEN ') (lambda v (lambda w (lambda x (lambda y (lambda z (var z)))))))
 (rule $FIELD ($FORM $TOKEN (checkbox optional) ` $TOKEN ') (lambda x (lambda y (lambda z (var z)))))
