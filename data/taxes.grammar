@@ -30,14 +30,18 @@
 (rule $REL (($PHRASE optional) equal ($PHRASE optional)) (ConstantFn (string "same")))
 
 # field value
-(rule $SENTENCE ($FIELD $NEGMODAL value (` optional) $TOKEN (' optional)) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE ($FIELD $NEGMODAL ($DET optional) value (` optional) $TOKEN (' optional)) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
 
+# Determiners
+(rule $DET (the) (ConstantFn (string "")))
+(rule $DET (a) (ConstantFn (string "")))
+(rule $DET (an) (ConstantFn (string "")))
 
 # implied field value
-(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL value $TOKEN \) ) (lambda v (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")")))))))
-(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL $NEGATION value $TOKEN \) ) (lambda u (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")"))))))))
-(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL equal to $TOKEN \) ) (lambda v (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")")))))))
-(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL $NEGATION equal to $TOKEN \) ) (lambda u (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")"))))))))
+(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL ($DET optional) value $TOKEN \) ) (lambda v (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")")))))))
+(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL $NEGATION ($DET optional) value $TOKEN \) ) (lambda u (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")"))))))))
+(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL ($TOKEN optional) equal to $TOKEN \) ) (lambda v (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")")))))))
+(rule $SENTENCE ($FORM ($PHRASE optional) \( element ` $TOKEN ' $MODAL $NEGATION ($TOKEN optional) equal to $TOKEN \) ) (lambda u (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")"))))))))
 
 
 # field value existence
