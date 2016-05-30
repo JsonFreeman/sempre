@@ -1,0 +1,69 @@
+(rule $ROOT ($VAR_PRED) (lambda x (var x)))
+
+
+# clean up var_pred
+(rule $VAR_PRED ($PHRASE $VAR_PRED) (lambda x (lambda y (var y))))
+(rule $VAR_PRED ($VAR_PRED $PHRASE) (lambda x (lambda y (var x))))
+
+
+# combine variables and predicates
+(rule $VAR_PRED ($VAR ($PHRASE optional) $PRED) (lambda x (lambda y (call + (var x) (string " ^ ") (var y)))))
+(rule $VAR_PRED ($PRED ($PHRASE optional) $VAR) (lambda x (lambda y (call + (var y) (string " ^ ") (var x)))))
+
+
+# combine var_pred and pred
+(rule $VAR_PRED ($PRED ($PHRASE optional) $VAR_PRED) (lambda x (lambda y (call + (var y) (string " @ ") (var x)))))
+(rule $VAR_PRED ($VAR_PRED ($PHRASE optional) $PRED) (lambda x (lambda y (call + (var x) (string " @ ") (var y)))))
+
+
+# combine var_pred and var
+(rule $VAR_PRED ($VAR ($PHRASE optional) $VAR_PRED) (lambda x (lambda y (call + (var x) (string " @ ") (var y)))))
+(rule $VAR_PRED ($VAR_PRED ($PHRASE optional) $VAR) (lambda x (lambda y (call + (var y) (string " @ ") (var x)))))
+
+
+# combine variables
+(rule $VAR ($VAR ($PHRASE optional) $VAR) (lambda x (lambda y (call + (var x) (string " @ ") (var y)))))
+
+
+# combine predicates
+(rule $PRED ($PRED ($PHRASE optional) $PRED) (lambda x (lambda y (call + (var x) (string " # ") (var y)))))
+
+
+# temporary rule for one predicate type
+(rule $PRED ($UNP) (lambda x (var x)))
+(rule $PRED ($BINP) (lambda x (var x)))
+(rule $PRED ($OP) (lambda x (var x)))
+
+
+# bind variables
+(rule $VAR (` $TOKEN ') (lambda x (var x)))
+
+
+# bind operators
+(rule $OP (and) (ConstantFn (string "&")))
+(rule $OP (or) (ConstantFn (string "|")))
+(rule $OP (not) (ConstantFn (string "~")))
+(rule $OP (cannot) (ConstantFn (string "~")))
+
+
+# comparison predicates
+(rule $BINP (greater than) (ConstantFn (string "greater_than")))
+(rule $BINP (greater than or equal to) (ConstantFn (string "greater_than_equal_to")))
+(rule $BINP (less than) (ConstantFn (string "less_than")))
+(rule $BINP (less than or equal to) (ConstantFn (string "less_than_equal_to")))
+(rule $BINP (equal to) (ConstantFn (string "same")))
+(rule $BINP (sam) (ConstantFn (string "same")))
+
+
+# value predicates
+(rule $UNP (non zero) (ConstantFn (string "non_zero")))
+(rule $BINP (value) (ConstantFn (string "value")))
+(rule $BINP (equal) (ConstantFn (string "value")))
+
+
+# existence predicates
+(rule $UNP (checked) (ConstantFn (string "has_value")))
+(rule $UNP (present) (ConstantFn (string "has_value")))
+(rule $UNP (attached) (ConstantFn (string "has_value")))
+(rule $UNP (value) (ConstantFn (string "has_value")))
+
