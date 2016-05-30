@@ -509,7 +509,7 @@
   ( utterance "Form 4972, Line 1 'DistributionOfQualifiedPlanInd' must not have a choice of ""No"" indicated." )  )
 
  ( example
-  ( utterance ""Only one of the two choices given below is allowed on Form 4972:  a choice of ""No"" for Line 3 'EmployeeBeneficiaryDistriInd' or a choice of ""No"" for Line 4 'QualifyingAge5YearMemberInd'."" )  )
+  ( utterance "Only one of the two choices given below is allowed on Form 4972:  a choice of ""No"" for Line 3 'EmployeeBeneficiaryDistriInd' or a choice of ""No"" for Line 4 'QualifyingAge5YearMemberInd'." )  )
 
  ( example
   ( utterance "Form 5074, Line 27 'TuitionAndFeesDedAmt' must be equal to zero if an amount is entered." )  )
@@ -599,7 +599,7 @@
   ( utterance "Form 8582-CR, Line 12 'PercentNetAGIAmt' must not be greater than 25000." )  )
 
  ( example
-  ( utterance "If Form 8594, Line 6 'PrchsOrEntrAgrmtWithSellrInd' has a choice of""Yes"" indicated, then ""Form 8594 Consideration Computation Statement "" [ ConsiderationComputationStatement ] must be attached to Line 6." )  )
+  ( utterance "If Form 8594, Line 6 'PrchsOrEntrAgrmtWithSellrInd' has a choice of ""Yes"" indicated, then ""Form 8594 Consideration Computation Statement "" [ ConsiderationComputationStatement ] must be attached to Line 6." )  )
 
  ( example
   ( utterance "Form 8606 'Form8606IRANamelineTxt' must contain a less-than sign ( < ) ." )  )
@@ -636,9 +636,6 @@
 
  ( example
   ( utterance "Each 'ChildSSN' on Form 8839, Line 1f must not be equal to 'PrimarySSN' in the Return Header." )  )
-
- ( example
-  ( utterance "To Be Deleted" )  )
 
  ( example
   ( utterance "Form 8844, line 1 ( a ) , 'QualifiedEmpowermentZoneWgsAmt' must be equal to zero if an amount is entered." )  )
@@ -995,7 +992,7 @@
   ( utterance "The return version ( attribute 'returnVersion' of the Return element ) must be specified for each return in the return header." )  )
 
  ( example
-  ( utterance ""If the Filer has a US address in the Return Header and 'StateAbbreviationCd' has the value ""AA"" then the first three digits of the 'ZipCd' must be 340."" )  )
+  ( utterance "If the Filer has a US address in the Return Header and 'StateAbbreviationCd' has the value ""AA"" then the first three digits of the 'ZipCd' must be 340." )  )
 
  ( example
   ( utterance "For US Addresses, the fourth and fifth digit of the 'ZipCd' of the Filer's address in the Return Header cannot both be zeros ( ""00"" ) , except when the 'ZipCd' is 00800, 20500, 34000, 00600, 96100, 96900." )  )
@@ -1154,13 +1151,13 @@
   ( utterance "The ETIN in the Message ID ( the first five digits ) must match the ETIN provided with the request." )  )
 
  ( example
-  ( utterance ""The namespace declarations in the root element of the return ( 'Return' element ) must be as follows:The default namespace shall be set to  ""http://www.irs.gov/efile"" ( xmlns= ""http://www.irs.gov/efile"" ) .The namespace prefix ""efile"" shall be bound to the namespace  ""http://www.irs.gov"" ( xmlns:efile=""http://www.irs.gov/efile"" ) ."" )  )
+  ( utterance "The namespace declarations in the root element of the return ( 'Return' element ) must be as follows:The default namespace shall be set to  ""http://www.irs.gov/efile"" ( xmlns= ""http://www.irs.gov/efile"" ) .The namespace prefix ""efile"" shall be bound to the namespace  ""http://www.irs.gov"" ( xmlns:efile=""http://www.irs.gov/efile"" ) ." )  )
 
  ( example
   ( utterance "The name of a binary attachment file must be less than or equal to 64 bytes." )  )
 
  ( example
-  ( utterance ""A submission zip archive ( zip file that is the submission ) must contain exactly one entry that consists of ""xml/"" or ""/xml/"" ( all lower case characters ) followed by a file name."" )  )
+  ( utterance "A submission zip archive ( zip file that is the submission ) must contain exactly one entry that consists of ""xml/"" or ""/xml/"" ( all lower case characters ) followed by a file name." )  )
 
  ( example
   ( utterance "Unable to read a binary attachment in the Submission Zip Archive." )  )
