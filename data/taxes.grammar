@@ -1,7 +1,8 @@
 # Basic construct of the utterance
-(rule $ROOT (if $SENTENCE (, optional) (then optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
+(rule $ROOT (if $SENTENCE (, optional) (then optional) (, optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
 (rule $ROOT ($SENTENCE .) (lambda x (call + (string "~") (var x))))
 (rule $SENTENCE (\( $SENTENCE \)) (lambda x (var x)))
+(rule $SENTENCE ([ $SENTENCE ]) (lambda x (var x)))
 (rule $SENTENCE ($SENTENCE ,) (lambda x (var x)))
 (rule $SENTENCE ($SENTENCE $SENTENCE) (lambda x (lambda y (var x))))
 (rule $SENTENCE ($SENTENCE $SENTENCE) (lambda x (lambda y (var y))))
@@ -14,14 +15,20 @@
 # TODO: account for parenthesized field names
 (rule $FIELD (form $TOKEN) (lambda x (call + (string "form") (var x))))
 (rule $FIELD (line $TOKEN) (lambda x (call + (string "line") (var x))))
+(rule $FIELD (part $TOKEN) (lambda x (call + (string "part") (var x))))
+(rule $FIELD (column \( $TOKEN \)) (lambda x (call + (string "column") (var x))))
 (rule $FIELD (line $TOKEN \( $TOKEN \)) (lambda x (lambda y (call + (string "line") (var x) (var y)))))
 (rule $FIELD (\( $FIELD \)) (lambda x (var x)))
 (rule $FIELD ($FIELD ,) (lambda x (var x)))
 (rule $FIELD (schedule $TOKEN (, optional)) (lambda x (call + (string "schedule") (var x))))
 (rule $FIELD (`` $PHRASE '') (ConstantFn (string "")))
+(rule $FIELD (checkbox $TOKEN) (lambda x (var x)))
+(rule $FIELD (checkbox $TOKEN $TOKEN) (lambda x (lambda y (call + (var x) (var y)))))
+(rule $FIELD (checkbox $TOKEN $TOKEN $TOKEN) (lambda x (lambda y (lambda z (call + (var x) (var y) (var z))))))
 (rule $FIELDNAME (` $TOKEN ') (lambda x (var x)))
 (rule $FIELDNAME ([ $TOKEN ]) (lambda x (var x)))
 (rule $FIELDNAME (element $FIELDNAME) (lambda x (var x)))
+(rule $FIELDNAME ($FIELDNAME checkbox) (lambda x (var x)))
 (rule $FIELDNAME (checkbox $FIELDNAME) (lambda x (var x)))
 (rule $FIELDNAME (checkbox $FIELD) (lambda x (var x)))
 (rule $FIELDNAME ($FIELD $FIELDNAME) (lambda x (lambda y (var y))))
@@ -32,10 +39,13 @@
 
 (rule $ENT ($FIELD) (lambda x (var x)))
 (rule $ENT ($FIELD $FIELD) (lambda x (lambda y (var x))))
-(rule $ENT ($FIELD $FIELD) (lambda x (lambda y (var y))))
-(rule $ENT ($FIELDNAME) (lambda x (var x)))
+(rule $ENT ($FIELD $ENT) (lambda x (lambda y (var y))))
 
+(rule $ENT ($FIELDNAME) (lambda x (var x)))
+(rule $ENT ($TOKEN) (lambda x (var x)))
+(rule $ENT ($TOKEN $TOKEN) (lambda x (lambda y (call + (var x) (var y)))))
 (rule $ENT (zero) (ConstantFn (string "0")))
+(rule $ENT ($DET $ENT) (lambda x (lambda y (var y))))
 
 # (rule $FIELDNAME ($TOKEN $FIELDNAME) (lambda x (lambda y (var y))))
 # (rule $FIELDNAME ($FIELDNAME $TOKEN) (lambda x (lambda y (var x))))
@@ -107,7 +117,7 @@
 (rule $OPTMOD ($PP) (lambda x (var x)))
 (rule $OPTMOD (provided) (ConstantFn (string "")))
 (rule $OPTMOD (if an amount is entered) (ConstantFn (string "")))
-(rule $OPTMOD (attached to $FIELD) (ConstantFn (string "")))
+(rule $OPTMOD (to $FIELD) (ConstantFn (string "")))
 (rule $PP ($PREP $NPP) (ConstantFn (string "")))
 (rule $PREP (in) (ConstantFn (string "")))
 (rule $PREP (on) (ConstantFn (string "")))
@@ -118,7 +128,7 @@
 (rule $ROOT ($ENT) (lambda x (var x)))
 (rule $ROOT ($TOHAVE) (lambda x (var x)))
 (rule $ROOT ($SENTENCE) (lambda x (var x)))
-
+(rule $ROOT ($FIELDNAME) (lambda x (var x)))
 
 # noun+VP coordination (and, or)
 # sum of, +, -, following+these, each, at least one,
