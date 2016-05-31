@@ -53,6 +53,9 @@
 (rule $ENT (zero) (ConstantFn (string "0")))
 (rule $ENT ($DET $ENT) (lambda x (lambda y (var y))))
 
+(rule $ENT (each $ENT) (lambda x (var x)))
+(rule $ENT (any $ENT) (lambda x (var x)))
+
 # (rule $FIELDNAME ($TOKEN $FIELDNAME) (lambda x (lambda y (var y))))
 # (rule $FIELDNAME ($FIELDNAME $TOKEN) (lambda x (lambda y (var x))))
 
