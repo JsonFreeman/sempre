@@ -47,10 +47,18 @@
 (rule $ENT (zero) (ConstantFn (string "0")))
 (rule $ENT ($DET $ENT) (lambda x (lambda y (var y))))
 
-(rule $LIFTED_ENT ((either optional) $ENT or $ENT) (lambda x (lambda y (lambda f (call + (string "(")
-																			(call + (var f) (string "(") (var x) (string ") | "))
-																			(call + (var f) (string "(") (var y) (string ")"))
-																			(string ")"))))))
+# LIFTED_ENT takes the predicate as the argument
+(rule $LIFTED_ENT (($PRE_CONJ optional) $ENT $CONJ $ENT) (lambda x (lambda c (lambda y (lambda f (call + (string "(")
+																				(call + (var f) (string "(") (var x) (string ")"))
+																				(var c)
+																				(call + (var f) (string "(") (var y) (string ")"))
+																				(string ")")))))))
+
+# Conjunctions
+(rule $CONJ (and) (ConstantFn (string " & ")))
+(rule $CONJ (or) (ConstantFn (string " | ")))
+(rule $PRE_CONJ (either) (ConstantFn (string "")))
+(rule $PRE_CONJ (both) (ConstantFn (string "")))
 
 # (rule $FIELDNAME ($TOKEN $FIELDNAME) (lambda x (lambda y (var y))))
 # (rule $FIELDNAME ($FIELDNAME $TOKEN) (lambda x (lambda y (var x))))
