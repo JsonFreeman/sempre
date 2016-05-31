@@ -47,6 +47,11 @@
 (rule $ENT (zero) (ConstantFn (string "0")))
 (rule $ENT ($DET $ENT) (lambda x (lambda y (var y))))
 
+(rule $LIFTED_ENT ((either optional) $ENT or $ENT) (lambda x (lambda y (lambda f (call + (string "(")
+																			(call + (var f) (string "(") (var x) (string ") | "))
+																			(call + (var f) (string "(") (var y) (string ")"))
+																			(string ")"))))))
+
 # (rule $FIELDNAME ($TOKEN $FIELDNAME) (lambda x (lambda y (var y))))
 # (rule $FIELDNAME ($FIELDNAME $TOKEN) (lambda x (lambda y (var x))))
 
@@ -78,6 +83,7 @@
 
 # Complements
 # has a value, has a (zero/non-zero) value, has the value x
+(rule $SENTENCE ($LIFTED_ENT $TOHAVE ($DET optional) value) (lambda x (lambda y ((var x) (string "has_value")))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) value) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) zero value) (lambda x (lambda y (call + (var y) (string "value(") (var x) (string ",") (string "0") (string ")")))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) non zero value) (lambda x (lambda y (call + (var y) (string "non_zero(") (var x) (string ")")))))
