@@ -86,7 +86,7 @@
   ( utterance "The ETIN associated with the Individual submission is not a participating transmitter for Prior Year Returns.  Please check the Modernized e-File ( MeF ) web page under irs.gov for more information on participation rules." )  )
 
  ( example
-  ( utterance "If Form 1040, Line 3 checkbox ""Married filing separately"" ( element 'IndividualReturnFilingStatusCd' has the value 3 ) , then Line 34 'TuitionAndFeesDedAmt' must be equal to zero if an amount is entered." )  )
+  ( utterance "If Form 1040, Line 3 checkbox ""Married filing separately"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 3 ) , then Line 34 'TuitionAndFeesDedAmt' must be equal to zero if an amount is entered." )  )
 
  ( example
   ( utterance "If Schedule D ( Form 1040 ) and Schedule J ( Form 1040 ) are present in the return, then Form 1040, Line 44 'TaxAmt' must not be less than Schedule J ( Form 1040 ) ,  Line 23 'AverageFarmIncomeTaxAmt'." )  )
