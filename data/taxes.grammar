@@ -97,10 +97,9 @@
 
 # Complements
 # has a value, has a (zero/non-zero) value, has the value x
-(rule $SENTENCE ($LIFTED_ENT $TOHAVE ($DET optional) value) (lambda x (lambda y ((var x) (string "has_value")))))
-(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
+(rule $SENTENCE ($LIFTED_ENT $NEG $PRED) (lambda x (lambda y (lambda z (call + (var y) ((var x) (var z)))))))
+(rule $SENTENCE ($ENT $NEG $PRED) (lambda x (lambda y (lambda z (call + (var y) (var z) (string "(") (var x) (string ")"))))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) zero value) (lambda x (lambda y (call + (var y) (string "value(") (var x) (string ",") (string "0") (string ")")))))
-(rule $SENTENCE ($ENT $TOHAVE ($DET optional) non zero value) (lambda x (lambda y (call + (var y) (string "non_zero(") (var x) (string ")")))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN $TOKEN) (lambda x (lambda y (lambda z (lambda w (call + (var y) (string "value(") (var x) (string ",") (call + (var z) (var w)) (string ")")))))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN $TOKEN $TOKEN) (lambda x (lambda y (lambda z (lambda w (lambda u (call + (var y) (string "value(") (var x) (string ",") (call + (var z) (var w) (var u)) (string ")"))))))))
@@ -108,11 +107,15 @@
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) choice of (` optional) $TOKEN (' optional) indicated) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
 (rule $SENTENCE (($DET optional) choice of (` optional) $TOKEN (' optional) $TOBE indicated $PREP $ENT) (lambda x (lambda y (lambda z (lambda w (call + (var y) (string "value(") (var w) (string ",") (var x) (string ")")))))))
 
-# be checked/present/attached
-(rule $SENTENCE ($ENT $TOBE present) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
-(rule $SENTENCE ($ENT $TOBE attached) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
-(rule $SENTENCE ($ENT $TOBE checked) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
-(rule $SENTENCE ($ENT $TOBE entered) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
+# unary predicates
+(rule $NEG ($TOHAVE) (IdentityFn))
+(rule $NEG ($TOBE) (IdentityFn))
+(rule $PRED (($DET optional) value) (ConstantFn (string "has_value")))
+(rule $PRED (($DET optional) non zero value) (ConstantFn (string "non_zero")))
+(rule $PRED (($DET optional) present) (ConstantFn (string "has_value")))
+(rule $PRED (($DET optional) attached) (ConstantFn (string "has_value")))
+(rule $PRED (($DET optional) checked) (ConstantFn (string "has_value")))
+(rule $PRED (($DET optional) entered) (ConstantFn (string "has_value")))
 
 # be an ITIN
 
