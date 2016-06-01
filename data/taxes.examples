@@ -54,7 +54,7 @@
 
 ( example
   ( utterance "If Schedule EIC ( Form 1040 ) is present in the return, Form 1040, Line 66a 'EarnedIncomeCreditAmt' must have a non-zero value." )
-  ( targetValue ( string "has_value ( scheduleEIC ) & ~non_zero ( earnedIncomeCreditAmt )"  )  )  )
+  ( targetValue ( string "has_value ( scheduleEIC ) & ~non_zero ( earnedIncomeCreditAmt )"  )  )  ) 
 
 ( example
   ( utterance "If Form 1040, Line 8a 'TaxableInterestAmt' is greater than 1500, then it must be equal to Schedule B ( Form 1040 ), Line 4 'CalculatedTotalTaxableIntAmt' unless Form 8958 is present in the return." )
