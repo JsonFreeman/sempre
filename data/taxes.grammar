@@ -103,7 +103,7 @@
 
 # be an ITIN
 
-(rule $SENTENCE ($ENT $TOBE ($DET optional) $TOKEN) (lambda x (lambda y (lambda z (call + (var y) (var z) (string "(") (var x) (string ")"))))))
+(rule $SENTENCE ($ENT $TOBE ($DET optional) itin) (lambda x (lambda y (call + (var y) (string "iTin(") (var x) (string ")")))))
 
 # be (REL = greater/less than + equal to) $ENT
 
