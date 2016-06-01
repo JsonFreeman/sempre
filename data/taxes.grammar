@@ -1,80 +1,176 @@
-(rule $ROOT (if $SENTENCE , (then optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
+# Basic construct of the utterance
+(rule $ROOT (if $SENTENCE (, optional) (then optional) (, optional) $SENTENCE .) (lambda x (lambda y (call + (var x) (string " & ~") (var y)))))
 (rule $ROOT ($SENTENCE .) (lambda x (call + (string "~") (var x))))
+(rule $SENTENCE (\( $SENTENCE \)) (lambda x (var x)))
+(rule $SENTENCE ([ $SENTENCE ]) (lambda x (var x)))
+(rule $SENTENCE ($SENTENCE ,) (lambda x (var x)))
+(rule $SENTENCE ($SENTENCE $SENTENCE) (lambda x (lambda y (var x))))
+(rule $SENTENCE ($SENTENCE $SENTENCE) (lambda x (lambda y (var y))))
 (rule $SENTENCE ($SENTENCE and $SENTENCE) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
+(rule $SENTENCE ($SENTENCE or $SENTENCE) (lambda x (lambda y (call + (var x) (string " | ") (var y)))))
+(rule $SENTENCE ($SENTENCE unless $SENTENCE) (lambda x (lambda y (call + (var x) (string " | ") (var y)))))
+(rule $SENTENCE ($SENTENCE if $SENTENCE) (lambda x (lambda y (call + (var x) (string " | ~") (var y)))))
+
+# Field names
+# TODO: account for parenthesized field names
+(rule $FIELD (form $TOKEN) (lambda x (call + (string "form") (var x))))
+(rule $FIELD (form $TOKEN $TOKEN) (lambda x (lambda y (call + (string "form") (var x) (var y)))))
+(rule $FIELD (line $TOKEN) (lambda x (call + (string "line") (var x))))
+(rule $FIELD (part $TOKEN) (lambda x (call + (string "part") (var x))))
+(rule $FIELD (section $TOKEN) (lambda x (call + (string "section") (var x))))
+(rule $FIELD (column \( $TOKEN \)) (lambda x (call + (string "column") (var x))))
+(rule $FIELD (line $TOKEN \( $TOKEN \)) (lambda x (lambda y (call + (string "line") (var x) (var y)))))
+(rule $FIELD (\( $FIELD \)) (lambda x (var x)))
+(rule $FIELD ($FIELD ,) (lambda x (var x)))
+(rule $FIELD (schedule $TOKEN (, optional)) (lambda x (call + (string "schedule") (var x))))
+(rule $FIELD (`` $PHRASE '') (ConstantFn (string "")))
+(rule $FIELD (checkbox $TOKEN) (lambda x (var x)))
+(rule $FIELD (checkbox $TOKEN $TOKEN) (lambda x (lambda y (call + (var x) (var y)))))
+(rule $FIELD (checkbox $TOKEN $TOKEN $TOKEN) (lambda x (lambda y (lambda z (call + (var x) (var y) (var z))))))
+(rule $FIELDNAME (` $TOKEN ') (lambda x (var x)))
+(rule $FIELDNAME ([ $TOKEN ]) (lambda x (var x)))
+(rule $FIELDNAME ($FIELDNAME ,) (lambda x (var x)))
+(rule $FIELDNAME (element $FIELDNAME) (lambda x (var x)))
+(rule $FIELDNAME ($FIELDNAME checkbox) (lambda x (var x)))
+(rule $FIELDNAME (checkbox $FIELDNAME) (lambda x (var x)))
+(rule $FIELDNAME (checkbox $FIELD) (lambda x (var x)))
+(rule $FIELDNAME ($FIELD $FIELDNAME) (lambda x (lambda y (var y))))
+
+# This is cheating
+(rule $FIELD (form $TOKEN or $TOKEN) (lambda x (lambda y (call + (string "form") (var x)))))
+(rule $FIELD (form $TOKEN or form $TOKEN) (lambda x (lambda y (call + (string "form") (var x)))))
+(rule $FIELD (schedule $TOKEN (, optional)) (lambda x (call + (string "formschedule") (var x))))
+(rule $FIELDNAME (($TOKEN optional) ($TOKEN optional) ($TOKEN optional) ($TOKEN optional) ($TOKEN optional) [ $TOKEN ]) (lambda x (var x)))
+(rule $ENT ($FIELD) (lambda x (var x)))
+(rule $ENT ($FIELD $FIELD) (lambda x (lambda y (var x))))
+(rule $ENT ($FIELD $ENT) (lambda x (lambda y (var y))))
+(rule $ENT ($FIELD $FIELD $ENT) (lambda x (lambda y (var y))))
+(rule $ENT ($FIELD $FIELD $FIELD $ENT) (lambda x (lambda y (var y))))
+
+(rule $ENT ($FIELDNAME) (lambda x (var x)))
+(rule $ENT ($TOKEN) (lambda x (var x)))
+(rule $ENT ($TOKEN $TOKEN) (lambda x (lambda y (call + (var x) (var y)))))
+(rule $ENT (zero) (ConstantFn (string "0")))
+(rule $ENT ($DET $ENT) (lambda x (lambda y (var y))))
+
+(rule $ENT (each $ENT) (lambda x (var x)))
+(rule $ENT (any $ENT) (lambda x (var x)))
+
+# (rule $FIELDNAME ($TOKEN $FIELDNAME) (lambda x (lambda y (var y))))
+# (rule $FIELDNAME ($FIELDNAME $TOKEN) (lambda x (lambda y (var x))))
+
+# Anaphor
+(rule $FIELDNAME (it) (ConstantFn (string "ANAPHOR")))
+(rule $FIELDNAME (($DET optional) amount) (ConstantFn (string "ANAPHOR")))
+
+# determiners
+(rule $DET (a) (ConstantFn (string "")))
+(rule $DET (an) (ConstantFn (string "")))
+(rule $DET (the) (ConstantFn (string "")))
+
+# Verbs
+(rule $TOBE (is) (ConstantFn (string "")))
+(rule $TOBE (is not) (ConstantFn (string "~")))
+(rule $TOBE (not be) (ConstantFn (string "~")))
+(rule $TOBE (are) (ConstantFn (string "")))
+(rule $TOBE (are not) (ConstantFn (string "~")))
+(rule $MOD (does) (ConstantFn (string "")))
+(rule $MOD (does not) (ConstantFn (string "~")))
+(rule $MOD (must) (ConstantFn (string "")))
+(rule $MOD (must not) (ConstantFn (string "~")))
+(rule $MOD (cannot) (ConstantFn (string "~")))
+(rule $TOHAVE (have) (ConstantFn (string "")))
+(rule $TOHAVE (has) (ConstantFn (string "")))
+(rule $TOBE ($MOD be) (lambda x (var x)))
+(rule $TOHAVE ($MOD have) (lambda x (var x)))
 
 
-# remove
-(rule $PADDING (be) (ConstantFn (string "")))
-(rule $PADDING (the) (ConstantFn (string "")))
-(rule $PADDING (a) (ConstantFn (string "")))  
-(rule $PADDING ($PADDING $PADDING) (lambda x (lambda y (var x))))
+# Complements
+# has a value, has a (zero/non-zero) value, has the value x
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) zero value) (lambda x (lambda y (call + (var y) (string "value(") (var x) (string ",") (string "0") (string ")")))))
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) non zero value) (lambda x (lambda y (call + (var y) (string "non_zero(") (var x) (string ")")))))
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN $TOKEN) (lambda x (lambda y (lambda z (lambda w (call + (var y) (string "value(") (var x) (string ",") (call + (var z) (var w)) (string ")")))))))
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN $TOKEN $TOKEN) (lambda x (lambda y (lambda z (lambda w (lambda u (call + (var y) (string "value(") (var x) (string ",") (call + (var z) (var w) (var u)) (string ")"))))))))
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value ` $TOKEN ') (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) choice of (` optional) $TOKEN (' optional) indicated) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
+(rule $SENTENCE (($DET optional) choice of (` optional) $TOKEN (' optional) $TOBE indicated $PREP $ENT) (lambda x (lambda y (lambda z (lambda w (call + (var y) (string "value(") (var w) (string ",") (var x) (string ")")))))))
+
+# be checked/present/attached
+(rule $SENTENCE ($ENT $TOBE present) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
+(rule $SENTENCE ($ENT $TOBE attached) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
+(rule $SENTENCE ($ENT $TOBE checked) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
+(rule $SENTENCE ($ENT $TOBE entered) (lambda x (lambda y (call + (var y) (string "has_value(") (var x) (string ")")))))
+
+# be an ITIN
+
+(rule $SENTENCE ($ENT $TOBE ($DET optional) $TOKEN) (lambda x (lambda y (lambda z (call + (var y) (var z) (string "(") (var x) (string ")"))))))
+
+# be (REL = greater/less than + equal to) $ENT
+
+(rule $REL (greater than) (ConstantFn (string "greater_than")))
+(rule $REL (less than) (ConstantFn (string "less_than")))
+(rule $REL (equal to) (ConstantFn (string "same")))
+(rule $REL (equals) (ConstantFn (string "same")))
+(rule $REL (equal) (ConstantFn (string "same")))
+(rule $REL (($DET optional) same as) (ConstantFn (string "same")))
+(rule $REL (greater than or equal to) (ConstantFn (string "greater_than_equal_to")))
+(rule $REL (less than or equal to) (ConstantFn (string "less_than_equal_to")))
+
+(rule $SENTENCE ($ENT $TOBE $REL $ENT) (lambda x (lambda y (lambda z (lambda w (call + (var y) (var z) (string "(") (var x) (string ",") (var w) (string ")")))))))
+
+(rule $SENTENCE ($ENT $TOBE $REL $NUM) (lambda x (lambda y (lambda z (lambda w (call + (var y) (var z) (string "(") (var x) (string ",") (var w) (string ")")))))))
+
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $REL $ENT) (lambda x (lambda y (lambda z (lambda w (call + (var y) (var z) (string "(") (var x) (string ",") (var w) (string ")")))))))
+
+(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $REL $NUM) (lambda x (lambda y (lambda z (lambda w (call + (var y) (var z) (string "(") (var x) (string ",") (var w) (string ")")))))))
 
 
-# variable labels
-(rule $FORM (form) (ConstantFn (string "")))
-(rule $FORM (line) (ConstantFn (string "")))
+(rule $NUM ($TOKEN) (lambda x (var x)))
+(rule $NUM ($TOKEN , $TOKEN) (lambda x (lambda y (call + (var x) (var y)))))
+(rule $NUM ($TOKEN , $TOKEN , $TOKEN) (lambda x (lambda y (lambda z (call + (var x) (var y) (var z))))))
 
 
-# modals
-(rule $MODAL ($MODAL $PADDING) (lambda x (lambda y (var x))))
-(rule $MODAL (is) (ConstantFn (string "")))
-(rule $MODAL (must (have optional)) (ConstantFn (string "")))
-(rule $MODAL (does) (ConstantFn (string "")))
-(rule $MODAL (has) (ConstantFn (string "")))
+# Optional MODIFIER
 
+(rule $ENT ($ENT $OPTMOD) (lambda x (lambda y (var x))))
+(rule $SENTENCE ($SENTENCE $OPTMOD) (lambda x (lambda y (var x))))
+(rule $SENTENCE ($OPTMOD $SENTENCE) (lambda x (lambda y (var y))))
 
-# modal negations
-(rule $NEGATION ($NEGATION $PADDING) (lambda x (lambda y (var x))))
-(rule $NEGATION (cannot) (ConstantFn (string "")))
-(rule $NEGATION (not (have optional)) (ConstantFn (string "")))
+(rule $OPTMOD ($PP) (lambda x (var x)))
+(rule $OPTMOD (provided) (ConstantFn (string "")))
+(rule $OPTMOD (if an amount is entered) (ConstantFn (string "")))
+(rule $OPTMOD (to $ENT) (ConstantFn (string "")))
+(rule $PP ($PREP $NPP) (ConstantFn (string "")))
+(rule $PP (in $ENT) (ConstantFn (string "")))
+(rule $PP (in $ENT present $PP) (ConstantFn (string "")))
+(rule $PP (in $ENT attached $PP) (ConstantFn (string "")))
+(rule $PP ($PP ,) (ConstantFn (string "")))
+(rule $PREP (in) (ConstantFn (string "")))
+(rule $PREP (on) (ConstantFn (string "")))
+(rule $NPP ($FIELD) (ConstantFn (string "")))
+(rule $NPP (($DET optional) return) (ConstantFn (string "")))
+(rule $NPP (($DET optional) return header) (ConstantFn (string "")))
+(rule $NPP (($DET optional) ($TOKEN optional) ($TOKEN optional) $TOKEN) (ConstantFn (string "")))
 
+(rule $ROOT ($ENT) (lambda x (var x)))
+(rule $ROOT ($TOHAVE) (lambda x (var x)))
+(rule $ROOT ($SENTENCE) (lambda x (var x)))
+(rule $ROOT ($FIELDNAME) (lambda x (var x)))
 
-# comparisons
-(rule $SENTENCE ($FIELD $MODAL greater than $FIELD) (lambda x (lambda y (lambda z (call + (string "greater_than(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL greater than or equal to $FIELD) (lambda x (lambda y (lambda z (call + (string "greater_than_equal_to(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL less than $FIELD) (lambda x (lambda y (lambda z (call + (string "less_than(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL less than or equal to $FIELD) (lambda x (lambda y (lambda z (call + (string "less_than_equal_to(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL equal to $FIELD) (lambda x (lambda y (lambda z (call + (string "same(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL $NEGATION equal to $FIELD) (lambda w (lambda x (lambda y (lambda z (call + (string "~same(") (var w) (string ",") (var z) (string ")")))))))
-(rule $SENTENCE ($FIELD $NEGATION equal to $FIELD) (lambda x (lambda y (lambda z (call + (string "~same(") (var x) (string ",") (var z) (string ")"))))))
+# noun+VP coordination (and, or)
+# sum of, +, -, following+these, each, at least one,
+# unquoted name Primary SSN, Spouse SSN
+# anaphoric "both"
+# has no entry
+# form number coordination
+#unique
+# parse only first sentence
+# valid range
+# years old
+# have 'a' value greater than zero
+# ITIN -- is $det $token == token
+#  If Form 1040, Line 2 checkbox "Married filing jointly" is not checked ( element 'IndividualReturnFilingStatusCd' does not have the value 2 ) and 'PrimaryDeathDt' has a value, then Personal Representative Indicator checkbox 'PersonalRepresentativeInd' must be checked
 
-
-# field value
-(rule $SENTENCE ($FIELD $MODAL non zero value) (lambda x (lambda y (call + (string "non_zero(") (var x) (string ")")))))
-(rule $SENTENCE ($FIELD has the value (` optional) $TOKEN (' optional)) (lambda x (lambda y (call + (string "value(") (var x) (string ",") (var y) (string ")")))))
-
-
-# implied field value
-(rule $SENTENCE ($FORM $PHRASE \( element ` $TOKEN ' $MODAL value $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")"))))))))
-(rule $SENTENCE ($FORM $PHRASE \( element ` $TOKEN ' $MODAL $NEGATION value $TOKEN \) ) (lambda u (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")")))))))))
-(rule $SENTENCE ($FORM $PHRASE \( element ` $TOKEN ' $MODAL equal to $TOKEN \) ) (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "value(") (var x) (string ",") (var z) (string ")"))))))))
-(rule $SENTENCE ($FORM $PHRASE \( element ` $TOKEN ' $MODAL $NEGATION equal to $TOKEN \) ) (lambda u (lambda v (lambda w (lambda x (lambda y (lambda z (call + (string "~value(") (var v) (string ",") (var z) (string ")")))))))))
-
-
-# field value existence
-(rule $SENTENCE ($FIELD has a value) (lambda x (call + (string "has_value(") (var x) (string ")"))))
-(rule $SENTENCE ($FIELD $MODAL checked) (lambda x (lambda y (call + (string "has_value(") (var x) (string ")")))))
-(rule $SENTENCE ($FIELD $MODAL $NEGATION checked) (lambda x (lambda y (lambda z (call + (string "~has_value(") (var x) (string ")"))))))
-(rule $SENTENCE ($FIELD $MODAL value) (lambda x (lambda y (call + (string "has_value(") (var x) (string ")")))))
-(rule $SENTENCE ($FIELD must be equal to zero if an amount is entered) (lambda x (call + (string "~non_zero(") (var x) (string ")"))))
-(rule $SENTENCE ($FIELD must be equal to zero or not be present) (lambda x (call + (string "~non_zero(") (var x) (string ")"))))
-
-
-# Tax-specific field value
-(rule $SENTENCE ($FIELD in the return header is an itin) (lambda x (call + (string "iTin(") (var x) (string ")"))))
-(rule $SENTENCE (schedule $TOKEN \( $TOKEN $TOKEN \) must be attached) (lambda x (lambda y (lambda z (call + (string "has_value(schedule") (var x) (string ")"))))))
-(rule $SENTENCE (schedule $TOKEN must not be attached) (lambda x (call + (string "~has_value(schedule") (var x) (string ")"))))
-(rule $SENTENCE (schedule $TOKEN \( $TOKEN $TOKEN \) is present in the return) (lambda x (lambda y (lambda z (call + (string "has_value(schedule") (var x) (string ")"))))))
-
-
-# extract field name
-(rule $FIELD ($FORM $TOKEN , $FORM $TOKEN (checkbox optional) ` $TOKEN ') (lambda v (lambda w (lambda x (lambda y (lambda z (var z)))))))
-(rule $FIELD (schedule $TOKEN $TOKEN $TOKEN , line $TOKEN ` $TOKEN ') (lambda v (lambda w (lambda x (lambda y (lambda z (var z)))))))
-(rule $FIELD ($FORM $TOKEN (checkbox optional) ` $TOKEN ') (lambda x (lambda y (lambda z (var z)))))
-(rule $FIELD (` $TOKEN ') (lambda x (var x)))
-
-# TODO
-# non-if-then
-# schedule X variables
-# form X variables
-# normalize to Xpresent 
+# If Form 1040, Line 66a 'EICEligibilityLiteralCd' has the value 'NO', then Line 66a 'EarnedIncomeCreditAmt' not be present
