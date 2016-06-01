@@ -57,17 +57,6 @@
   ( targetValue ( string "has_value ( scheduleEIC ) & ~non_zero ( earnedIncomeCreditAmt )"  )  )  ) 
 
 ( example
-  ( utterance "If Form 1040, Line 66a 'EarnedIncomeCreditAmt' has a non-zero value, then at least one of the following must be true: ( 1 ) In [WagesNotShownSchedule] attached to Form 1040, Line 7, at least one 'WagesLiteralCd' must have the value \"HSH\" and the corresponding 'WagesNotShownAmt' must be greater than zero; ( 2 ) [OtherIncomeTypeStatement] must be attached to Form 1040, Line 21; ( 3 ) Form W-2 must be present; ( 4 ) Form 1099-R must be present; ( 5 ) Schedule C ( Form 1040 ) must be present; ( 6 ) Schedule E ( Form 1040 ), Line 28( b ) 'PartnershipSCorpCd' must have the value \"P\" for at least one entry in Line 28; ( 7 ) Schedule F ( Form 1040 ) must be present; ( 8 ) Schedule C-EZ ( Form 1040 ) must be present; ( 9 ) Form 8919 must be present; ( 10 ) In [WagesNotShownSchedule] attached to Form 1040, Line 7, at least one 'WagesLiteralCd' must have the value \"FEC\" with the corresponding 'WagesNotShownAmt' having a value greater than zero and [FECRecord] must be present." )
-  ( targetValue ( string "non_zero( earnedIncomeCreditAmt )              & ~ (  (  value ( wagesLiteralCd( I ), hsh ) & greater_than ( wagesNotShownAmt( I ),0 ) )|
-                                                                                   has_value( otherIncomeTypeStatement ) |
-                                                                                   has_value( w2 ) |
-                                                                                   has_value( form1099R ) |
-                                                                                   has_value( scheduleC ) |
-                                                                                   has_value( form8919 )  |
-                                                                                  ( value ( wagesLiteralCd( J ),fec ) &  greater_than( wagesNotShownAmt( J ),0 ) &
-                                                                                     has_value( fECRecord ) ) )"  )  )  ) 
-
-( example
   ( utterance "If Form 1040, Line 8a 'TaxableInterestAmt' is greater than 1500, then it must be equal to Schedule B ( Form 1040 ), Line 4 'CalculatedTotalTaxableIntAmt' unless Form 8958 is present in the return." )
   ( targetValue ( string "greater_than( taxableInterestAmt,1500 ) &  ~has_value( form8958 ) & ~same( taxableInterestAmt,calculatedTotalTaxableIntAmt )"  )  )  ) 
 
