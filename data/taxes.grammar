@@ -43,10 +43,7 @@
 (rule $FIELD (schedule $TOKEN (, optional)) (lambda x (call + (string "formschedule") (var x))))
 (rule $FIELDNAME (($TOKEN optional) ($TOKEN optional) ($TOKEN optional) ($TOKEN optional) ($TOKEN optional) [ $TOKEN ]) (lambda x (var x)))
 (rule $ENT ($FIELD) (lambda x (var x)))
-(rule $ENT ($FIELD $FIELD) (lambda x (lambda y (var x))))
 (rule $ENT ($FIELD $ENT) (lambda x (lambda y (var y))))
-(rule $ENT ($FIELD $FIELD $ENT) (lambda x (lambda y (var y))))
-(rule $ENT ($FIELD $FIELD $FIELD $ENT) (lambda x (lambda y (var y))))
 
 (rule $ENT ($FIELDNAME) (lambda x (var x)))
 (rule $ENT ($TOKEN) (lambda x (var x)))
@@ -141,7 +138,6 @@
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $REL $NUM) (lambda x (lambda y (lambda z (lambda w (call + (var y) (var z) (string "(") (var x) (string ",") (var w) (string ")")))))))
 
 
-(rule $NUM ($TOKEN) (lambda x (var x)))
 (rule $NUM ($TOKEN , $TOKEN) (lambda x (lambda y (call + (var x) (var y)))))
 (rule $NUM ($TOKEN , $TOKEN , $TOKEN) (lambda x (lambda y (lambda z (call + (var x) (var y) (var z))))))
 
