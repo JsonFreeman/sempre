@@ -4,12 +4,13 @@
 (rule $SENTENCE (\( $SENTENCE \)) (lambda x (var x)))
 (rule $SENTENCE ([ $SENTENCE ]) (lambda x (var x)))
 (rule $SENTENCE ($SENTENCE ,) (lambda x (var x)))
-(rule $SENTENCE ($SENTENCE $SENTENCE) (lambda x (lambda y (var x))))
-(rule $SENTENCE ($SENTENCE $SENTENCE) (lambda x (lambda y (var y))))
-(rule $SENTENCE ($SENTENCE and $SENTENCE) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
-(rule $SENTENCE ($SENTENCE or $SENTENCE) (lambda x (lambda y (call + (var x) (string " | ") (var y)))))
-(rule $SENTENCE ($SENTENCE unless $SENTENCE) (lambda x (lambda y (call + (var x) (string " | ") (var y)))))
-(rule $SENTENCE ($SENTENCE if $SENTENCE) (lambda x (lambda y (call + (var x) (string " | ~") (var y)))))
+(rule $SENTENCELIST ($SENTENCE) (IdentityFn))
+(rule $SENTENCE ($SENTENCE $SENTENCELIST) (lambda x (lambda y (var x))))
+(rule $SENTENCE ($SENTENCE $SENTENCELIST) (lambda x (lambda y (var y))))
+(rule $SENTENCE ($SENTENCE and $SENTENCELIST) (lambda x (lambda y (call + (var x) (string " & ") (var y)))))
+(rule $SENTENCE ($SENTENCE or $SENTENCELIST) (lambda x (lambda y (call + (var x) (string " | ") (var y)))))
+(rule $SENTENCE ($SENTENCE unless $SENTENCELIST) (lambda x (lambda y (call + (var x) (string " | ") (var y)))))
+(rule $SENTENCE ($SENTENCE if $SENTENCELIST) (lambda x (lambda y (call + (var x) (string " | ~") (var y)))))
 
 # Field names
 # TODO: account for parenthesized field names
