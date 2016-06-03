@@ -59,6 +59,11 @@
 																				(var c)
 																				(call + (var f) (string "(") (var y) (string ")"))
 																				(string ")")))))))
+(rule $DOUBLY_LIFTED_ENT (($PRE_CONJ optional) $ENT $CONJ $ENT) (lambda x (lambda c (lambda y (lambda f (call + (string "(")
+																					((var f) (var x))
+																					(var c)
+																					((var f) (var y))
+																					(string ")")))))))
 
 # Conjunctions
 (rule $CONJ (and) (ConstantFn (string " & ")))
@@ -100,7 +105,9 @@
 (rule $SENTENCE ($LIFTED_ENT $NEG $PRED) (lambda x (lambda y (lambda z ((var x) (call + (var y) (var z)))))))
 (rule $SENTENCE ($LIFTED_ENT $NEG $PRED) (lambda x (lambda y (lambda z (call + (var y) ((var x) (var z)))))))
 (rule $SENTENCE ($ENT $NEG $PRED) (lambda x (lambda y (lambda z (call + (var y) (var z) (string "(") (var x) (string ")"))))))
-(rule $SENTENCE ($ENT $TOHAVE ($DET optional) zero value) (lambda x (lambda y (call + (var y) (string "value(") (var x) (string ",") (string "0") (string ")")))))
+(rule $SENTENCE ($DOUBLY_LIFTED_ENT $NEG $PART_APPLIED_REL) (lambda x (lambda y (lambda z ((var x) ((var z) (var y)))))))
+(rule $SENTENCE ($ENT $NEG $PART_APPLIED_REL) (lambda x (lambda y (lambda z (((var z) (var y)) (var x))))))
+#(rule $SENTENCE ($ENT $TOHAVE ($DET optional) zero value) (lambda x (lambda y (call + (var y) (string "value(") (var x) (string ",") (string "0") (string ")")))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN $TOKEN) (lambda x (lambda y (lambda z (lambda w (call + (var y) (string "value(") (var x) (string ",") (call + (var z) (var w)) (string ")")))))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN $TOKEN $TOKEN) (lambda x (lambda y (lambda z (lambda w (lambda u (call + (var y) (string "value(") (var x) (string ",") (call + (var z) (var w) (var u)) (string ")"))))))))
@@ -117,6 +124,8 @@
 (rule $PRED (($DET optional) attached) (ConstantFn (string "has_value")))
 (rule $PRED (($DET optional) checked) (ConstantFn (string "has_value")))
 (rule $PRED (($DET optional) entered) (ConstantFn (string "has_value")))
+
+(rule $PART_APPLIED_REL (($DET optional) zero value) (lambda n (lambda x (call + (var n) (string "value(") (var x) (string ",0)")))))
 
 # be an ITIN
 
