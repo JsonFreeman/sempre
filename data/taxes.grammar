@@ -125,7 +125,7 @@
 (rule $PRED (($DET optional) checked) (ConstantFn (string "has_value")))
 (rule $PRED (($DET optional) entered) (ConstantFn (string "has_value")))
 
-(rule $PART_APPLIED_REL (($DET optional) zero value) (lambda n (lambda x (call + (var n) (string "value(") (var x) (string ",0)")))))
+(rule $PART_APPLIED_REL (($DET optional) zero value) (ConstantFn (lambda n (lambda x (call + (var n) (string "value(") (var x) (string ",0)"))))))
 
 # be an ITIN
 
