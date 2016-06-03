@@ -107,12 +107,6 @@
 (rule $SENTENCE ($ENT $NEG $PRED) (lambda x (lambda y (lambda z (call + (var y) (var z) (string "(") (var x) (string ")"))))))
 (rule $SENTENCE ($DOUBLY_LIFTED_ENT $NEG $PART_APPLIED_REL) (lambda x (lambda y (lambda z ((var x) ((var z) (var y)))))))
 (rule $SENTENCE ($ENT $NEG $PART_APPLIED_REL) (lambda x (lambda y (lambda z (((var z) (var y)) (var x))))))
-#(rule $SENTENCE ($ENT $TOHAVE ($DET optional) zero value) (lambda x (lambda y (call + (var y) (string "value(") (var x) (string ",") (string "0") (string ")")))))
-(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN $TOKEN) (lambda x (lambda y (lambda z (lambda w (call + (var y) (string "value(") (var x) (string ",") (call + (var z) (var w)) (string ")")))))))
-(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN $TOKEN $TOKEN) (lambda x (lambda y (lambda z (lambda w (lambda u (call + (var y) (string "value(") (var x) (string ",") (call + (var z) (var w) (var u)) (string ")"))))))))
-(rule $SENTENCE ($ENT $TOHAVE ($DET optional) value ` $TOKEN ') (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
-(rule $SENTENCE ($ENT $TOHAVE ($DET optional) choice of (` optional) $TOKEN (' optional) indicated) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
 (rule $SENTENCE (($DET optional) choice of (` optional) $TOKEN (' optional) $TOBE indicated $PREP $ENT) (lambda x (lambda y (lambda z (lambda w (call + (var y) (string "value(") (var w) (string ",") (var x) (string ")")))))))
 
 # unary predicates
@@ -126,6 +120,13 @@
 (rule $PRED (($DET optional) entered) (ConstantFn (string "has_value")))
 
 (rule $PART_APPLIED_REL (($DET optional) zero value) (ConstantFn (lambda n (lambda x (call + (var n) (string "value(") (var x) (string ",0)"))))))
+(rule $PART_APPLIED_REL (($DET optional) value $VALUE) (lambda v (lambda n (lambda x (call + (var n) (string "value(") (var x) (string ",") (var v) (string ")" ))))))
+
+(rule $VALUE ($TOKEN) (IdentityFn))
+(rule $VALUE (` $TOKEN ') (IdentityFn))
+(rule $VALUE (choice of (` optional) $TOKEN (' optional) indicated) (IdentityFn))
+(rule $VALUE ($TOKEN $TOKEN) (lambda x (lambda y (call + (var x) (var y)))))
+(rule $VALUE ($TOKEN $TOKEN $TOKEN) (lambda x (lambda y (lambda z (call + (var x) (var y) (var z))))))
 
 # be an ITIN
 
