@@ -121,6 +121,7 @@
 
 (rule $PART_APPLIED_REL (($DET optional) zero value) (ConstantFn (lambda n (lambda x (call + (var n) (string "value(") (var x) (string ",0)"))))))
 (rule $PART_APPLIED_REL (($DET optional) value $VALUE) (lambda v (lambda n (lambda x (call + (var n) (string "value(") (var x) (string ",") (var v) (string ")" ))))))
+(rule $PART_APPLIED_REL ($REL $ENT) (lambda r (lambda v (lambda n (lambda x (call + (var n) (var r) (string "(") (var x) (string ",") (var v) (string ")" )))))))
 
 (rule $VALUE ($TOKEN) (IdentityFn))
 (rule $VALUE (` $TOKEN ') (IdentityFn))
