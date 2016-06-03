@@ -98,6 +98,7 @@
 # Complements
 # has a value, has a (zero/non-zero) value, has the value x
 (rule $SENTENCE ($LIFTED_ENT $NEG $PRED) (lambda x (lambda y (lambda z ((var x) (call + (var y) (var z)))))))
+(rule $SENTENCE ($LIFTED_ENT $NEG $PRED) (lambda x (lambda y (lambda z (call + (var y) ((var x) (var z)))))))
 (rule $SENTENCE ($ENT $NEG $PRED) (lambda x (lambda y (lambda z (call + (var y) (var z) (string "(") (var x) (string ")"))))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) zero value) (lambda x (lambda y (call + (var y) (string "value(") (var x) (string ",") (string "0") (string ")")))))
 (rule $SENTENCE ($ENT $TOHAVE ($DET optional) value $TOKEN) (lambda x (lambda y (lambda z (call + (var y) (string "value(") (var x) (string ",") (var z) (string ")"))))))
