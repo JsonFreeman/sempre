@@ -84,6 +84,7 @@
 (rule $DET (the) (ConstantFn (string "")))
 
 # Verbs
+(rule $TOBE (be) (ConstantFn (string "")))
 (rule $TOBE (is) (ConstantFn (string "")))
 (rule $TOBE (is not) (ConstantFn (string "~")))
 (rule $TOBE (not be) (ConstantFn (string "~")))
@@ -102,9 +103,6 @@
 
 # Complements
 # has a value, has a (zero/non-zero) value, has the value x
-(rule $SENTENCE ($LIFTED_ENT $NEG $PRED) (lambda x (lambda y (lambda z ((var x) (call + (var y) (var z)))))))
-(rule $SENTENCE ($LIFTED_ENT $NEG $PRED) (lambda x (lambda y (lambda z (call + (var y) ((var x) (var z)))))))
-(rule $SENTENCE ($ENT $NEG $PRED) (lambda x (lambda y (lambda z (call + (var y) (var z) (string "(") (var x) (string ")"))))))
 (rule $SENTENCE ($DOUBLY_LIFTED_ENT $NEG $PART_APPLIED_REL) (lambda x (lambda y (lambda z ((var x) ((var z) (var y)))))))
 (rule $SENTENCE ($PART_APPLIED_REVERSE_REL $DOUBLY_LIFTED_ENT) (lambda z (lambda x ((var x) (var z)))))
 (rule $SENTENCE ($ENT $NEG $PART_APPLIED_REL) (lambda x (lambda y (lambda z (((var z) (var y)) (var x))))))
@@ -120,10 +118,21 @@
 (rule $PRED (($DET optional) checked) (ConstantFn (string "has_value")))
 (rule $PRED (($DET optional) entered) (ConstantFn (string "has_value")))
 
+
 (rule $PART_APPLIED_REL (($DET optional) zero value) (ConstantFn (lambda n (lambda x (call + (var n) (string "value(") (var x) (string ",0)"))))))
 (rule $PART_APPLIED_REL (($DET optional) value $VALUE) (lambda v (lambda n (lambda x (call + (var n) (string "value(") (var x) (string ",") (var v) (string ")" ))))))
 (rule $PART_APPLIED_REL ($REL $ENT) (lambda r (lambda v (lambda n (lambda x (call + (var n) (var r) (string "(") (var x) (string ",") (var v) (string ")" )))))))
 (rule $PART_APPLIED_REVERSE_REL ($ENT $TOBE $REL) (lambda v (lambda n (lambda r (lambda x (call + (var n) (var r) (string "(") (var v) (string ",") (var x) (string ")" )))))))
+(rule $PART_APPLIED_REL ($PRED) (lambda p (lambda n (lambda x (call + (var n) (var p) (string "(") (var x) (string ")"))))))
+
+# Conjoined PART_APPLIED_REL (predicates)
+(rule $PART_APPLIED_REL (($PRE_CONJ optional) $NEG $PART_APPLIED_REL $CONJ $NEG $PART_APPLIED_REL)
+(lambda n1 (lambda p1 (lambda c (lambda n2 (lambda p2 (lambda n (lambda x 
+	(call + (var n) (string "(") 
+		(((var p1) (var n1)) (var x))
+		(var c)
+		(((var p2) (var n2)) (var x))
+		(string ")"))))))))))
 
 (rule $VALUE ($TOKEN) (IdentityFn))
 (rule $VALUE (` $TOKEN ') (IdentityFn))
