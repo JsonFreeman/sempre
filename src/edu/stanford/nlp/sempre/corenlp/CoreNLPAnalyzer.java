@@ -30,7 +30,8 @@ import java.util.*;
 public class CoreNLPAnalyzer extends LanguageAnalyzer {
   public static class Options {
     @Option(gloss = "What CoreNLP annotators to run")
-    public List<String> annotators = Lists.newArrayList("tokenize", "ssplit", "pos", "lemma", "ner", "parse");
+    //public List<String> annotators = Lists.newArrayList("tokenize", "ssplit", "pos", "lemma", "ner", "parse");
+    public List<String> annotators = Lists.newArrayList("tokenize", "ssplit", "pos", "lemma");
 
     @Option(gloss = "Whether to use case-sensitive models")
     public boolean caseSensitive = false;

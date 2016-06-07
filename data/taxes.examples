@@ -74,11 +74,11 @@
 
 ( example
   ( utterance "If Form 1040, Line 73 'OverpaidAmt' is greater than Line 77 'EsPenaltyAmt', then the sum of Line 74a 'RefundAmt', Line 75 'AppliedToEsTaxAmt', and Line 77 'EsPenaltyAmt' must be equal to Line 73 'OverpaidAmt'." )
-  ( targetValue ( string "greater_than( overpaidAmt,esPenaltyAmt ) & ~plus( refundAmt,appliedToEsTaxAmt,esPaneltyAmt,overpaidAmt )"  )  )  )
+  ( targetValue ( string "greater_than( overpaidAmt,esPenaltyAmt ) & ~plus( refundAmt,appliedToEsTaxAmt,esPenaltyAmt,overpaidAmt )"  )  )  ) 
 
 ( example
   ( utterance "If Form 1040, Line 75 'OverpaidAmt' is greater than zero and less than Line 79 'EsPenaltyAmt', then ( Line 76a 'RefundAmt' and Line 77 'AppliedToEsTaxAmt' must be equal to zero if an amount is entered  ) and [ Line 78 'OwedAmt' must be equal to (  Line 79 'EsPenaltyAmt' minus( - ) Line 75 'OverpaidAmt' ) ]." )
-  ( targetValue ( string "greater_than( overpaidAmt,0 ) & greater_than( esPaneltyAmt,overpaidAmt ) & ~( same( refundAmt,0 ) & same( appliedToEsTaxAmt,0 ) & minus( esPenaltyAmt,overpaidAmt,owedAmt ) )"  )  )  )
+  ( targetValue ( string "greater_than( overpaidAmt,0 ) & greater_than( esPenaltyAmt,overpaidAmt ) & ~( same( refundAmt,0 ) & same( appliedToEsTaxAmt,0 ) & minus( esPenaltyAmt,overpaidAmt,owedAmt ) )"  )  )  ) 
 
 ( example
   ( utterance "If Form 1040, Line 31a 'TotalAlimonyPaidAmt' has a non-zero value, then there must be at least one 'RecipientSSN' provided on Line 31b." )
@@ -144,11 +144,11 @@
 
 ( example
   ( utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is greater than Line 63 'TotalTaxAmt' and [ Line 77 'AppliedToEsTaxAmt' plus( + ) Line 79 'EsPenaltyAmt' is equal to Line 75 'OverpaidAmt' ], then Line 76a 'RefundAmt' must be equal to zero if an amount is entered." )
-  ( targetValue ( string "greater_than( totalPaymentsAmt,totalTaxAmt ) & plus( appliedToEsTaxAmt,esPaneltyAmt,overpaidAmt ) & non_zero( refundAmt )"  )  )  )
+  ( targetValue ( string "greater_than( totalPaymentsAmt,totalTaxAmt ) & plus( appliedToEsTaxAmt,esPenaltyAmt,overpaidAmt ) & non_zero( refundAmt )"  )  )  ) 
 
 ( example
   ( utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is greater than Line 63 'TotalTaxAmt' and [Line 77 'AppliedToEsTaxAmt' plus ( + ) Line 79 'EsPenaltyAmt' is less than Line 75 'OverpaidAmt'], then Line 76a 'RefundAmt' must have a non-zero value." )
-  ( targetValue ( string "greater_than( totalPaymentsAmt,totalTaxAmt ) & greater_than( overpaidAmt,plus( appliedToEsTaxAmt,esPaneltyAmt ) ) & ~non_zero( refundAmt )"  )  )  )
+  ( targetValue ( string "greater_than( totalPaymentsAmt,totalTaxAmt ) & greater_than( overpaidAmt,plus( appliedToEsTaxAmt,esPenaltyAmt ) ) & ~non_zero( refundAmt )"  )  )  ) 
 
 ( example
   ( utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is equal to Line 63 'TotalTaxAmt', then the following lines must not have a value greater than zero: Line 75 'OverpaidAmt' and Line 76a 'RefundAmt' and Line 77 'AppliedToEsTaxAmt'." )
@@ -164,7 +164,7 @@
 
 ( example
   ( utterance "If Form 2210 is present, then Form 1040, Line 79 'EsPenaltyAmt' must be equal to Form 2210, Line 17 'PenaltyAmt' or Form 2210, Line 27 'TotalPenaltyAmt'." )
-  ( targetValue ( string "has_value( form2210 ) & ~( same( esPaneltyAmt,form2210PentaltyAmt,Y ) | same( esPaneltyAmt,form2210TotalPenaltyAmt ) )"  )  )  )
+  ( targetValue ( string "has_value( form2210 ) & ~( same( esPenaltyAmt,form2210PentaltyAmt,Y ) | same( esPenaltyAmt,form2210TotalPenaltyAmt ) )"  )  )  ) 
 
 ( example
   ( utterance "Form 1040, Line 6d 'TotalExemptionsCnt' must be equal to the total of the following fields: 'TotalExemptPrimaryAndSpouseCnt', 'ChldWhoLivedWithYouCnt', 'ChldNotLivingWithYouCnt', and 'OtherDependentsListedCnt'." )
