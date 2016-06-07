@@ -1,0 +1,691 @@
+( example
+  ( utterance "If Form 1040, Line 75 'OverpaidAmt' has a non-zero value and Line 79 'EsPenaltyAmt' is greater than Line 75 'OverpaidAmt', then Line 78 'OwedAmt' must have a non-zero value." )
+  ( targetValue ( string "non_zero(OverpaidAmt) & greater_than(EsPenaltyAmt) & ~non_zero(OwedAmt)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 3 checkbox ""Married filing separately""( element 'IndividualReturnFilingStatusCd' has the value 3 ) ,  and Line 6b checkbox 'ExemptSpouseInd' are checked, then both the Primary SSN and the Spouse SSN must be present in the Return Header." )
+  ( targetValue ( string "value(IndividualReturnFilingStatusCd,3) & has_value(ExemptSpouseInd) & (~has_value(PrimarySSN) | ~has_value(SpouseSSN))" ) ) )
+
+( example
+  ( utterance "If Schedule A ( Form 1040 ) is present in the return, then Form 1040, Line 40 'TotalItemizedOrStandardDedAmt' must be equal to Schedule A ( Form 1040 ) , Line 29 'TotalItemizedDeductionsAmt'." )
+  ( targetValue ( string "has_value(scheduleA) & ~same(TotalItemizedOrStandardDedAmt,TotalItemizedDeductionsAmt)" ) ) )
+
+( example
+  ( utterance "If any of the following Form 1040 fields have a value, then all of these fields must have a value: Line 76b 'RoutingTransitNum', Line 76c 'BankAccountTypeCd', Line 76d 'DepositorAccountNum'." )
+  ( targetValue ( string "(has_value(RoutingTransitNum) | has_value(BankAccountTypeCd) | has_value(DepositorAccountNum) & ~(has_value(RoutingTransitNum) & has_value(BankAccountTypeCd) & has_value(DepositorAccountNum)))" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 2 checkbox ""Married filing jointly"" is checked( element 'IndividualReturnFilingStatusCd' has the value 2 ) and 'SpouseSSN' in the Return Header is an ITIN, then Schedule EIC ( Form 1040A or 1040 ) must not be present in the return." )
+  ( targetValue ( string "value(IndividualReturnFilingStatusCd,2) & iTin(SpouseSSN) & has_value(scheduleEIC)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 74 'TotalPaymentsAmt' is equal to Line 63 'TotalTaxAmt', then the following lines must not have a value greater than zero: Line 75 'OverpaidAmt' and Line 76a 'RefundAmt' and Line 77  'AppliedToEsTaxAmt'." )
+  ( targetValue ( string "same(TotalPaymentsAmt,TotalTaxAmt) & ~(~greater_than(OverpaidAmt,0) | ~greater_than(RefundAmt) | ~greater_than(AppliedToEsTaxAmt) | ~greater_than(OwedAmt))" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 66a 'EarnedIncomeCreditAmt' is greater than 496, then Schedule EIC ( Form 1040A or 1040 ) must be present in the return." )
+  ( targetValue ( string "greater_than(EarnedIncomeCreditAmt,496) & ~has_value(ScheduleEIC)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 33 'StudentLoanInterestDedAmt' has a non-zero value, then Form 1040, Line 3 checkbox ""Married filing separately"" must not be checked( element 'IndividualReturnFilingStatusCd' must not have the value 3 ) ." )
+  ( targetValue ( string "value(IndividualReturnFilingStatusCd,3)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 2 checkbox ""Married filing jointly"" is checked( element 'IndividualReturnFilingStatusCd' has the value 2 ) and 'PrimaryDeathDt' has a value, then Filer Name in the Return Header 'NameLine1Txt' must contain ""DECD &""." )
+  ( targetValue ( string "value(IndividualReturnFilingStatusCd,2) & has_value(PrimaryDeathDt) & ~contain(NameLine1Txt,DECD &)" ) ) )
+
+( example
+  ( utterance "If  Form 1040, Line 2 checkbox ""Married filing jointly"" is not checked( element 'IndividualReturnFilingStatusCd' does not have the value 2 ) , then 'PrimarySignaturePIN' must have a value in the Return Header." )
+  ( targetValue ( string "~value(IndividualReturnFilingStatusCd,2) & ~has_value(PrimarySignaturePIN)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 16b 'TaxableForeignPensionsTotalAmt' has a non-zero value, then it must be equal to 'ForeignPensionTaxableAmt' in the ""FEC Record"" [ FECRecord ] ." )
+  ( targetValue ( string "non_zero(TaxableForeignPensionsTotalAmt) & ~same(TaxableForeignPensionsTotalAmt,ForeignPensionTaxableAmt)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 3 checkbox ""Married filing separately"" is checked( element 'IndividualReturnFilingStatusCd' has the value 3 ) , then Line 34 'TuitionAndFeesDedAmt' must be equal to zero if an amount is entered." )
+  ( targetValue ( string "value(IndividualReturnFilingStatusCd,3) & ~(same(TuitionAndFeesDedAmt,0) | ~has_value(TuitionAndFeesDedAmt))" ) ) )
+
+( example
+  ( utterance "Form 1040,  Line 18 'NetFarmProfitLossAmt' must be equal to the sum of all Schedule F ( Form 1040 ) , Line 34 'NetFarmProfitLossAmt' attached to Form 1040, Line 18." )
+  ( targetValue ( string "same(NetFarmProfitLossAmt,sumofall(NetFarmProfitLossAmt))" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""B"" 'GeneralBusCrFromPassiveActyInd' is checked and Part III, Line 1k ( c ) 'CYEmplrProvChldCareFcltsCrAmt' has a non-zero value in column ( c ) and the corresponding column ( b ) Part III, Line 1k ( b ) 'PassThroughEntityEIN' does not have a value, then Form 8882 must be present in the return." )
+  ( targetValue ( string "has_value(GeneralBusCrFromNnpssvActyInd) & non_zero(CYEmplrProvChldCareFcltsCrAmt) & ~has_value(PassThroughEntityEIN) & ~has_value(form8882)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""B"" 'GeneralBusCrFromPassiveActyInd' is checked and Part III, Line 4f ( c ) 'CreditForEmployerSSMedcrTxAmt' has a non-zero value in column ( c ) and the corresponding column ( b ) Part III, Line 4f ( b ) 'PassThroughEntityEIN' does not have a value, then Form 8846 must be present in the return." )
+  ( targetValue ( string "has_value(GeneralBusCrFromNnpssvActyInd) & non_zero(CreditForEmployerSSMedcrTxAmt) & ~has_value(PassThroughEntityEIN) & ~has_value(form8841)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""A"" 'GeneralBusCrFromNnpssvActyInd' is checked and Part III, Line 1e ( c ) 'CurrentYearDisabledAccessCrAmt' has a non-zero value in column ( c ) and the corresponding column ( b ) Part III, Line 1e ( b ) 'PassThroughEntityEIN' does not have a value, then Form 8826 must be present in the return." )
+  ( targetValue ( string "has_value(GeneralBusCrFromNnpssvActyInd) & non_zero(CurrentYearDisabledAccessCrAmt) & ~has_value(PassThroughEntityEIN) & ~has_value(form8826)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""A"" 'GeneralBusCrFromNnpssvActyInd' is checked and Part III, Line 1m ( c ) 'CurrentYearLowSulfurDslCrAmt' has a non-zero value in column ( c ) and the corresponding column ( b ) Part III, Line 1m ( b ) 'PassThroughEntityEIN' does not have a value, then Form 8896 must be present in the return." )
+  ( targetValue ( string "has_value(GeneralBusCrFromNnpssvActyInd) & non_zero(CurrentYearLowSulfurDslCrAmt) & ~has_value(PassThroughEntityEIN) & ~has_value(form8896)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""A"" 'GeneralBusCrFromNnpssvActyInd' is checked and Part III, Line 1p ( c ) 'CurrentYrEngyEfficientHmCrAmt' has a non-zero value in column ( c ) and the corresponding column ( b ) Part III, Line 1p ( b ) 'PassThroughEntityEIN' does not have a value, then Form 8908 must be present in the return." )
+  ( targetValue ( string "has_value(GeneralBusCrFromNnpssvActyInd) & non_zero(CurrentYrEngyEfficientHmCrAmt) & ~has_value(PassThroughEntityEIN) & ~has_value(form8908)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""A"" 'GeneralBusCrFromNnpssvActyInd' is checked and Part III, Line 1s ( c ) 'CurrentYearAltRefuelingCrAmt' has a non-zero value in column ( c ) and the corresponding column ( b ) Part III, Line 1s ( b ) 'PassThroughEntityEIN' does not have a value, then Form 8911 must be present in the return." )
+  ( targetValue ( string "has_value(GeneralBusCrFromNnpssvActyInd) & non_zero(CurrentYearAltRefuelingCrAmt) & ~has_value(PassThroughEntityEIN) & ~has_value(form8911)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""A"" 'GeneralBusCrFromNnpssvActyInd' is checked and Part III, Line 1bb ( c ) 'CYGenBusCrElectingLgePrtshpAmt' has a non-zero value in column ( c ) and the corresponding column ( b ) Part III, Line 1bb ( b ) 'PassThroughEntityEIN' does not have a value, then Form Schedule K-1 ( Form 1065B ) must be present in the return." )
+  ( targetValue ( string "has_value(GeneralBusCrFromNnpssvActyInd) & non_zero(CYGenBusCrElectingLgePrtshpAmt) & ~has_value(PassThroughEntityEIN) & ~has_value(form1065B)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""A"" 'GeneralBusCrFromNnpssvActyInd' is checked and Part III, Line 4d ( c ) 'LowIncomeHousingCreditAmt' has a non-zero value in column ( c ) and the corresponding column ( b ) Part III, Line 4d ( b ) 'PassThroughEntityEIN' does not have a value, then Form 8586 must be present in the return." )
+  ( targetValue ( string "has_value(GeneralBusCrFromNnpssvActyInd) & non_zero(LowIncomeHousingCreditAmt) & ~has_value(PassThroughEntityEIN) & ~has_value(form8586)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""I"" 'ConsolidatedSectionInd' is checked, then Part III, line 1k ( c ) 'CYEmplrProvChldCareFcltsCrAmt' must be less than 150,001." )
+  ( targetValue ( string "has_value(ConsolidatedSectionInd) & ~less_than(CYEmplrProvChldCareFcltsCrAmt,150001)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""A""  'GeneralBusCrFromNnpssvActyInd' is checked and  Form 3800, Part III, line 2  'CurrentYearGeneralBusCrAmt' has a non- zero value, then Form 3800, Part I, line 1 'GeneralBusCrFromNnPssvActyAmt' must have a non-zero value." )
+  ( targetValue ( string "has_value(GeneralBusCrFromNnpssvActyInd) & non_zero(CurrentYearGeneralBusCrAmt) & ~non_zero(GeneralBusCrFromNnPssvActyAmt)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, checkbox ""B"" 'GeneralBusCrFromPassiveActyInd' is checked and Part III, line 3 ( c ) 'EnterAmountFromF8844Amt' has a non-zero value, then Form 3800, Part II, line 24 'PassiveActyAllowedForTYAmt' must have a value." )
+  ( targetValue ( string "has_value(GeneralBusCrFromPassiveActyInd) & non_zero(nterAmountFromF8844Amt) & ~has_value(PassiveActyAllowedForTYAmt)" ) ) )
+
+( example
+  ( utterance "If any Form 3800, Part III, line 6c  'TotalBusinessCreditsAmt' has a non-zero value and checkbox ""G"" 'EligSmllBusCrCarryforwardsInd' is checked, then Form 3800, Part II, line 34  'AllwGenAndEligSmllBusCfwdCrAmt' must have a non-zero value." )
+  ( targetValue ( string "non_zero(TotalBusinessCreditsAmt) & has_value(EligSmllBusCrCarryforwardsInd) & ~non_zero(AllwGenAndEligSmllBusCfwdCrAmt)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 3c ( d ) 'TrainUseOfUndyedDieselCrAmt' has a non-zero value, then Line 3c ( c ) 'TrainUseOfUndyedDieselGalsQty' must have a non-zero value." )
+  ( targetValue ( string "non_zero(TrainUseOfUndyedDieselCrAmt) & ~non_zero(TrainUseOfUndyedDieselGalsQty)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 8a ( d ) 'SlsKrsnUsedInAvnTxd219CrAmt' has a non-zero value, then Line 8a ( c ) 'SlsKrsnUsedInAvnTxd219GalsQty' must have a non-zero value." )
+  ( targetValue ( string "non_zero(SlsKrsnUsedInAvnTxd219CrAmt) & ~non_zero(SlsKrsnUsedInAvnTxd219GalsQty)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 12a ( d ) 'LiquefiedPetroleumGasCrAmt' has a non-zero value, then Line 12a ( c ) 'LiquefiedPetroleumGasGalsQty' must have a non-zero value." )
+  ( targetValue ( string "non_zero(LiquefiedPetroleumGasCrAmt) & ~non_zero(LiquefiedPetroleumGasGalsQty)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 13b ( d ) 'KrsnFuelSoldStLocalGovtCrAmt' has a non-zero value, then Line 13b ( c ) 'KrsnFuelSoldStLocalGovtGalsQty' must have a non-zero value." )
+  ( targetValue ( string "non_zero(KrsnFuelSoldStLocalGovtCrAmt) & ~non_zero(KrsnFuelSoldStLocalGovtGalsQty)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 12h ( d ) 'LiquefiedGasDerBiomassCrAmt' has a non-zero value, then Line 12h ( c ) 'LiquefiedGasDerBiomassGalsQty' must have a non-zero value." )
+  ( targetValue ( string "non_zero(LiquefiedGasDerBiomassCrAmt) & ~non_zero(LiquefiedGasDerBiomassGalsQty)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 7b ( d ) 'SlsUndyedKrsnBlockPumpCrAmt' has a non-zero value, then Line 7 'UndyedKeroseneRegistrationNum' must have a value." )
+  ( targetValue ( string "non_zero(SlsUndyedKrsnBlockPumpCrAmt) & ~has_value(UndyedKeroseneRegistrationNum)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 5d ( d ) 'NonTxKrsnUsedInAvnTxd219CrAmt' has a non-zero value, then Line 5d ( c ) 'GallonsQty' must have a non-zero value." )
+  ( targetValue ( string "non_zero(NonTxKrsnUsedInAvnTxd219CrAmt) & ~non_zero(GallonsQty)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 12e ( d ) 'LiquidFuelDerFromCoalCreditAmt' has a non-zero value, then Line 12 'AlternativeFuelRegistrationNum' must have a value." )
+  ( targetValue ( string "non_zero(LiquidFuelDerFromCoalCreditAmt) & ~has_value(AlternativeFuelRegistrationNum)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 15 ( d ) 'BlndrCrUseDslWtrEmulsionCrAmt' has a non-zero value, then Line 15 'DieselWtrBlndgRegistrationNum' must have a value." )
+  ( targetValue ( string "non_zero(BlndrCrUseDslWtrEmulsionCrAmt) & ~has_value(DieselWtrBlndgRegistrationNum)" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 11a ( d ) 'NontxLiquefiedPtrlmGasCrAmt' has a non-zero value, then Line 11a ( c ) 'GallonsQty' in 'NontxLiquifiedPetroleumGas' or Line 11a ( c ) 'GallonsQty' in 'BusNontxLiquifiedPetroleumGas' must have a non-zero value." )
+  ( targetValue ( string "non_zero(NontxLiquefiedPtrlmGasCrAmt) & ~(non_zero(NontxLiquifiedPetroleumGas.GallonsQty) | non_zero(BusNontxLiquifiedPetroleumGas.GallonsQty))" ) ) )
+
+( example
+  ( utterance "If Form 4136, Line 11g ( d ) 'NontxLiquefiedNaturalGasCrAmt' has a non-zero value, then Line 11g ( c ) 'GallonsQty' in 'NontxLiquefiedNaturalGas' or Line 11g ( c ) 'GallonsQty' in 'BusNontxLiquefiedNaturalGas' must have a non-zero value." )
+  ( targetValue ( string "non_zero(NontxLiqfdFuelDerFromCoalCrAmt) & ~(non_zero(NontxLiquefiedNaturalGas.GallonsQty) | non_zero(BusNontxLiquefiedNaturalGas.GallonsQty))" ) ) )
+
+( example
+  ( utterance "Form 4136, Line 12e ( d ) 'LiquidFuelDerFromCoalCreditAmt' must be equal to zero if an amount is entered." )
+  ( targetValue ( string "~(same(LiquidFuelDerFromCoalCreditAmt,0) | ~has_value(LiquidFuelDerFromCoalCreditAmt))" ) ) )
+
+( example
+  ( utterance "If Form 4562, Line 1, 'MaximumDollarLimitationAmt' has a non-zero value, then Line 1, 'MaximumDollarLimitationAmt' must not be greater than 535,000." )
+  ( targetValue ( string "non_zero(MaximumDollarLimitationAmt) & greater_than(MaximumDollarLimitationAmt,535000)" ) ) )
+
+( example
+  ( utterance "Only one of the two choices given below is allowed on Form 4972:  a choice of ""No"" for Line 3 'EmployeeBeneficiaryDistriInd' or a choice of ""No"" for Line 4 'QualifyingAge5YearMemberInd'." )
+  ( targetValue ( string "value(EmployeeBeneficiaryDistriInd,NO) & value(QualifyingAge5YearMemberInd,NO)" ) ) )
+
+( example
+  ( utterance "If Form 5405, Line 3a checkbox 'HomeSoldToUnrltPrsnWithGainInd' is checked, then Line 1 'ChangeOfMainHomeDt' must have a value." )
+  ( targetValue ( string "has_value(HomeSoldToUnrltPrsnWithGainInd) & ~has_value(ChangeOfMainHomeDt)" ) ) )
+
+( example
+  ( utterance "If Form 5405, Line 1 'ChangeOfMainHomeDt' has a value, then one or more of the following checkboxes must be checked: Line 2 'HomeSoldMilitaryExtDutyInd' or Line 3a 'HomeSoldToUnrltPrsnWithGainInd' or Line 3b 'HomeSoldToUnrltPrsnNoGainInd' or Line 3c 'HomeSoldToRelatedPersonInd' or Line 3d 'HomeConvertedToBusinessUseInd' or Line 3e 'HomeTransferredToSpouseOrExInd' or Line 3f 'HomeDestrCondemnNewHomeInd' or Line 3g 'HomeDestrCondemnNoNewHomeInd' or Line 3h 'HomeBuyerCrTaxpayerDeceasedInd'." )
+  ( targetValue ( string "has_value(ChangeOfMainHomeDt) & ~ (has_value(HomeSoldMilitaryExtDutyInd) | has_value(HomeSoldToUnrltPrsnWithGainInd) | has_value(HomeSoldToUnrltPrsnNoGainInd) | has_value(HomeSoldToRelatedPersonInd) | has_value(HomeConvertedToBusinessUseInd)  | has_value(HomeTransferredToSpouseOrExInd) | has_value(HomeDestrCondemnNewHomeInd) | has_value(HomeDestrCondemnNoNewHomeInd) | has_value(HomeBuyerCrTaxpayerDeceasedInd))" ) ) )
+
+( example
+  ( utterance "If Form 5471, Line B ( 3 ) 'CategoryOfFiler3' checkbox is checked, then ""Category 3 Filer Statement"" [ Category3FilerStatement ] must be attached to Line B ( 3 ) ." )
+  ( targetValue ( string "has_value(CategoryOfFiler3) & ~has_value(Category3FilerStatement)" ) ) )
+
+( example
+  ( utterance "If Form 5471, Schedule F, Line 6 ( b ) 'EndAcctPrdInvstSubsidiaryAmt' has a non-zero value, then "" Investment In Subsidiaries Statement"" [ InvestmentInSubsidiariesStmt ] must be attached to Schedule F, Line 6 ( b ) ." )
+  ( targetValue ( string "non_zero(EndAcctPrdInvstSubsidiaryAmt) & has_value(InvestmentInSubsidiariesStmt)" ) ) )
+
+( example
+  ( utterance "If Form 5471, Schedule F, Line 17 ( b ) 'EndAcctPrdOthLiabilitiesAmt' has a non-zero value, then ""Itemized Other Liabilities Schedule"" [ ItemizedOtherLiabilitiesSchedule ] must be attached to Schedule F, Line 17 ( b ) ." )
+  ( targetValue ( string "non_zero(EndAcctPrdOthLiabilitiesAmt) & has_value(ItemizedOtherLiabilitiesSchedule)" ) ) )
+
+( example
+  ( utterance "If a choice of ""Yes"" is indicated on Schedule H ( Form 1040 ) , Line A 'HsldEmplPdCashWageOverLmtCYInd', then Line 3 'MedicareTaxCashWagesAmt' must not be less than 1900." )
+  ( targetValue ( string "value(scheduleH,YES) & ~less_than(MedicareTaxCashWagesAmt,1900)" ) ) )
+
+( example
+  ( utterance "If a choice of ""Yes"" is indicated on Schedule H ( Form 1040 ) , Line 9 'HsldEmplPdTotCashWageAnyQtrInd', then Line 10  'UnemplPaidOnlyOneStateInd' and Line 11 'PayAllStateUnemplContriInd' and Line 12 'TxblFUTAWagesAlsoTxblUnemplInd' must have a choice of ""Yes"" or ""No"" indicated." )
+  ( targetValue ( string "value(HsldEmplPdTotCashWageAnyQtrInd,YES) & ~((value(UnemplPaidOnlyOneStateInd,YES) | value(UnemplPaidOnlyOneStateInd,NO)) & (value(PayAllStateUnemplContriInd,YES) | value(PayAllStateUnemplContriInd,NO)) & (value(TxblFUTAWagesAlsoTxblUnemplInd,YES) | value(TxblFUTAWagesAlsoTxblUnemplInd,NO)))" ) ) )
+
+( example
+  ( utterance "Schedule K1 ( Form 8865 ) 'PartnershipsEIN' or 'ForeignEntityReferenceIdNum' must have a value." )
+  ( targetValue ( string "~(has_value(PartnershipsEIN) | has_value(ForeignEntityReferenceIdNum))" ) ) )
+
+( example
+  ( utterance "If Schedule SE ( Form 1040 ) , Section A, Line 6 'DeductibleSelfEmploymentTaxAmt'  has a non-zero value, and [ Line 3 'selfEmploymentTaxExemptCd' or 'chap11BankruptcyIncomeCd' or 'communityIncmTaxedToSpouseCd' or 'exemptCommunityIncomeCd' or 'additionalIncomeOrLossCd' ] does not have a value, then Form 1040, Line 27 'DeductibleSelfEmploymentTaxAmt' must have a non-zero value." )
+  ( targetValue ( string "non_zero(DeductibleSelfEmploymentTaxAmt) & ( ~has_value(selfEmploymentTaxExemptCd) | ~has_value(chap11BankruptcyIncomeCd) | ~has_value(communityIncmTaxedToSpouseCd) | ~has_value(exemptCommunityIncomeCd) | ~has_value(additionalIncomeOrLossCd)) & ~non_zero(DeductibleSelfEmploymentTaxAmt)" ) ) )
+
+( example
+  ( utterance "If Form 8853, Line 12 'TaxableMedicareMSADistriAmt' has a non-zero value, then there must  be an 'OtherIncomeLitCd'  in [ OtherIncomeTypeStatement ] in the return  with the value ""MED MSA""." )
+  ( targetValue ( string "non_zero(TaxableMedicareMSADistriAmt) & ~value(OtherIncomeLitCd,MED_MSA)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 54c checkbox 'SpecificOtherCreditsInd' is checked and Line 54c 'creditFormsStatement8911Cd' has the value ""8911"", then Form 8911 must be present in the return." )
+  ( targetValue ( string "has_value(SpecificOtherCreditsInd) & value(creditFormsStatement8911Cd,8911) & ~has_value(form8911)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 54a checkbox 'Form3800Ind' is checked, then Form 3800 must be attached to Line 54a." )
+  ( targetValue ( string "has_value(Form3800Ind) & ~has_value(form3800)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 13 'Form8814Cd' has the value ""FORM 8814"", then Form 8814 must be present in the return." )
+  ( targetValue ( string "value(Form8814Cd,Form8814) & ~has_value(form8814)" ) ) )
+
+( example
+  ( utterance "If in [ OtherIncomeTypeStatement ] present in the return, 'OtherIncomeLitCd' has the value ""LTC"",  then Form 8853 must be present in the return." )
+  ( targetValue ( string "value(OtherIncomeLitCd,LTC) & ~has_value(form8853)" ) ) )
+
+( example
+  ( utterance "If in [ OtherIncomeTypeStatement ] present in the return, 'OtherIncomeLitCd' has the value ""FORM 2555-EZ"", then Form 2555-EZ must be present in the return." )
+  ( targetValue ( string "value(otherIncomeLitCd,Form2555EZ) & ~has_value(form2555EZ)" ) ) )
+
+( example
+  ( utterance "If Form 8697, Part I, Line 10c 'NetAmtOfInterestOwedAmt' has a non-zero value, then there must be an 'OtherTaxLitCd' in [ OtherTaxStatement ] in the return with the value ""FROM FORM 8697"" with the corresponding 'OtherTaxAmt' having a value greater than zero." )
+  ( targetValue ( string "non_zero(NetAmtOfInterestOwedAmt) & ~value(OtherTaxLitCd,FromForm8697) & ~greater_than(OtherTaxAmt,0)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 73 'OtherPaymentsAmt' has a non-zero value, then Line 73d 'CreditForRepaymentAmt' must have a non-zero value or one of the following checkboxes must be checked: Line 73a 'Form2439Ind' or Line 73d 'OtherPaymentsInd'." )
+  ( targetValue ( string "non_zero(OtherPaymentsAmt) & ~(non_zero(CreditForRepaymentAmt) | has_value(Form2439Ind) | has_value(OtherPaymentsInd))" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 73c checkbox 'Form8885Ind' is checked, then Form 8885 must be attached to Line 73c." )
+  ( targetValue ( string "has_value(Form8885Ind) & ~has_value(form8885)" ) ) )
+
+#( example
+#  ( utterance "If Form 1040, Line 2 checkbox ""Married filing jointly"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) , and 'SpecialProcessingLiteralCd' does not have a value and 'CombatZoneCd' does not have a value and 'SpecialProcessingCodeTxt' does not have a value and 'PrimaryDeathDt' has a value and 'SpouseDeathDt' has a value, then 'PrimarySignaturePIN' must have a value in the Return Header." )
+#  ( targetValue ( string "value(IndividualReturnFilingStatusCd,2) & ~has_value(SpecialProcessingLiteralCd) & ~has_value(CombatZoneCd) & ~has_value(SpecialProcessingCodeTxt) & has_value(PrimaryDeathDt) & has_value(SpouseDeathDt) & ~has_value(PrimarySignaturePIN)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 2 checkbox ""Married filing jointly"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and Line 68 'RefundableAmerOppCreditAmt' has a non-zero value, then Line 37 'AdjustedGrossIncomeAmt' must not be greater than 179999." )
+  ( targetValue ( string "value(IndividualReturnFilingStatusCd,2) & non_zero(RefundableAmerOppCreditAmt) & greater_than(AdjustedGrossIncomeAmt,179999)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 1 checkbox ""Single"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 1 ) and Line 6a checkbox 'ExemptPrimaryInd' is checked and Line 39a 'TotalBoxesCheckedCnt' has the value 1 and Line 39b checkbox 'MustItemizeInd' is not checked and Line 40 'modifiedStandardDeductionInd' does not have a value and Schedule A ( Form 1040 ) is not present in the return, then Line 40 'TotalItemizedOrStandardDedAmt' must equal 7850." )
+  ( targetValue ( string "value(IndividualReturnFilingStautsCd,1) & has_value(ExemptPrimaryInd) & value(TotalBoxesCheckedCnt,1) & ~has_value(MustItemizeInd) & ~has_value(modifiedStandardDeductionInd) ~has_value(scheduleA) & ~same(TotalItemizedOrStandardDedAmt,7850)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 2 checkbox ""Married filing jointly"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) and [ Line 6a checkbox 'ExemptPrimaryInd' and 6b checkbox 'ExemptSpouseInd' are checked ] and Line 39a 'TotalBoxesCheckedCnt' has the value 2 and Line 39b checkbox 'MustItemizeInd' is not checked and Line 40 'modifiedStandardDeductionInd' does not have a value and Schedule A ( Form 1040 ) is not present in the return, then Line 40 'TotalItemizedOrStandardDedAmt' must equal 15100." )
+  ( targetValue ( string "value(IndividualReturnFilingStautsCd,2) & has_value(ExemptPrimaryInd) & has_value(ExemptSpouseInd) & value(TotalBoxesCheckedCnt,2) & ~has_value(MustItemizeInd) & ~has_value(modifiedStandardDeductionInd) ~has_value(scheduleA) & ~same(TotalItemizedOrStandardDedAmt,15100)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 3 checkbox ""Married filing separately"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 3 ) and Line 6a checkbox 'ExemptPrimaryInd' is checked and Line 39a 'TotalBoxesCheckedCnt' has the value 1 and Line 39b checkbox 'MustItemizeInd' is not checked and Line 40 'modifiedStandardDeductionInd' does not have a value and Schedule A ( Form 1040 ) is not present in the return, then Line 40 'TotalItemizedOrStandardDedAmt' must equal 7550." )
+  ( targetValue ( string "value(IndividualReturnFilingStautsCd,3) & has_value(ExemptPrimaryInd) & value(TotalBoxesCheckedCnt,1) & ~has_value(MustItemizeInd) & ~has_value(modifiedStandardDeductionInd) ~has_value(scheduleA) & ~same(TotalItemizedOrStandardDedAmt,7550)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 4 checkbox ""Head of Household"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 4 ) and Line 6a checkbox 'ExemptPrimaryInd' is checked and Line 39a 'TotalBoxesCheckedCnt' has the value 2 and Line 39b checkbox 'MustItemizeInd' is not checked and Line 40 'modifiedStandardDeductionInd' does not have a value and Schedule A ( Form 1040 ) is not present in the return, then Line 40 'TotalItemizedOrStandardDedAmt' must equal 12350." )
+  ( targetValue ( string "value(IndividualReturnFilingStautsCd,4) & has_value(ExemptPrimaryInd) & value(TotalBoxesCheckedCnt,2) & ~has_value(MustItemizeInd) & ~has_value(modifiedStandardDeductionInd) ~has_value(scheduleA) & ~same(TotalItemizedOrStandardDedAmt,12350)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 67 'AdditionalChildTaxCreditAmt', has a non-zero value, then Schedule 8812 ( Form 1040A or Form 1040 )  must be attached to Line 67." )
+  ( targetValue ( string "non_zero(AdditionalChildTaxCreditAmt) & ~has_value(schedule8812)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 3 'NRALiteralCd' has the value ""NRA"" and checkbox ""Married filing separately"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 3 ) , then Line 6b 'ExemptSpouseNameControlTxt' must not have a value." )
+  ( targetValue ( string "value(NRALiteralCd,NRA) & value(IndividualReturnFilingStatusCd,3) & has_value(ExemptSpouseNameControlTxt)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 2 checkbox ""Married filing jointly"" is not checked ( element 'IndividualReturnFilingStatusCd' does not have the value 2 ) and the number of Qualifying Child's SSN that has a value on Schedule EIC ( Form 1040A or 1040 ) is one, then Form 1040, Line 37 'AdjustedGrossIncomeAmt' must not be greater than 39131." )
+  ( targetValue ( string "~value(IndividualReturnFilingStatusCd,2) & same(numberOfQualifyingChild,1) & greater_than(AdjustedGrossIncomeAmt,39131)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 2 checkbox ""Married filing jointly"" is not checked ( element 'IndividualReturnFilingStatusCd' does not have the value 2 ) and the number of Qualifying Child's SSN that has a value on Schedule EIC ( Form 1040A or 1040 ) is three, then Form 1040, Line 37 'AdjustedGrossIncomeAmt' must not be greater than 47747." )
+  ( targetValue ( string "~value(IndividualReturnFilingStatusCd,3) & same(numberOfQualifyingChild,2) & greater_than(AdjustedGrossIncomeAmt,47747)" ) ) )
+
+( example
+  ( utterance "If the number of Qualifying Child's SSN that has a value on Schedule EIC ( Form 1040A or 1040 ) is three, then Form 1040, Line 66a 'EarnedIncomeCreditAmt' must not be greater than 6242." )
+  ( targetValue ( string "same(numberOfQualifyingChild,1) & greater_than(EarnedIncomeCreditAmt,6242)" ) ) )
+
+( example
+  ( utterance "The total number of checkboxes checked on Form 1040, Line 39a 'Primary65OrOlderInd' and 'PrimaryBlindInd' and 'Spouse65OrOlderInd' and 'SpouseBlindInd' must be equal to the value on Line 39a 'TotalBoxesCheckedCnt'." )
+  ( targetValue ( string "~plus(Primary65OrOlderInd,PrimaryBlindInd,Spouse65OrOlderInd,SpouseBlindInd,TotalBoxesCheckedCnt)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 4 checkbox ""Head of Household"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 4 ) , then 'SpouseSignaturePIN' must not have a value in the Return Header." )
+  ( targetValue ( string "value(IndividualReturnFilingStautsCd,4) & has_value(SpouseSignaturePIN)" ) ) )
+
+( example
+  ( utterance "If in [ OtherTaxStatement ] attached to Form 1040, Line 62, at least one 'OtherTaxLitCd' has the value ""SEC. 1291 INTEREST"" and the corresponding 'OtherTaxAmt' has a value greater than zero, then Form 8621, Line 16f 'InterestOnEachNetIncrInTaxAmt' must have a value greater than zero." )
+  ( targetValue ( string "has_value(OtherTaxLitCd(I),SEC_1291_INTEREST) & greater_than(OtherTaxAmt(I),0) & ~greater_than(InterestOnEachNetIncrInTaxAmt,0)" ) ) )
+
+( example
+  ( utterance "If in [ OtherTaxStatement ] attached to Form 1040, Line 62, at least one 'OtherTaxLitCd' has the value ""SEC. 1294 INTEREST"" and the corresponding 'OtherTaxAmt' has a value greater than zero, then Form 8621, Line 24 'AccruedInterestDueThisRetAmt' must have a value greater than zero." )
+  ( targetValue ( string "has_value(OtherTaxLitCd(I),SEC_1294_INTEREST) & greater_than(OtherTaxAmt(I),0) & ~greater_than(AccruedInterestDueThisRetAmt,0)" ) ) )
+
+( example
+  ( utterance "Form 1040, Line 34 'TuitionAndFeesDedAmt' must be equal to zero if an amount is entered." )
+  ( targetValue ( string "has_value(TuitionAndFeesDedAmt) & ~same(TuitionAndFeesDedAmt,0)" ) ) )
+
+( example
+  ( utterance "Form 1040, Line 46 'PremiumTaxCreditTaxLiabAmt' must be equal to Form 8962, Line 29 'PremiumTaxCreditTaxLiabAmt'." )
+  ( targetValue ( string "~same(PremiumTaxCreditTaxLiabAmt,PremiumTaxCreditTaxLiabAmt)" ) ) )
+
+( example
+  ( utterance "Form 1099-R, 'PayerEIN' was issued after the Tax Year in the Return Header." )
+  ( targetValue ( string "less_than(TaxYear,PayerEINIssueYr)" ) ) )
+
+( example
+  ( utterance "If for any country in Form 1116, Part II, column ( k ) 'ForeignTaxWithheldOnDivAmt' has a non-zero value, then [ ForeignTaxWithheldOnDividendsStatement ] must be attached to column ( k ) ." )
+  ( targetValue ( string "non_zero(ForeignWithheldOnDivAmt(I)) & ~has_value(ForeignTaxWithheldOnDividentsStatement(I))" ) ) )
+
+( example
+  ( utterance "Form 1310, 'DecedentSSN' must be equal to 'PrimarySSN' or 'SpouseSSN' in the Return Header, if Line 2 checkbox ""Married filing jointly"" is checked ( element 'IndividualReturnFilingStatusCd' has the value 2 ) in the return." )
+  ( targetValue ( string "value(IndividualReturnFilingStatusCd,2) & ~(same(DecendentSSN,PrimarySSN) | same(DecendentSSN,SpouseSSN))" ) ) )
+
+( example
+  ( utterance "Form 1310, 'RefundClaimantSSN' must not be equal to the 'PrimarySSN' in the Return Header." )
+  ( targetValue ( string "same(RefundClaimantSSN,PrimarySSN)" ) ) )
+
+( example
+  ( utterance "There can be no more than 2 Forms 2106 present whose 'SSN' is the same as the 'SpouseSSN' in Return Header." )
+  ( targetValue ( string "same(Form2106SSN(I),SpouseSSN) & same(Form2106SSN(J),SpouseSSN) & same(Form2106SSN(K),SouseSSN) & ~same(I,J) & ~same(I,K)" ) ) )
+
+( example
+  ( utterance "Each SSN that has a value on Form 2120, 'EligiblePersonWaivingDepdRight' must not have the following values: ""123456789"",  ""111111111"", ""222222222"", ""333333333"", ""444444444"", ""555555555"", ""666666666"",  ""777777777"",  ""888888888"", ""999999999""." )
+  ( targetValue ( string "same(EligiblePersonWaivingDepdRight,123456789) | same(EligiblePersonWaivingDepdRight,111111111) |same(EligiblePersonWaivingDepdRight,222222222) |same(EligiblePersonWaivingDepdRight,333333333) |same(EligiblePersonWaivingDepdRight,444444444) |same(EligiblePersonWaivingDepdRight,555555555) |same(EligiblePersonWaivingDepdRight,666666666) |same(EligiblePersonWaivingDepdRight,777777777) |same(EligiblePersonWaivingDepdRight,888888888) |same(EligiblePersonWaivingDepdRight,999999999)" ) ) )
+
+( example
+  ( utterance "If Form 2439 is present in the return, then 'RICOrREITEIN' must have a value." )
+  ( targetValue ( string "has_value(Form2439) & ~has_value(RICOrREITEIN)" ) ) )
+
+( example
+  ( utterance "Form 2441, Part II, Line 2 ( b ) , each 'QualifyingPersonSSN' must not be the same as another 'QualifyingPersonSSN' in Part II, Line 2 ( b ) of the same Form 2441." )
+  ( targetValue ( string "~same(I,J) & same(QualifyingPerosnSSN(I),QualifyingPersonSSN(J))" ) ) )
+
+( example
+  ( utterance "Form 2555, Line 42 'ForeignEarnedIncExclusionAmt' must not be greater than Line 26 'ForeignEarnedIncomeAmt'." )
+  ( targetValue ( string "greater_than(ForeignEarnedIncExclusionAmt,ForeignEarnedIncomeAmt)" ) ) )
+
+( example
+  ( utterance "Form 2555, Line 43 'TentativeIncomeExclusionAmt' must be equal to the sum of Line 36 'HousingExclusionAmt' and 42 'ForeignEarnedIncExclusionAmt'." )
+  ( targetValue ( string "~same(TentativeIncomeExclusionAmt,plus(HousingExclusionAmt,ForeignEarnedIncExclusionAmt))" ) ) )
+
+( example
+  ( utterance "Form 2555, Line 10 'BonaFideResidenceBeginDt' or Line 16 'PhysicalPresenceBeginDt' must have a value." )
+  ( targetValue ( string "~(has_value(BonaFideResidenceBeginDt) | has_value(PhysicalPresenceBeginDt))" ) ) )
+
+( example
+  ( utterance "Form 2555-EZ, Line 3 'TaxHomeTestInd' must have a choice of ""Yes"" indicated." )
+  ( targetValue ( string "~value(TaxHomeTestInd,Yes)" ) ) )
+
+( example
+  ( utterance "If Form 2555-EZ, 'claimFrgnEarnIncWaiverCd' does not have a value, and [ ForeignEarnedIncomeWaiverOfTimeRequirementsStatement ] is not present in the Return and Line 2b 'PhysicalPresenceEndDt' has a value, then Line 2b 'PhysicalPresenceEndDt' minus ( - ) 'PhysicalPresenceBeginDt' must be greater than 329 days." )
+  ( targetValue ( string "~has_value(claimFrgnEarnIncWaiverCd) & ~has_value(ForeignEarnedIncomeWaiverOfTimeRequirementsStatement) & has_value(PhysicalPresenceEndDt) & ~greater_than(minus(PhysicalPresenceEndDt,PhysicalPresenceBeginDt),329)" ) ) )
+
+( example
+  ( utterance "If Form 5471, Schedule I, 'IncomeUnblockedInd' has a choice of ""Yes"" indicated, then ""Explanation Of Blocked Income Statement"" [ ExplanationOfBlockedIncomeStmt ] must be attached to Schedule I, 'IncomeUnblockedInd'." )
+  ( targetValue ( string "value(IncomeUnblockedInd,Yes) & ~has_value(ExplanationOfBlockedIncomeStamt)" ) ) )
+
+( example
+  ( utterance "Form 5695, Line 22b 'QualifiedNaturalGasCostAmt' must not be greater than 150." )
+  ( targetValue ( string "greater_than(QualifiedNaturalGasCostAmt,150)" ) ) )
+
+( example
+  ( utterance "If Form 6252, Line 26 'InstalSaleLessOrdnryIncmAmt' has a non-zero value, then Schedule D ( Form 1040 ) or Form 4797 must be present in the return." )
+  ( targetValue ( string "non_zero(InstalSaleLessOrdnryIncmAmt) & ~(has_value(ScheduleD) | has_value(Form4797))" ) ) )
+
+( example
+  ( utterance "If Form 6765 is present in the return then there can only be entries in Line 37 'ResearchActivitiesIncrCrAmt', Line 38 'CYResearchCreditAmt', Line 39 'EstateOrTrustAllocatedBenefAmt' and/or Line 40 'NetEstateOrTrustAllocBenefAmt'." )
+  ( targetValue ( string "has_value(Form6765) & ~has_value(ResearchActivitiesIncrCrAmt) & ~has_value(CYResearchCreditAmt) & ~has_value(EstateOrTrustAllocatedBenefAmt) & ~has_value(NetEstateOrTrustAllocBenefAmt))" ) ) )
+
+( example
+  ( utterance "The year of the 'ContributionDt' in ""Contributions of Motor Vehicles, Boats, and Airplanes Statement"" [ ContributionsOfMotorVehiclesBoatsAndAirplanesStatement ] must equal the 'TaxYr' year in the Return Header." )
+  ( targetValue ( string "~same(ContributionDt.year, TaxYr)" ) ) )
+
+( example
+  ( utterance "If ""Contemporaneous Written Acknowledgment Statement"" [ ContemporaneousWrittenAcknowledgmentStatement ] is attached to Section B 'PropertyInformation', then Line 4i checkbox 'VehicleInd' must be checked." )
+  ( targetValue ( string "has_value(ContemporaneousWrittenAcknowledgmentStatement) & ~has_value(VehicleInd)" ) ) )
+
+( example
+  ( utterance "If Form 8379, Line 16a Joint Return 'AllocatedExemptionCnt' must be equal to the sum of Line 16b Injured Spouse 'AllocatedExemptionCnt' and Line 16c Other Spouse 'AllocatedExemptionCnt'." )
+  ( targetValue ( string "~same(AllocatedExemptionCnt,plus(AllocatedExemptionCnt,AllocatedExemptionCnt))" ) ) )
+
+( example
+  ( utterance "If Form 8379, Line 14a Joint Return 'IncomeAdjustmentAmt' must be equal to the sum of Line 14b Injured Spouse 'IncomeAdjustmentAmt' and Line 14c Other Spouse 'IncomeAdjustmentAmt'." )
+  ( targetValue ( string "~same(IncomeAdjustmentAmt,plus(IncomeAdjustmentAmt,IncomeAdjustmentAmt))" ) ) )
+
+( example
+  ( utterance "If Form 8594, Line 6 'PrchsOrEntrAgrmtWithSellrInd' has a choice of ""Yes"" indicated, then ""Form 8594 Consideration Computation Statement "" [ ConsiderationComputationStatement ] must be attached to Line 6." )
+  ( targetValue ( string "value(PrchsOrEntrAgrmtWithSellrInd,Yes) & ~has_value(ConsiderationComputationStatement)" ) ) )
+
+( example
+  ( utterance "Form 8615, Line 1 'ChildInvestmentIncomeAmt' must be greater than 2000." )
+  ( targetValue ( string "~greater_than(ChildInvestmentIncomeAmt,2000)" ) ) )
+
+( example
+  ( utterance "If Form 8621, Line 8e 'ProRataLessCashAndPortionAmt' has a non-zero value, then Line 9c 'DeferredTaxAmt' must have a non-zero value." )
+  ( targetValue ( string "non_zero(ProRataLessCashAndPortionAmt) & ~non_zero(DeferredTaxAmt)" ) ) )
+
+( example
+  ( utterance "Form 8689, Line 27 'TuitionAndFeesDedAmt' must be equal to zero if an amount is entered." )
+  ( targetValue ( string "has_value(TuitionAndFeesDedAmt) & ~same(TuitionAndFeesDedAmt,0)" ) ) )
+
+( example
+  ( utterance "Form 8814, 'ChildSSN' must be within the valid range of SSN/ITIN/ATIN." )
+  ( targetValue ( string "~valid_range_of_SSN_ITIN_ATIN(ChildSSN)" ) ) )
+
+( example
+  ( utterance "Form 8815, Line 9 'ExclBondIntModifiedAGIAmt' must be less than 92200, if in the return, Line 1 checkbox ""Single"" or Line 4 checkbox ""Head of household"" is checked ( element 'IndividualReturnFilingStatusCd' has a value of 1 or 4 ) ." )
+  ( targetValue ( string "~less_than(ExclBondIntModifiedAGIAmt,92200) & value(IndividualReturnFilingStatusCd,1) | value(IndividualReturnFilingStatusCd,4)" ) ) )
+
+( example
+  ( utterance "Each 'ChildSSN' on Form 8839, Line 1f must not be equal to 'PrimarySSN' in the Return Header." )
+  ( targetValue ( string "same(ChildSSN(I),PrimarySSN)" ) ) )
+
+( example
+  ( utterance "Form 8845, Line 3, 'IncrementalIncreaseAmt' must be equal to zero if an amount is entered." )
+  ( targetValue ( string "has_value(IncrementalIncreaseAmt) & ~same(IncrementalIncreaseAmt,0)" ) ) )
+
+( example
+  ( utterance "Form 8853, Line 14b 'LTCInsuredSSN' must be within the valid range of SSN/ITIN and must not be an ATIN." )
+  ( targetValue ( string "~( valid_range_of_SSN_ITIN(LTCInsuredSSN) & ATIN(LTCInsuredSSN))" ) ) )
+
+( example
+  ( utterance "Each 'StudentSSN' that has a value on Form 8863, Line 21 must be equal to 'PrimarySSN' or 'SpouseSSN' in the Return Header or a 'DependentSSN' on Line 6c ( 2 ) of the return." )
+  ( targetValue ( string "~( same(StudentSSN(I),PrimarySSN) | same(StudentSSN(I),SpouseSSN) | same(StudnetSSN(I),DependentSSN))" ) ) )
+
+( example
+  ( utterance "For each 'PriorYear1098TReceivedInd' that has a choice of ""Yes"" indicated on Form 8863, Line 22a ( 3 ) , the corresponding 'EIN' on Line 22a ( 4 ) must have a non-zero value." )
+  ( targetValue ( string "has_value(PriorYear1098TReceivedInd(I),YES) & ~non_zero(EIN(I))" ) ) )
+
+( example
+  ( utterance "Form 8864, Line 2 ( c ) , 'AgriBiodieselAmt' must be equal to zero if an amount is entered." )
+  ( targetValue ( string "has_value(AgriBiodieselAmt) & ~same(AgriBiodieselAmt,0)))" ) ) )
+
+( example
+  ( utterance "If Form 8865, Schedule K, Line 10 'NetSection1231GainLossAmt' has a non-zero value, then Form 4797 must be attached." )
+  ( targetValue ( string "non_zero(NetSection1231GainLossAmt) & ~has_value(Form4797)" ) ) )
+
+( example
+  ( utterance "If Form 8865, Line G2 'FileForm1065or1065BInd' checkbox is checked and Line F2 'ForeignPartnershipEIN' is present, then the first two Digits of Line F2 'ForeignPartnershipEIN' must equal an established District Office Code." )
+  ( targetValue ( string "has_value(FileForm1065or1065Ind) & has_value(ForeignPartnershipEIN) & ~contains(ForeignPartnershipEIN,EstablishedDistrictOfficeCode)" ) ) )
+
+( example
+  ( utterance "If Form 8865, Schedule K, Line 13d 'OtherDeductionsAmt' has a non-zero value, then ""Itemized Other Deductions Schedule"" [ ItemizedOtherDeductionsSchedule3 ] must be attached to Schedule K, Line 13d." )
+  ( targetValue ( string "non_zero(OtherDeductionsAmt) & ~has_value(ItemizedOtherDeductionsSchedule3)" ) ) )
+
+( example
+  ( utterance "If Form 8865, Schedule L, Line 17 ( b ) 'OtherCurrentLiabilitiesBOYAmt' has a non-zero value, then ""Itemized Other Current Liabilities Schedule"" [ ItemizedOtherCurrentLiabilitiesSchedule ] must be attached to Schedule L, Line 17 ( b ) ." )
+  ( targetValue ( string "non_zero(OtherCurrentLiabilitiesBOYAmt) & ~has_value(ItemizedOtherCurrentLiabilitiesSchedule)" ) ) )
+
+( example
+  ( utterance "If Form 8865, Schedule B, Line 9 'SalariesAndWagesAmt' has a non-zero value, then the value must be greater than zero." )
+  ( targetValue ( string "non_zero(SalariesAndWagesAmt) & ~greater_than(SalariesAndWagesAmt,0)" ) ) )
+
+( example
+  ( utterance "If Form 8873, Line 2 'TransInLieuOfFSCPrvsnBoxInd' checkbox is checked, then ""Transactions In Lieu Of The FSC Provision Schedule"" [ TransactionsInLieuOfTheFSCProvisionsSchedule ] must be attached to Line 2." )
+  ( targetValue ( string "has_value(TransInLieuOfFSCPrvsnBoxInd) & ~has_value(TransactionsInLieuOfTheFSCProvisionsSchedule)" ) ) )
+
+( example
+  ( utterance "If Form 8873, Line 19 ( a ) 'DeductionsForeignTradeIncmAmt' has a non-zero value, then ""Other Expenses And Deductions Schedule"" [ OtherExpensesAndDeductionsSchedule ] must be attached to Line 19 ( a ) ." )
+  ( targetValue ( string "non_zero(DeductionsForeignTradeIncmAmt) & ~has_value(OtherExpensesAndDeductionsSchedule)" ) ) )
+
+( example
+  ( utterance "If Form 8885, Line 5 'HealthCoverageTaxCreditAmt' has a value greater than zero, then 'Form8885PaperDocumentInd' must have a value in the Return Header or a binary attachment with Description ""Form 8885 Required Documents"" must be present in the Return." )
+  ( targetValue ( string "greater_than(HealthCoverageTaxCreditAmt,0) & ~(has_value(Form8885PaperDocumentInd) | has_value(Form8885))" ) ) )
+
+( example
+  ( utterance "If Form 8888, Line 4 'RefundUsedForBondPurchasesAmt' has a non-zero value, then ( Form 1040 or Form 1040A or Form 1040EZ or Form 1040-SS or Form 1040-PR ) 'PrimaryDeathDt' must not have a value." )
+  ( targetValue ( string "non_zero(RefundUsedForBondPurchasesAmt) & has_value(PrimaryDeathDt)" ) ) )
+
+( example
+  ( utterance "If Form 8891, Line 5 'CanadaRetirePlanAnnuitantInd' is checked, then Line 6b 'USTaxDeferralElectionFirstYr' must not have a value." )
+  ( targetValue ( string "has_value(CanadaRetirePlanAnnuitantInd) & has_value(USTaxDeferralElectionFirstYr)" ) ) )
+
+( example
+  ( utterance "If Form 8891, Line 6a 'USTaxDeferralElectPreviousInd' has a choice of ""Yes"" indicated, then the following must have a zero value if an amount is entered: [ Line 9 'CanadaRetireCYContributionAmt' and Line 10a 'CARetireCYUndistrIntIncAmt' and Line 10b 'CanadaRetireCYUndistrOrdDivAmt' and Line 10c 'CARetireCYUndistrQlfyDivAmt' and Line 10d 'CanadaRetireCYUndistrCapGnAmt' and Line 10e 'CanadaRetireCYUndistrOthIncAmt' ] ." )
+  ( targetValue ( string " value(USTaxDeferralElectionPreviousInd,Yes) & ~((has_value(CanadaRetireCYContributionAmt) -> same (CanadaRetireCYContributionAmt,0)) & (has_value(CARetireCYUndistrIntIncAmt) -> same(CARetireCYUndistrIntIncAmt,0)) & (has_value(CanadaRetireCYUndistrOrdDivAmt) -> same(CanadaRetireCYUndistrOrdDivAmt,0)) & (has_value(CARetireCYUndistrQlfyDivAmt) -> same(CARetireCYUndistrQlfyDivAmt,0)) & (has_value(CanadaRetireCYUndistrCapGnAmt) -> same(CanadaRetireCYUndistrCapGnAmt,0)) & (has_value(CanadaRetireCYUndistrOthIncAmt) -> same(CanadaRetireCYUndistrOthIncAmt,0)))" ) ) )
+
+( example
+  ( utterance "Form 8908, Line 1b, 'TotalHomesStandardAmt' must be equal to zero if an amount is entered." )
+  ( targetValue ( string "has_value(TotalHomesStandardAmt) & ~same(TotalHomesStandardAmt,0)))" ) ) )
+
+( example
+  ( utterance "If Form 8909 is present in the return, Part III, Line 18 'TentativeCrForRefrigeratorsAmt', must have a zero value if an amount is entered." )
+  ( targetValue ( string "has_value(Form8909) & has_value(TentativeCrForRefrigeratorsAmt) & ~same(TentativeCrForRefrigeratorsAmt,0)))" ) ) )
+
+( example
+  ( utterance "For Each ""Vehicle Placed in Service Date"" listed on Form 8910, Line 3 'VehiclePlacedInServiceDt' the date must be after December 31, 2013 but before January 01, 2015." )
+  ( targetValue ( string "~(greater_than(VehiclePlacedInServiceDt,December_31_2013) & greater_than(January_01_2015,VehiclePlacedInServiceDt))" ) ) )
+
+( example
+  ( utterance "Form 8917 must not be present in the return." )
+  ( targetValue ( string "has_value(Form8917)" ) ) )
+
+( example
+  ( utterance "If Form 8936, Line 12 'TotalBusinessInvestmentUseAmt' has a non-zero value, then 'VehicleDescriptionGrp' must have a value." )
+  ( targetValue ( string "non_zero(TotalBusinessInvestmentUseAmt) & ~has_value(VehicleDescriptionGrp)" ) ) )
+
+( example
+  ( utterance "If Form 8938, Part III 'RoyaltySumGrp' is present, then either 'WhereReportedFormAndLineTxt' or 'WhereReportedSchAndLineTxt' must have a value." )
+  ( targetValue ( string "has_value(RoyaltySumGrp) & ~(has_value(WhereReportedFormAndLineTxt) | has_value(WhereReportedSchAndLineTxt))" ) ) )
+
+( example
+  ( utterance "If Form 8941, Line 3 'AvgAnnualWagesPdForTxYrAmt' has a value greater than ""50999"", then  Line 4  'HIPPaidForEmplEmployedForCrAmt', Line 5 ' SmllEmplrHIPPotentiallyPaidAmt', Line 6  'SmllEmplrEligibleHIPPaidAmt', Line 7 'SmllEmplrEligHIPTimesPctAmt', Line 8 'SmllEmplrHIPFTECreditAmt', Line 9  'AnnualWgPdLessThanSpecifiedAmt', Line 10 'TotStPremSbsdyPdOrCrForHIPAmt', Line 11 'HIPPdLessTotStPremOrCrAmt', and Line 12 'SmallerAnnualWgPdOrHIPPdAmt', must be equal to zero if an amount is entered." )
+  ( targetValue ( string " greater_than(AvgAnnualWagesPdForTxYrAmt,50999) & ~((has_value(HIPPaidForEmplEmployedForCrAmt) -> same (HIPPaidForEmplEmployedForCrAmt,0)) & (has_value(SmllEmplrHIPPotentiallyPaidAmt) -> same(SmllEmplrHIPPotentiallyPaidAmt,0)) & (has_value(SmllEmplrEligibleHIPPaidAmt) -> same(SmllEmplrEligibleHIPPaidAmt,0)) & (has_value(SmllEmplrEligHIPTimesPctAmt) -> same(SmllEmplrEligHIPTimesPctAmt,0)) & (has_value(SmllEmplrHIPFTECreditAmt) -> same(SmllEmplrHIPFTECreditAmt,0)) & (has_value(AnnualWgPdLessThanSpecifiedAmt) -> same(AnnualWgPdLessThanSpecifiedAmt,0)) & (has_value(TotStPremSbsdyPdOrCrForHIPAmt) -> same(TotStPremSbsdyPdOrCrForHIPAmt,0)) & (has_value(HIPPdLessTotStPremOrCrAmt) -> same(HIPPdLessTotStPremOrCrAmt,0)) & (has_value(SmallerAnnualWgPdOrHIPPdAmt) -> same(SmallerAnnualWgPdOrHIPPdAmt,0))   )" ) ) )
+
+( example
+  ( utterance "Form 8949, Part II, checkbox E 'TransRptOn1099BNotShowBasisInd' must not be checked in more than one 'LongTermCapitalGainAndLossGrp'." )
+  ( targetValue ( string "~has_value_count(TransRptOn1099BNotShowBasisInd,1)" ) ) )
+
+( example
+  ( utterance "If Form 1040, Line 1 checkbox ""Single"" or Line 4 checkbox ""Head of household"" or Line 5 checkbox ""Qualifying widow ( er ) "" is checked ( element 'IndividualReturnFilingStatusCd' has the value 1 or 4 or 5 ) , then Form 8959, Line 5 'FilingStatusThresholdCd' must be equal to 200000." )
+  ( targetValue ( string "value(IndividualReturnFilingStatusCd,1) | value(IndividualReturnFilingStatusCd,4) | value(IndividualReturnFilingStatusCd,5) & ~value(FilingStatusThresholdCd,200000)" ) ) )
+
+( example
+  ( utterance "Form 8959, Line 17 'AddlRailroadRetirementTaxAmt' must be equal to Line 16 'RRTCompSubjToAddRRTTaxAmt' multiplied by 0.9% ( .009 ) ." )
+  ( targetValue ( string "~times(RRTCompSubjToAddRRTTaxAmt,0.009,AddlRailroadRetirementTaxAmt)" ) ) )
+
+( example
+  ( utterance "Form 8960, Line 9d 'InvestmentExpenseAmt' must be equal to the sum of Line 9a 'InvestmentInterestAmt' and Line 9b 'StateLocalForeignIncomeTaxAmt' and Line 9c 'MiscInvestmentExpenseAmt'." )
+  ( targetValue ( string "~plus(InvestmentInterestAmt,StateLocalForeignIncomeTaxAmt,MiscInvestmentExpenseAmt)" ) ) )
+
+( example
+  ( utterance "If Form 8960, Line 5a 'PropertyDisposGainOrLossAmt' has a non-zero value, then it must be equal to sum of [ Form 1040, Line 13 'CapitalGainLossAmt' and Line 14 'OtherGainLossAmt' ] unless all of the following conditions are true: 1 ) Form 1040, Line 2 checkbox ""Married Filing Jointly"" or Line 5 checkbox ""Qualifying Widow ( er ) "" is checked ( element 'IndividualReturnFilingStatusCd' has a value of 2 or 5 ) and 2 ) Form 8960, neither checkbox 'Section6013gInd' or 'Section6013hInd' is not checked and 3 ) Form 8960, Line 14 'FilingThresholdAmt' equals 125000." )
+  ( targetValue ( string "non_zero(PropertyDisposGainOrLossAmt) & ~plus(CapitalGainLossAmt,OtherGainLossAmt,PropertyDisposGainOrLossAmt)  & ~value(IndividualReturnFilingStatusCd,2) & ~value(IndividualReturnFilingStatusCd,5) & ~has_value(Section6013gInd) & ~has_value(Section6013hInd) & ~same(FilingThresholdAmt,125000)" ) ) )
+
+( example
+  ( utterance "If Form 8960, Line 1 'TaxableInterestAmt'' has a non-zero value, then it must be equal to Form 1040, Line 8a 'TaxableInterestAmt' unless all of the following conditions are true: 1 ) Form 1040, Line 2 checkbox ""Married Filing Jointly"" or Line 5 checkbox ""Qualifying Widow ( er ) "" is checked ( element 'IndividualReturnFilingStatusCd' has a value of 2 or 5 ) and 2 ) Form 8960, checkbox 'Section6013gInd' is not checked and 3 ) Form 8960, Line 14 'FilingThresholdAmt' equals 125000." )
+  ( targetValue ( string "non_zero(TaxableInterestAmt) & ~same(TaxableInterestAmt,TaxableInterestAmt) & ~value(IndividualReturnFilingStatusCd,2) & ~value(IndividualReturnFilingStatusCd,5) & ~has_value(Section6013gInd) & ~same(FilingThresholdAmt,125000)" ) ) )
+
+( example
+  ( utterance "Form 8962, Line 5 'FederalPovertyLevelPct' must be equal to Line 3 'HouseholdIncomeAmt' divided by Line 4 'PovertyLevelAmt'." )
+  ( targetValue ( string "~dividedBy(HouseholdIncomeAmt,PovertyLevelAmt,FederalPovertyLevelPct)" ) ) )
+
+( example
+  ( utterance "If Form 8962, Line 17 'MonthCd' has the value ""JUNE"", then Line 17D 'MonthlyMaxPremiumAssistanceAmt' must be equal to Line 17B 'MonthlyPremiumSLCSPAmt' minus ( - ) Line 17C 'MonthlyContributionAmt'." )
+  ( targetValue ( string "value(MonthCd,JUNE) & ~minus(MonthlyPremiumSLCSPAmt,MonthlyContributionAmt,MonthlyMaxPremiumAssistanceAmt)" ) ) )
+
+( example
+  ( utterance "If Form 8962, Line 12 'MonthCd' has the value ""JANUARY"", then Line 12E 'MonthlyPremiumTaxCreditAllAmt' must be equal to the smaller of Line 12A 'MonthlyPremiumAmt' or Line 12D 'MonthlyMaxPremiumAssistanceAmt'." )
+  ( targetValue ( string "value(MonthCd,JANURAY) & ~min(MonthlyPremiumAmt,MonthlyMaxPremiumAssistanceAmt,MonthlyPremiumTaxCreditAllAmt)" ) ) )
+
+( example
+  ( utterance "If Form 8962, Line 20 'MonthCd' has the value ""SEPTEMBER"", then Line 20E 'MonthlyPremiumTaxCreditAllAmt' must be equal to the smaller of Line 20A 'MonthlyPremiumAmt' or Line 20D 'MonthlyMaxPremiumAssistanceAmt'." )
+  ( targetValue ( string "value(MonthCd,SEPTEMBER) & ~min(MonthlyPremiumAmt,MonthlyMaxPremiumAssistanceAmt,MonthlyPremiumTaxCreditAllAmt)" ) ) )
+
+( example
+  ( utterance "If Form 8962, Part 4 ""Shared Policy Allocation"", 'PolicyNum' has a value, then at least one of the following must have a value: 'MonthlyPremiumPct' or 'MonthlyPremiumSLCSPPct' or 'MonthlyAdvancedPTCPct'." )
+  ( targetValue ( string "has_value(PolicyNum) & ~(has_value(MonthlyPremiumPct) | has_value(MonthlyPremiumSLCSPPct) | has_value(MontlyAdvancedPTCPct))" ) ) )
+
+( example
+  ( utterance "If Form 8962, Line 13 'MonthCd' has the value ""FEBRUARY"" and Line 13E 'MonthlyPremiumTaxCreditAllwAmt' has a non-zero value, then Line 13A 'MonthlyPremiumAmt' and Line 13B 'MonthlyPremiumSLCSPAmt' and Line 13D 'MonthlyMaxPremiumAssistanceAmt' must have non-zero values." )
+  ( targetValue ( string "value(MonthCd,FEBRUARY) & non_zero(MonthlyPremiumTaxCreditAllAmt) & ~(non_zero(MonthlyPremiumAmt) & non_zero(MonthlyPremiumSLCSPAmt) & non_zero(MonthlyMaxPremumAssistanceAmt))" ) ) )
+
+( example
+  ( utterance "If Form 8962, Line 21 'MonthCd' has the value ""OCTOBER"" and Line 21E 'MonthlyPremiumTaxCreditAllAmt' has a non-zero value, then Line 21A 'MonthlyPremiumAmt' and Line 21B 'MonthlyPremiumSLCSPAmt' and Line 21D 'MonthlyMaxPremiumAssistanceAmt' must have non-zero values." )
+  ( targetValue ( string "value(MonthCd,OCTOBER) & non_zero(MonthlyPremiumTaxCreditAllAmt) & ~(non_zero(MonthlyPremiumAmt) & non_zero(MonthlyPremiumSLCSPAmt) & non_zero(MonthlyMaxPremumAssistanceAmt))" ) ) )
+
+( example
+  ( utterance "Form 8962, Part 4 ""Shared Policy Allocation"", 'StartMonthNumberCd' must not be after 'EndMonthNumberCd'." )
+  ( targetValue ( string "~less_than(StartMonthNumberCd,EndMonthNumberCd)" ) ) )
+
+( example
+  ( utterance "If Form 9465, Line 1 'SpouseSSN' has a value, then it must be equal to either the 'PrimarySSN' or 'SpouseSSN' in the Return Header." )
+  ( targetValue ( string "has_value(SpouseSSN) & ~(same(SpouseSSN,PrimarySSN) | same(Spouse,SpouseSSN))" ) ) )
+
+( example
+  ( utterance "If Form 9465 is attached to Form 1040 or Form 1040A or Form 1040EZ or Form 1040PR or Form 1040SS, then 'F9465TaxReturnTypeCd' must not have the following values: ""FORM 940"" or ""FORM 940PR"" or ""FORM 941"" or ""FORM 941PR"" or ""FORM 941SS"" or ""FORM 943"" or ""FORM 943PR"" or ""FORM 944"" or ""FORM 945"" or ""FORM 720"" or ""FORM 2290""." )
+  ( targetValue ( string "has_value(Form9465) & ~(same(F9465TaxReturnTypeCd,Form_940) | same(F9465TaxReturnTypeCd,Form_940) |same(F9465TaxReturnTypeCd,Form_940) |same(F9465TaxReturnTypeCd,Form_940) |same(F9465TaxReturnTypeCd,Form_940) |same(F9465TaxReturnTypeCd,Form_940PR) |same(F9465TaxReturnTypeCd,Form_941) |same(F9465TaxReturnTypeCd,Form_941PR) |same(F9465TaxReturnTypeCd,Form_941SS) |same(F9465TaxReturnTypeCd,Form_943) |same(F9465TaxReturnTypeCd,Form_943PR) | same(F9465TaxReturnTypeCd,Form_944) |same(F9465TaxReturnTypeCd,Form_945) |same(F9465TaxReturnTypeCd,Form_720) |same(F9465TaxReturnTypeCd,Form_2290))" ) ) )
+
+( example
+  ( utterance "'PaymentAmt' in the IRS Payment Record must not be greater than 99,999,999." )
+  ( targetValue ( string "greater_than(IRSPaymentRecordPaymnetAmt,99999999)" ) ) )
+
+( example
+  ( utterance "'EstimatedPaymentDueDt' in the IRS ES Payment Record must be 04/15/2016 or 6/15/2016 or 09/15/2016 or 01/17/2017." )
+  ( targetValue ( string "~(same(EstimatedPaymentDt,04/15/2016) | same(EstimatedPaymentDt,6/15/2016) | same(EstimatedPaymentDt,09/15/2016) | same(EstimatedPaymentDt,01/17/2017))" ) ) )
+
+( example
+  ( utterance "'CityNm' of Form W-2, Line C 'EmployerUSAddress' must contain at least three characters." )
+  ( targetValue ( string "~greater_than(length(CityNm),3)" ) ) )
+
+( example
+  ( utterance "If Form W-2G, Payer Address is a US Address, then the first five digits of the 'ZipCd' must be within the valid ranges of zip codes for the corresponding 'StateAbbreviationCd'. See Publication 4164." )
+  ( targetValue ( string "us_address(PayerAddress) & ~valid_ranges_of_zip_codes(ZipCd,StateAbbrevationCd)" ) ) )
+
+( example
+  ( utterance "If Form 9465 and IRS Payment Record are present in the return, then Form 9465, 'PaymentAmt' must be equal to 'PaymentAmt' in IRS Payment Record." )
+  ( targetValue ( string "~same(PaymentAmt,PaymentAmt" ) ) )
+
+( example
+  ( utterance "If checkbox 'WorkPerformedResidingInUSInd' is checked in [ FECRecord ] , then 'USAddress' must have a value." )
+  ( targetValue ( string "has_value(WorkPerformedResidingInUSInd) & ~has_value(USAddress)" ) ) )
+
+( example
+  ( utterance "If 'PINTypeCd' in the Return Header has the value ""Self-Select Practitioner"" and 'SpouseSignaturePIN' has a value, then 'SpouseBirthDt' must have a value." )
+  ( targetValue ( string "value(PINTypeCd,Self_Select_Practitioner) & has_value(SpouseSignaturePIN) & ~has_value(SpouseBirthDt)" ) ) )
+
+( example
+  ( utterance "The year of 'PrimaryDeathDt' must not be less than 'TaxYr' in the Return Header." )
+  ( targetValue ( string "less_than(PrimaryDeathDt,TaxYr)" ) ) )
+
+( example
+  ( utterance "If 'ThirdPartyDesigneeInd' in the return has a choice of 'Yes' indicated, then 'ThirdPartyDesigneePIN' must have a value." )
+  ( targetValue ( string "value(ThirdPartyDesigneeInd,Yes) & ~has_value(ThirdPartyDesigneePIN)" ) ) )
+
+( example
+  ( utterance "The 'IPAddress' in the Return Header must not equal all zeros." )
+  ( targetValue ( string "all_zeros(IPAddress)" ) ) )
+
+( example
+  ( utterance "'SpouseIdentityProtectionPIN' in the Return Header must not equal all zeroes." )
+  ( targetValue ( string "all_zeros(SpouseIdentityProtectionPIN)" ) ) )
+
+( example
+  ( utterance "The Year of Birth of the Primary SSN must not be greater than the 'TaxYr' in the Return Header." )
+  ( targetValue ( string "greater_than(year_of_birth(PrimarySSN,TaxYr)" ) ) )
+
+( example
+  ( utterance "In the Return Header, if 'PINTypeCd' has the value ""Practitioner"" or ""Self-Select Practitioner"", then 'PractitionerPINGrp' must have a value." )
+  ( targetValue ( string "value(PinTypeCd,Practitioner) | value(PinTypeCd,Self_Select_Practitioner) & ~has_value(PractitionerPINGrp)" ) ) )
+
+( example
+  ( utterance "'SpouseIdentityProtectionPIN' in the Return Header must be numeric digits." )
+  ( targetValue ( string "~numeric_digits(SpouseIdentityProtectionPIN)" ) ) )
+
+( example
+  ( utterance "If the Filer has a US address in the Return Header and 'StateAbbreviationCd' has the value ""AA"" then the first three digits of the 'ZipCd' must be 340." )
+  ( targetValue ( string "us_address(FilerAddress) & value(StateAbbreviationCd,AA) & ~first_three_digits_contain(ZipCd,340)" ) ) )
+
+( example
+  ( utterance "'PreparerFirmEIN' in the Return Header must not equal all zeros or all nines." )
+  ( targetValue ( string "all_zeros(PreparerFirmEIN)" ) ) )
+
+( example
+  ( utterance "'SpouseSignaturePIN' in the Return Header must not equal all zeros." )
+  ( targetValue ( string "all_zeros(SpouseSignaturePIN)" ) ) )
+
+( example
+  ( utterance "There can be no more than two less-than signs ( < ) in 'NameLine1Txt' in the Return Header." )
+  ( targetValue ( string "greater_than(count(Less_Than_Sign,NameLine1Txt),2)" ) ) )
+
+( example
+  ( utterance "Each 'DependentSSN' and the corresponding 'DependentNameControlTxt' that has a value on Line 6c ( 2 ) of the return, must match the SSN and Name Control in the e-File database." )
+  ( targetValue ( string "has_value(DependentSSN(I)) & has_value(DependentNameControlTxt(I)) & ~match_Efile_Database(DependentSSN(I)) & ~match_Efile_Database(DependentNameControlTxt(I)" ) ) )
+
+( example
+  ( utterance "If Schedule A ( Form 1040 ) , Line 27 'NetMiscellaneousDeductionsAmt' has a non-zero value, then one of the following Lines must have a non-zero value: Line 21 'UnreimEmployeeBusExpnsAmt', Line 22 'TaxPreparationFeesAmt', Line 23 'OtherExpensesAmt', or Line 24 'TotJobExpnssAndCrtnMiscDedAmt'." )
+  ( targetValue ( string "non_zero(NetMiscellaneousDeductionsAmt) & ~(non_zero(UnreimEmployeeBusExpnsAmt)| non_zero(TaxPreparationFeesAmt) | non_zero('OtherExpensesAmt) | non_zero(TotJobExpnssAndCrtnMiscDedAmt))" ) ) )
+
+( example
+  ( utterance "Schedule A ( Form 1040 ) , Line 13 'MortgageInsurancePremiumsAmt' must be equal to zero if an amount is entered." )
+  ( targetValue ( string "~same(MortgageInsurancePremiumsAmt,0)" ) ) )
+
+( example
+  ( utterance "If Schedule B ( Form 1040A or 1040 ) , Line 6 'TotalOrdinaryDividendsAmt' has a non-zero value, then it must be equal to Form 1040 or 1040A, Line 9a 'OrdinaryDividendsAmt' unless ( Form 1040 only ) Form 8958 is present in the return." )
+  ( targetValue ( string "non_zero(TotalOrdinaryDividendsAmt) & ~has_value(Form8958) & ~same(TotalOrdinaryDividendsAmt,OrdinaryDividentsAmt)" ) ) )
+
+( example
+  ( utterance "Schedule C ( Form 1040 ) , Line 1 'TotalGrossReceiptsAmt' minus ( - ) Line 2 'ReturnsAndAllowancesAmt' must be equal to Line 3 'NetGrossReceiptsAmt'." )
+  ( targetValue ( string "~minus(TotalGrossReceiptAmt,ReturnsAndAllAllowanceAmt,NetGrossReceiptAmt)" ) ) )
+
+( example
+  ( utterance "On Schedule C-EZ ( Form 1040 ) , one of the following  must have a non-zero value: Line 1 'TotalGrossReceiptsAmt' or Line 2 'TotalOtherExpensesAmt' or Line 3 'NetProfitAmt'." )
+  ( targetValue ( string "~(non_zero(TotalGrossReceiptAmt) |  non_zero(TotalOtherExpensesAmt) |  non_zero(NetProfitAmt))" ) ) )
+
+( example
+  ( utterance "If Schedule D ( Form 1040 ) , Line 1b ( h ) , 'TotalGainOrLossAmt' has a non-zero value and Form 8949 is present in the return, then Form 8949 must be attached to Schedule D ( Form 1040 ) ." )
+  ( targetValue ( string "non_zero(TotalGainOrLossAmt) & ~has_value(Form8949)" ) ) )
+
+( example
+  ( utterance "If Schedule E ( Form 1040 ) , Line 26 'nonpassiveActivityLiteralCd' has a value, then Line 26 'nonpassiveActivityAmt' must have a non-zero value." )
+  ( targetValue ( string "has_value(nonpassiveActivityLiteralCd) & ~non_zero(nonpassiveActivityAmt)" ) ) )
+
+( example
+  ( utterance "Each 'QualifyingChildSSN' that has a value on Schedule EIC ( Form 1040A or 1040 ) , Line 2 must not be equal to another 'QualifyingChildSSN' on the same Schedule EIC ( Form 1040A or Form 1040 ) ." )
+  ( targetValue ( string "~duplicate_values(QualifyingChildSSN)" ) ) )
+
+( example
+  ( utterance "Each child in Schedule EIC ( Form 1040A or Form 1040 ) must be younger than the tax payer, if Line 1 checkbox ""Single"" or Line 4 checkbox ""Head of household"" or Line 5 checkbox ""Qualifying widow ( er ) with dependent child"" is checked ( 'IndividualReturnFilingStatusCd' has a value 1 or 4 or 5 ) in the return. If for any child in Schedule EIC ( Form 1040A or Form 1040 ) , Line 4b 'ChildPermanentlyDisabledInd' has a choice of ""Yes"" indicated, this rule does not apply for that child." )
+  ( targetValue ( string "~less_than(age(Child(I)),age(TaxPayer)) & value(IndividualReturnFilingStatusCd,1) | value(IndividualReturnFilingStatusCd,4) | value(IndividualReturnFilingStatusCd,5) & ~has_value(ChildPermanentlyDisabledInd)" ) ) )
+
+( example
+  ( utterance "On Schedule H ( Form 1040 ) , exactly one of Line A 'HsldEmplPdCashWageOverLmtCYInd' or Line B 'HsldEmplFedIncmTaxWithheldInd' or Line C 'HsldEmplPdCashWageOvrLmtQtrInd' must have a choice of ""Yes"" indicated." )
+  ( targetValue ( string "value(HsldEmplPdCashWageOverLmtCYInd,Yes) ! has_value(HsldEmplFedIncmTaxWithheldInd) ! has_value(HsldEmplPdCashWageOvrLmtQtrInd)" ) ) )
+
+( example
+  ( utterance "If Schedule H ( Form 1040 ) , Line 9 'HsldEmplPdTotCashWageAnyQtrInd' has a choice of ""No"" indicated, then Line 26 'CombinedFUTATaxPlusNetTaxesAmt' must have a zero value if an amount is entered." )
+  ( targetValue ( string "value(HsldEmplPdTotCashWageAnyQtrInd,No) & ~(value(CombinedFUTATaxPlusNetTaxesAmt,0) |  ~has_value(CombinedFUTATaxPlusNetTaxesAmt))" ) ) )
+
+( example
+  ( utterance "If Schedule J ( Form 1040 ) , Line 17 'TotalTaxTableAmt' has a non-zero value, then one of the following must have a non-zero value: Line 4 'CurrentTaxAmt' or Line 8 'TaxTableAmt' or Line 12 'TaxTableAmt' or Line 16 'TaxTableAmt'." )
+  ( targetValue ( string "non_zero(TotalTaxTableAmt) & ~(non_zero(CurrentTaxAmt) | non_zero(TaxTableAmt) | non_zero(TaxTableAmt) | non_zero(TaxTableAmt))" ) ) )
+
+( example
+  ( utterance "For each Schedule SE ( Form 1040 ) present in the return, 'SSN' must be equal to the Primary SSN or Spouse SSN in the Return Header." )
+  ( targetValue ( string "~(same(ScheduleSESSN,PrimarySSN) | (same(ScheduleHSSN,SpouseSSN)))" ) ) )

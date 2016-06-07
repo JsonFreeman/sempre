@@ -1,0 +1,1 @@
+./run @mode=simple -FeatureExtractor.featureDomains rule span -Grammar.inPaths data/taxes.grammar -Dataset.inPaths train:data/train.244 test:data/test.173 -Learner.maxTrainIters 5 -SimpleLexicon.inPaths data/taxes.lexicon -typeInference -valueEvaluator ApproximateStringValueEvaluator -execPoolDir logs
