@@ -38,7 +38,7 @@
 (rule $FIELDNAME ($FIELD $FIELDNAME) (lambda x (lambda y (var y))))
 
 # This is cheating
-(rule $FIELD (form $TOKEN or $TOKEN) (lambda x (lambda y (call + (string "form") (var x)))))\
+(rule $FIELD (form $TOKEN or $TOKEN) (lambda x (lambda y (call + (string "form") (var x)))))
 (rule $FIELD (form $TOKEN or form $TOKEN) (lambda x (lambda y (call + (string "form") (var x)))))
 (rule $FIELD (schedule $TOKEN (, optional)) (lambda x (call + (string "formschedule") (var x))))
 (rule $FIELDNAME (($TOKEN optional) ($TOKEN optional) ($TOKEN optional) ($TOKEN optional) ($TOKEN optional) [ $TOKEN ]) (lambda x (var x)))
